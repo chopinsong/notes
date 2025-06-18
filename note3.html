@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java基础学习大纲（详细版）</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2980b9;
+            border-left: 4px solid #3498db;
+            padding-left: 10px;
+            margin-top: 30px;
+        }
+        h3 {
+            color: #16a085;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .module {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3498db;
+        }
+        .sub-module {
+            margin-left: 20px;
+        }
+        .details {
+            display: none;
+            background-color: #f0f8ff;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 3px solid #5dade2;
+        }
+        .toggle-btn {
+            background-color: #5dade2;
+            color: white;
+            border: none;
+            padding: 2px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+        .toggle-btn:hover {
+            background-color: #3498db;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .code {
+            font-family: Consolas, Monaco, 'Andale Mono', monospace;
+            font-size: 14px;
+        }
+    </style>
+    <script>
+        function toggleDetails(id) {
+            var element = document.getElementById(id);
+            if (element.style.display === "none") {
+                element.style.display = "block";
+            } else {
+                element.style.display = "none";
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Java基础学习大纲（详细版）</h1>
+    
+    <div class="module">
+        <h2>第一部分：Java入门</h2>
+        <ul>
+            <li>Java简介与发展历史
+                <button class="toggle-btn" onclick="toggleDetails('java-intro')">展开</button>
+                <div id="java-intro" class="details">
+                    <p>Java由Sun Microsystems公司于1995年推出，后被Oracle收购。主要版本发展：</p>
+                    <ul>
+                        <li>Java 1.0 (1996)</li>
+                        <li>Java 5 (2004) - 重大更新，加入泛型等</li>
+                        <li>Java 8 (2014) - 加入Lambda表达式</li>
+                        <li>Java 11 (2018) - LTS版本</li>
+                        <li>Java 17 (2021) - 最新LTS版本</li>
+                    </ul>
+                    <p>Java特点：跨平台、面向对象、自动内存管理、多线程支持等。</p>
+                </div>
+            </li>
+            <li>Java平台与JVM原理
+                <button class="toggle-btn" onclick="toggleDetails('jvm-principle')">展开</button>
+                <div id="jvm-principle" class="details">
+                    <p>Java平台组成：</p>
+                    <ul>
+                        <li>Java虚拟机(JVM) - 执行字节码</li>
+                        <li>Java运行时环境(JRE) - 包含JVM和核心类库</li>
+                        <li>Java开发工具包(JDK) - 包含JRE和开发工具</li>
+                    </ul>
+                    <p>JVM工作原理：</p>
+                    <pre>Java源代码 → 编译器 → 字节码(.class) → JVM → 机器码</pre>
+                    <p>JVM内存区域：方法区、堆、虚拟机栈、本地方法栈、程序计数器</p>
+                </div>
+            </li>
+            <li>JDK安装与环境配置
+                <button class="toggle-btn" onclick="toggleDetails('jdk-install')">展开</button>
+                <div id="jdk-install" class="details">
+                    <p>安装步骤：</p>
+                    <ol>
+                        <li>从Oracle官网下载JDK安装包</li>
+                        <li>运行安装程序</li>
+                        <li>配置环境变量：
+                            <pre class="code">
+# Windows系统
+1. 右键"此电脑" → 属性 → 高级系统设置 → 环境变量
+2. 在系统变量中新建JAVA_HOME，值为JDK安装路径（如C:\Program Files\Java\jdk-17）
+3. 编辑Path变量，添加%JAVA_HOME%\bin
+
+# Linux/Mac系统
+在~/.bashrc或~/.zshrc中添加：
+export JAVA_HOME=/path/to/jdk
+export PATH=$JAVA_HOME/bin:$PATH</pre>
+                        </li>
+                        <li>验证安装：<pre class="code">java -version</pre></li>
+                    </ol>
+                </div>
+            </li>
+            <li>第一个Java程序：Hello World
+                <button class="toggle-btn" onclick="toggleDetails('hello-world')">展开</button>
+                <div id="hello-world" class="details">
+                    <p>创建HelloWorld.java文件：</p>
+                    <pre class="code">
+public class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello, World!");
+    }
+}</pre>
+                    <p>编译和运行：</p>
+                    <pre class="code">
+# 编译
+javac HelloWorld.java
+
+# 运行
+java HelloWorld</pre>
+                    <p>程序解析：</p>
+                    <ul>
+                        <li>public class HelloWorld - 定义一个公共类</li>
+                        <li>public static void main - 程序入口方法</li>
+                        <li>System.out.println - 输出文本到控制台</li>
+                    </ul>
+                </div>
+            </li>
+            <li>Java开发工具介绍（Eclipse/IntelliJ IDEA/VSCode）
+                <button class="toggle-btn" onclick="toggleDetails('ide-intro')">展开</button>
+                <div id="ide-intro" class="details">
+                    <h4>常用Java开发工具比较：</h4>
+                    <table border="1" cellpadding="5">
+                        <tr>
+                            <th>工具</th>
+                            <th>特点</th>
+                            <th>适用场景</th>
+                        </tr>
+                        <tr>
+                            <td>Eclipse</td>
+                            <td>免费开源，插件丰富</td>
+                            <td>教学、企业开发</td>
+                        </tr>
+                        <tr>
+                            <td>IntelliJ IDEA</td>
+                            <td>智能提示强大，商业版功能更全</td>
+                            <td>专业开发</td>
+                        </tr>
+                        <tr>
+                            <td>VSCode</td>
+                            <td>轻量级，需安装Java插件</td>
+                            <td>小型项目、快速开发</td>
+                        </tr>
+                    </table>
+                    <p>IntelliJ IDEA创建项目示例：</p>
+                    <ol>
+                        <li>File → New → Project</li>
+                        <li>选择Java项目，设置JDK</li>
+                        <li>输入项目名称和位置</li>
+                        <li>创建新类：右键src → New → Java Class</li>
+                    </ol>
+                </div>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="module">
+        <h2>第二部分：Java基础语法</h2>
+        <div class="sub-module">
+            <h3>1. 基本语法结构</h3>
+            <ul>
+                <li>标识符与关键字
+                    <button class="toggle-btn" onclick="toggleDetails('identifiers-keywords')">展开</button>
+                    <div id="identifiers-keywords" class="details">
+                        <p>标识符规则：</p>
+                        <ul>
+                            <li>以字母、下划线(_)或美元符号($)开头</li>
+                            <li>后续可以是字母、数字、_或$</li>
+                            <li>区分大小写</li>
+                            <li>不能是Java关键字</li>
+                        </ul>
+                        <p>常见关键字：</p>
+                        <pre class="code">
+class, public, static, void, if, else, for, while, do, switch,
+case, break, continue, return, try, catch, finally, new, this,
+super, extends, implements, interface, package, import</pre>
+                        <p>命名规范：</p>
+                        <ul>
+                            <li>类名：大驼峰，如StudentInfo</li>
+                            <li>方法名：小驼峰，如getStudentName</li>
+                            <li>常量：全大写，用下划线连接，如MAX_SIZE</li>
+                        </ul>
+                    </div>
+                </li>
+                <li>注释与文档注释
+                    <button class="toggle-btn" onclick="toggleDetails('comments')">展开</button>
+                    <div id="comments" class="details">
+                        <p>Java注释类型：</p>
+                        <pre class="code">
+// 单行注释
+
+/*
+ * 多行注释
+ */
+
+/**
+ * 文档注释 - 用于生成API文档
+ * @param name 用户名
+ * @return 欢迎消息
+ */</pre>
+                        <p>Javadoc示例：</p>
+                        <pre class="code">
+/**
+ * 计算两个数的和
+ * @param a 第一个加数
+ * @param b 第二个加数
+ * @return 两数之和
+ */
+public int add(int a, int b) {
+    return a + b;
+}</pre>
+                        <p>生成文档：<pre class="code">javadoc -d doc MyClass.java</pre></p>
+                    </div>
+                </li>
+                <li>Java基本数据类型
+                    <button class="toggle-btn" onclick="toggleDetails('data-types')">展开</button>
+                    <div id="data-types" class="details">
+                        <p>8种基本数据类型：</p>
+                        <table border="1" cellpadding="5">
+                            <tr>
+                                <th>类型</th>
+                                <th>大小</th>
+                                <th>范围</th>
+                                <th>默认值</th>
+                                <th>示例</th>
+                            </tr>
+                            <tr>
+                                <td>byte</td>
+                                <td>8位</td>
+                                <td>-128~127</td>
+                                <td>0</td>
+                                <td>byte b = 100;</td>
+                            </tr>
+                            <tr>
+                                <td>short</td>
+                                <td>16位</td>
+                                <td>-32768~32767</td>
+                                <td>0</td>
+                                <td>short s = 1000;</td>
+                            </tr>
+                            <tr>
+                                <td>int</td>
+                                <td>32位</td>
+                                <td>-2^31~2^31-1</td>
+                                <td>0</td>
+                                <td>int i = 100000;</td>
+                            </tr>
+                            <tr>
+                                <td>long</td>
+                                <td>64位</td>
+                                <td>-2^63~2^63-1</td>
+                                <td>0L</td>
+                                <td>long l = 100000L;</td>
+                            </tr>
+                            <tr>
+                                <td>float</td>
+                                <td>32位</td>
+                                <td>IEEE 754</td>
+                                <td>0.0f</td>
+                                <td>float f = 3.14f;</td>
+                            </tr>
+                            <tr>
+                                <td>double</td>
+                                <td>64位</td>
+                                <td>IEEE 754</td>
+                                <td>0.0d</td>
+                                <td>double d = 3.14159;</td>
+                            </tr>
+                            <tr>
+                                <td>char</td>
+                                <td>16位</td>
+                                <td>'\u0000'~'\uffff'</td>
+                                <td>'\u0000'</td>
+                                <td>char c = 'A';</td>
+                            </tr>
+                            <tr>
+                                <td>boolean</td>
+                                <td>1位</td>
+                                <td>true/false</td>
+                                <td>false</td>
+                                <td>boolean flag = true;</td>
+                            </tr>
+                        </table>
+                    </div>
+                </li>
+                <li>变量与常量
+                    <button class="toggle-btn" onclick="toggleDetails('variables')">展开</button>
+                    <div id="variables" class="details">
+                        <p>变量声明与初始化：</p>
+                        <pre class="code">
+// 声明
+int age;
+String name;
+
+// 初始化
+age = 20;
+name = "张三";
+
+// 声明并初始化
+double price = 99.99;
+char grade = 'A';</pre>
+                        <p>常量定义：</p>
+                        <pre class="code">
+// 使用final关键字
+final double PI = 3.1415926;
+final int MAX_USERS = 1000;</pre>
+                        <p>变量作用域：</p>
+                        <pre class="code">
+public class ScopeExample {
+    // 类变量（静态变量）
+    static int classVar = 10;
+    
+    // 实例变量
+    int instanceVar = 20;
+    
+    public void method() {
+        // 局部变量
+        int localVar = 30;
+        System.out.println(localVar);
+    }
+}</pre>
+                    </div>
+                </li>
+                <li>运算符与表达式
+                    <button class="toggle-btn" onclick="toggleDetails('operators')">展开</button>
+                    <div id="operators" class="details">
+                        <p>Java运算符分类：</p>
+                        <table border="1" cellpadding="5">
+                            <tr>
+                                <th>类型</th>
+                                <th>运算符</th>
+                                <th>示例</th>
+                            </tr>
+                            <tr>
+                                <td>算术</td>
+                                <td>+ - * / % ++ --</td>
+                                <td>a + b, i++</td>
+                            </tr>
+                            <tr>
+                                <td>关系</td>
+                                <td>> < >= <= == !=</td>
+                                <td>a > b, x == y</td>
+                            </tr>
+                            <tr>
+                                <td>逻辑</td>
+                                <td>&& || !</td>
+                                <td>a && b, !flag</td>
+                            </tr>
+                            <tr>
+                                <td>位</td>
+                                <td>& | ^ ~ << >> >>></td>
+                                <td>a & b, num << 2</td>
+                            </tr>
+                            <tr>
+                                <td>赋值</td>
+                                <td>= += -= *= /= %= &= |= ^= <<= >>= >>>=</td>
+                                <td>a += 5, b &= mask</td>
+                            </tr>
+                            <tr>
+                                <td>条件</td>
+                                <td>? :</td>
+                                <td>a > b ? a : b</td>
+                            </tr>
+                            <tr>
+                                <td>instanceof</td>
+                                <td>instanceof</td>
+                                <td>obj instanceof String</td>
+                            </tr>
+                        </table>
+                        <p>运算符优先级（从高到低）：</p>
+                        <pre>
+[] . () (方法调用) 
+! ~ ++ -- +(一元) -(一元) (类型) new 
+* / % 
++ - 
+<< >> >>> 
+< > <= >= instanceof 
+== != 
+& 
+^ 
+| 
+&& 
+|| 
+?: 
+= += -= *= /= %= &= |= ^= <<= >>= >>>=</pre>
+                        <p>表达式示例：</p>
+                        <pre class="code">
+int a = 10, b = 20;
+int c = a + b * 2;  // 50
+boolean result = (a > 5) && (b < 30);  // true
+int max = (a > b) ? a : b;  // 20
+a += 5;  // a = 15</pre>
+                    </div>
+                </li>
+            </ul>
+            
+            <h3>2. 流程控制</h3>
+            <ul>
+                <li>条件语句（if-else, switch）
+                    <button class="toggle-btn" onclick="toggleDetails('conditionals')">展开</button>
+                    <div id="conditionals" class="details">
+                        <p>if-else语句：</p>
+                        <pre class="code">
+// 简单if
+if (score >= 60) {
+    System.out.println("及格");
+}
+
+// if-else
+if (score >= 90) {
+    System.out.println("优秀");
+} else if (score >= 80) {
+    System.out.println("良好");
+} else if (score >= 60) {
+    System.out.println("及格");
+} else {
+    System.out.println("不及格");
+}</pre>
+                        <p>switch语句（Java 12+支持箭头语法）：</p>
+                        <pre class="code">
+int day = 3;
+String dayName;
+
+// 传统语法
+switch (day) {
+    case 1: dayName = "星期一"; break;
+    case 2: dayName = "星期二"; break;
+    case 3: dayName = "星期三"; break;
+    default: dayName = "未知";
+}
+
+// Java 12+新语法
+dayName = switch (day) {
+    case 1 -> "星期一";
+    case 2 -> "星期二";
+    case 3 -> "星期三";
+    default -> "未知";
+};</pre>
+                        <p>switch表达式（Java 14+）：</p>
+                        <pre class="code">
+String season = switch (month) {
+    case 12, 1, 2 -> "冬季";
+    case 3, 4, 5 -> "春季";
+    case 6, 7, 8 -> "夏季";
+    case 9, 10, 11 -> "秋季";
+    default -> "无效月份";
+};</pre>
+                    </div>
+                </li>
+                <li>循环结构（for, while, do-while）
+                    <button class="toggle-btn" onclick="toggleDetails('loops')">展开</button>
+                    <div id="loops" class="details">
+                        <p>for循环：</p>
+                        <pre class="code">
+// 传统for循环
+for (int i = 0; i < 10; i++) {
+    System.out.println(i);
+}
+
+// 增强for循环（foreach）
+int[] numbers = {1, 2, 3, 4, 5};
+for (int num : numbers) {
+    System.out.println(num);
+}</pre>
+                        <p>while循环：</p>
+                        <pre class="code">
+// 先判断后执行
+int count = 0;
+while (count < 5) {
+    System.out.println(count);
+    count++;
+}</pre>
+                        <p>do-while循环：</p>
+                        <pre class="code">
+// 先执行后判断，至少执行一次
+int x = 10;
+do {
+    System.out.println(x);
+    x--;
+} while (x > 0);</pre>
+                        <p>循环控制：</p>
+                        <pre class="code">
+// break示例 - 跳出循环
+for (int i = 0; i < 10; i++) {
+    if (i == 5) break;
+    System.out.println(i);
+}
+
+// continue示例 - 跳过当前迭代
+for (int i = 0; i < 10; i++) {
+    if (i % 2 == 0) continue;
+    System.out.println(i);  // 只打印奇数
+}</pre>
+                    </div>
+                </li>
+                <li>跳转语句（break, continue, return）
+                    <button class="toggle-btn" onclick="toggleDetails('jumps')">展开</button>
+                    <div id="jumps" class="details">
+                        <p>break语句：</p>
+                        <pre class="code">
+// 1. 跳出循环
+for (int i = 0; i < 10; i++) {
+    if (i == 5) {
+        break;  // 当i等于5时跳出循环
+    }
+    System.out.println(i);
+}
+
+// 2. 带标签的break（跳出多层循环）
+outerLoop:
+for (int i = 0; i < 5; i++) {
+    for (int j = 0; j < 5; j++) {
+        if (i * j > 6) {
+            break outerLoop;  // 直接跳出外层循环
+        }
+        System.out.println(i + " * " + j + " = " + (i * j));
+    }
+}</pre>
+                        <p>continue语句：</p>
+                        <pre class="code">
+// 1. 跳过当前迭代
+for (int i = 0; i < 10; i++) {
+    if (i % 2 == 0) {
+        continue;  // 跳过偶数
+    }
+    System.out.println(i);  // 只打印奇数
+}
+
+// 2. 带标签的continue
+outerLoop:
+for (int i = 0; i < 3; i++) {
+    for (int j = 0; j < 3; j++) {
+        if (i == j) {
+            continue outerLoop;  // 跳过外层循环当前迭代
+        }
+        System.out.println(i + "," + j);
+    }
+}</pre>
+                        <p>return语句：</p>
+                        <pre class="code">
+// 1. 返回值
+public int add(int a, int b) {
+    return a + b;  // 返回两数之和
+}
+
+// 2. 提前结束方法
+public void printPositive(int num) {
+    if (num <= 0) {
+        return;  // 如果数字非正，提前结束方法
+    }
+    System.out.println("正数: " + num);
+}</pre>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- 其他部分的HTML结构类似，可以根据需要继续添加 -->
+    
+    <div class="module">
+        <h2>第七部分：进阶学习方向</h2>
+        <ul>
+            <li>Java网络编程
+                <button class="toggle-btn" onclick="toggleDetails('network')">展开</button>
+                <div id="network" class="details">
+                    <p>Java网络编程核心类：</p>
+                    <ul>
+                        <li>URL/URLConnection - 处理URL资源</li>
+                        <li>Socket/ServerSocket - TCP编程</li>
+                        <li>DatagramSocket - UDP编程</li>
+                    </ul>
+                    <p>简单TCP客户端/服务器示例：</p>
+                    <pre class="code">
+// 服务器端
+try (ServerSocket server = new ServerSocket(8080);
+     Socket client = server.accept();
+     PrintWriter out = new PrintWriter(client.getOutputStream(), true);
+     BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()))) {
+    
+    String inputLine;
+    while ((inputLine = in.readLine()) != null) {
+        System.out.println("收到: " + inputLine);
+        out.println("服务器回复: " + inputLine);
+    }
+}
+
+// 客户端
+try (Socket socket = new Socket("localhost", 8080);
+     PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+     BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+     BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in))) {
+    
+    String userInput;
+    while ((userInput = stdIn.readLine()) != null) {
+        out.println(userInput);
+        System.out.println("服务器说: " + in.readLine());
+    }
+}</pre>
+                </div>
+            </li>
+            <li>Java数据库连接（JDBC）
+                <button class="toggle-btn" onclick="toggleDetails('jdbc')">展开</button>
+                <div id="jdbc" class="details">
+                    <p>JDBC基本步骤：</p>
+                    <pre class="code">
+// 1. 加载驱动（JDBC 4.0+自动加载）
+Class.forName("com.mysql.cj.jdbc.Driver");
+
+// 2. 建立连接
+String url = "jdbc:mysql://localhost:3306/mydb?useSSL=false";
+String user = "root";
+String password = "123456";
+try (Connection conn = DriverManager.getConnection(url, user, password)) {
+    
+    // 3. 创建Statement
+    Statement stmt = conn.createStatement();
+    
+    // 4. 执行查询
+    ResultSet rs = stmt.executeQuery("SELECT * FROM users");
+    
+    // 5. 处理结果
+    while (rs.next()) {
+        int id = rs.getInt("id");
+        String name = rs.getString("name");
+        System.out.println(id + ": " + name);
+    }
+    
+    // 6. 关闭资源（try-with-resources自动关闭）
+}</pre>
+                    <p>使用PreparedStatement防止SQL注入：</p>
+                    <pre class="code">
+String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+    pstmt.setString(1, username);
+    pstmt.setString(2, password);
+    ResultSet rs = pstmt.executeQuery();
+    // 处理结果...
+}</pre>
+                </div>
+            </li>
+            <li>Java GUI编程（Swing/JavaFX）
+                <button class="toggle-btn" onclick="toggleDetails('gui')">展开</button>
+                <div id="gui" class="details">
+                    <p>Swing简单示例：</p>
+                    <pre class="code">
+import javax.swing.*;
+
+public class SwingDemo {
+    public static void main(String[] args) {
+        // 创建主窗口
+        JFrame frame = new JFrame("我的Swing程序");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(300, 200);
+        
+        // 添加按钮
+        JButton button = new JButton("点击我");
+        button.addActionListener(e -> {
+            JOptionPane.showMessageDialog(frame, "你好，Swing！");
+        });
+        
+        // 设置布局并添加组件
+        frame.getContentPane().setLayout(new FlowLayout());
+        frame.getContentPane().add(button);
+        
+        // 显示窗口
+        frame.setVisible(true);
+    }
+}</pre>
+                    <p>JavaFX简单示例：</p>
+                    <pre class="code">
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+
+public class JavaFXDemo extends Application {
+    @Override
+    public void start(Stage primaryStage) {
+        Button btn = new Button("点击我");
+        btn.setOnAction(e -> {
+            System.out.println("你好，JavaFX！");
+        });
+        
+        StackPane root = new StackPane();
+        root.getChildren().add(btn);
+        
+        Scene scene = new Scene(root, 300, 200);
+        
+        primaryStage.setTitle("我的JavaFX程序");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+    
+    public static void main(String[] args) {
+        launch(args);
+    }
+}</pre>
+                </div>
+            </li>
+            <li>Java Web开发（Servlet/JSP）
+                <button class="toggle-btn" onclick="toggleDetails('web')">展开</button>
+                <div id="web" class="details">
+                    <p>Servlet示例：</p>
+                    <pre class="code">
+@WebServlet("/hello")
+public class HelloServlet extends HttpServlet {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+        out.println("&lt;html&gt;&lt;body&gt;");
+        out.println("&lt;h1&gt;Hello, Servlet!&lt;/h1&gt;");
+        out.println("&lt;/body&gt;&lt;/html&gt;");
+    }
+}</pre>
+                    <p>JSP示例：</p>
+                    <pre class="code">
+&lt;%@ page contentType="text/html;charset=UTF-8" language="java" %&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;我的JSP页面&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;欢迎，&lt;%= request.getParameter("name") %&gt;!&lt;/h1&gt;
+    &lt;p&gt;当前时间: &lt;%= new java.util.Date() %&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+                </div>
+            </li>
+            <li>Spring框架
+                <button class="toggle-btn" onclick="toggleDetails('spring')">展开</button>
+                <div id="spring" class="details">
+                    <p>Spring核心模块：</p>
+                    <ul>
+                        <li>Spring Core - 依赖注入(IoC)容器</li>
+                        <li>Spring MVC - Web框架</li>
+                        <li>Spring Data - 数据访问</li>
+                        <li>Spring Security - 安全框架</li>
+                        <li>Spring Boot - 快速开发</li>
+                    </ul>
+                    <p>Spring Boot简单REST API示例：</p>
+                    <pre class="code">
+@RestController
+@RequestMapping("/api")
+public class MyController {
+    
+    @GetMapping("/hello")
+    public String sayHello(@RequestParam(defaultValue = "World") String name) {
+        return "Hello, " + name + "!";
+    }
+    
+    @PostMapping("/users")
+    public ResponseEntity&lt;User&gt; createUser(@RequestBody User user) {
+        // 保存用户逻辑...
+        return ResponseEntity.ok(user);
+    }
+}
+
+// 启动类
+@SpringBootApplication
+public class MyApp {
+    public static void main(String[] args) {
+        SpringApplication.run(MyApp.class, args);
+    }
+}</pre>
+                </div>
+            </li>
+            <li>Java性能优化
+                <button class="toggle-btn" onclick="toggleDetails('performance')">展开</button>
+                <div id="performance" class="details">
+                    <p>Java性能优化技巧：</p>
+                    <ul>
+                        <li>使用StringBuilder代替字符串拼接</li>
+                        <li>避免不必要的对象创建</li>
+                        <li>合理使用集合类（ArrayList vs LinkedList）</li>
+                        <li>使用基本类型而非包装类</li>
+                        <li>优化循环结构</li>
+                    </ul>
+                    <p>JVM调优参数示例：</p>
+                    <pre class="code">
+# 堆内存设置
+-Xms512m  # 初始堆大小
+-Xmx1024m # 最大堆大小
+-XX:NewRatio=2 # 新生代与老年代比例
+-XX:SurvivorRatio=8 # Eden与Survivor区比例
+
+# GC设置
+-XX:+UseG1GC # 使用G1垃圾收集器
+-XX:MaxGCPauseMillis=200 # 目标最大GC暂停时间</pre>
+                    <p>性能分析工具：</p>
+                    <ul>
+                        <li>JVisualVM - 可视化监控工具</li>
+                        <li>JProfiler - 商业性能分析工具</li>
+                        <li>YourKit - 商业性能分析工具</li>
+                        <li>Arthas - 阿里开源的Java诊断工具</li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

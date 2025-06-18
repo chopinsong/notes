@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySQL 基础学习大纲</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2980b9;
+            background-color: #f8f9fa;
+            padding: 8px 12px;
+            border-left: 4px solid #3498db;
+        }
+        h3 {
+            color: #16a085;
+            cursor: pointer;
+            padding: 6px 10px;
+            background-color: #ecf0f1;
+            border-radius: 4px;
+            margin: 10px 0 5px 0;
+        }
+        h3:hover {
+            background-color: #d6eaf8;
+        }
+        .content {
+            display: none;
+            padding: 10px 15px;
+            margin-left: 15px;
+            border-left: 2px solid #bdc3c7;
+            background-color: #f9f9f9;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        code {
+            font-family: Consolas, Monaco, 'Andale Mono', monospace;
+            color: #c7254e;
+            background-color: #f9f2f4;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>MySQL 基础学习大纲</h1>
+
+    <h2>一、MySQL 简介与安装</h2>
+    
+    <h3 onclick="toggleContent('intro')">1.1 MySQL 简介</h3>
+    <div id="intro" class="content">
+        <p>MySQL 是一个开源的关系型数据库管理系统(RDBMS)，由瑞典 MySQL AB 公司开发，目前属于 Oracle 公司。</p>
+        <p>主要特点：</p>
+        <ul>
+            <li>开源免费</li>
+            <li>性能高</li>
+            <li>可靠性好</li>
+            <li>易于使用</li>
+            <li>跨平台支持</li>
+        </ul>
+        <p>MySQL 使用 SQL(结构化查询语言)进行数据库操作。</p>
+    </div>
+    
+    <h3 onclick="toggleContent('install')">1.2 MySQL 安装与配置</h3>
+    <div id="install" class="content">
+        <p>MySQL 可以在多种操作系统上安装，包括 Windows、Linux 和 macOS。</p>
+        
+        <h4>Windows 安装步骤：</h4>
+        <ol>
+            <li>从 MySQL 官网下载 MySQL Installer</li>
+            <li>运行安装程序，选择"Developer Default"安装类型</li>
+            <li>配置 MySQL 服务器端口(默认3306)和root用户密码</li>
+            <li>完成安装</li>
+        </ol>
+        
+        <h4>Linux 安装(Ubuntu示例)：</h4>
+        <pre><code>sudo apt update
+sudo apt install mysql-server
+sudo mysql_secure_installation</code></pre>
+        
+        <h4>验证安装：</h4>
+        <pre><code>mysql --version</code></pre>
+    </div>
+    
+    <h3 onclick="toggleContent('workbench')">1.3 MySQL Workbench 简介</h3>
+    <div id="workbench" class="content">
+        <p>MySQL Workbench 是 MySQL 官方提供的可视化数据库管理工具。</p>
+        <p>主要功能：</p>
+        <ul>
+            <li>数据库设计与建模</li>
+            <li>SQL 开发</li>
+            <li>数据库管理</li>
+            <li>数据迁移</li>
+            <li>性能监控</li>
+        </ul>
+        <p>基本使用方法：</p>
+        <ol>
+            <li>创建新的数据库连接</li>
+            <li>使用 SQL 编辑器执行查询</li>
+            <li>使用可视化工具管理数据库对象</li>
+        </ol>
+    </div>
+
+    <h2>二、数据库基本操作</h2>
+    
+    <h3 onclick="toggleContent('connect')">2.1 连接与断开 MySQL</h3>
+    <div id="connect" class="content">
+        <p>连接到 MySQL 服务器的基本命令：</p>
+        <pre><code>mysql -u username -p</code></pre>
+        <p>示例：</p>
+        <pre><code>mysql -u root -p
+# 输入密码后进入 MySQL 命令行</code></pre>
+        
+        <p>断开连接：</p>
+        <pre><code>exit;
+或
+quit;</code></pre>
+        
+        <p>查看当前连接信息：</p>
+        <pre><code>STATUS;</code></pre>
+    </div>
+    
+    <h3 onclick="toggleContent('db_operations')">2.2 数据库基本操作</h3>
+    <div id="db_operations" class="content">
+        <h4>查看所有数据库：</h4>
+        <pre><code>SHOW DATABASES;</code></pre>
+        
+        <h4>创建数据库：</h4>
+        <pre><code>CREATE DATABASE database_name;
+CREATE DATABASE IF NOT EXISTS database_name;</code></pre>
+        <p>示例：</p>
+        <pre><code>CREATE DATABASE school;</code></pre>
+        
+        <h4>选择数据库：</h4>
+        <pre><code>USE database_name;</code></pre>
+        <p>示例：</p>
+        <pre><code>USE school;</code></pre>
+        
+        <h4>删除数据库：</h4>
+        <pre><code>DROP DATABASE database_name;
+DROP DATABASE IF EXISTS database_name;</code></pre>
+        <p>示例：</p>
+        <pre><code>DROP DATABASE school;</code></pre>
+    </div>
+    
+    <h3 onclick="toggleContent('variables')">2.3 系统变量与用户变量</h3>
+    <div id="variables" class="content">
+        <h4>系统变量：</h4>
+        <p>查看所有系统变量：</p>
+        <pre><code>SHOW VARIABLES;</code></pre>
+        
+        <p>查看特定系统变量：</p>
+        <pre><code>SHOW VARIABLES LIKE 'version%';</code></pre>
+        
+        <p>设置系统变量(会话级别)：</p>
+        <pre><code>SET SESSION sql_mode = 'STRICT_TRANS_TABLES';</code></pre>
+        
+        <h4>用户变量：</h4>
+        <p>定义用户变量：</p>
+        <pre><code>SET @var_name = value;</code></pre>
+        <p>示例：</p>
+        <pre><code>SET @total = 100;
+SELECT @total;</code></pre>
+    </div>
+
+    <h2>三、表操作与数据类型</h2>
+    
+    <h3 onclick="toggleContent('data_types')">3.1 MySQL 数据类型</h3>
+    <div id="data_types" class="content">
+        <p>MySQL 支持多种数据类型，主要分为以下几类：</p>
+        
+        <h4>数值类型：</h4>
+        <table>
+            <tr>
+                <th>类型</th>
+                <th>描述</th>
+                <th>示例</th>
+            </tr>
+            <tr>
+                <td>TINYINT</td>
+                <td>小整数(-128到127)</td>
+                <td>age TINYINT</td>
+            </tr>
+            <tr>
+                <td>INT</td>
+                <td>标准整数</td>
+                <td>id INT</td>
+            </tr>
+            <tr>
+                <td>FLOAT</td>
+                <td>单精度浮点数</td>
+                <td>price FLOAT(8,2)</td>
+            </tr>
+            <tr>
+                <td>DECIMAL</td>
+                <td>精确小数</td>
+                <td>salary DECIMAL(10,2)</td>
+            </tr>
+        </table>
+        
+        <h4>字符串类型：</h4>
+        <table>
+            <tr>
+                <th>类型</th>
+                <th>描述</th>
+                <th>示例</th>
+            </tr>
+            <tr>
+                <td>CHAR</td>
+                <td>固定长度字符串</td>
+                <td>gender CHAR(1)</td>
+            </tr>
+            <tr>
+                <td>VARCHAR</td>
+                <td>可变长度字符串</td>
+                <td>name VARCHAR(50)</td>
+            </tr>
+            <tr>
+                <td>TEXT</td>
+                <td>长文本数据</td>
+                <td>content TEXT</td>
+            </tr>
+        </table>
+        
+        <h4>日期时间类型：</h4>
+        <table>
+            <tr>
+                <th>类型</th>
+                <th>描述</th>
+                <th>示例</th>
+            </tr>
+            <tr>
+                <td>DATE</td>
+                <td>日期(YYYY-MM-DD)</td>
+                <td>birthday DATE</td>
+            </tr>
+            <tr>
+                <td>DATETIME</td>
+                <td>日期时间</td>
+                <td>created_at DATETIME</td>
+            </tr>
+            <tr>
+                <td>TIMESTAMP</td>
+                <td>时间戳</td>
+                <td>updated_at TIMESTAMP</td>
+            </tr>
+        </table>
+    </div>
+    
+    <h3 onclick="toggleContent('table_operations')">3.2 表的基本操作</h3>
+    <div id="table_operations" class="content">
+        <h4>创建表：</h4>
+        <pre><code>CREATE TABLE table_name (
+    column1 datatype constraints,
+    column2 datatype constraints,
+    ...
+);</code></pre>
+        <p>示例：</p>
+        <pre><code>CREATE TABLE students (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL,
+    age TINYINT,
+    gender CHAR(1),
+    enrollment_date DATE
+);</code></pre>
+        
+        <h4>查看表结构：</h4>
+        <pre><code>DESCRIBE table_name;
+或
+DESC table_name;</code></pre>
+        <p>示例：</p>
+        <pre><code>DESCRIBE students;</code></pre>
+        
+        <h4>查看所有表：</h4>
+        <pre><code>SHOW TABLES;</code></pre>
+        
+        <h4>删除表：</h4>
+        <pre><code>DROP TABLE table_name;
+DROP TABLE IF EXISTS table_name;</code></pre>
+        <p>示例：</p>
+        <pre><code>DROP TABLE students;</code></pre>
+        
+        <h4>修改表结构：</h4>
+        <p>添加列：</p>
+        <pre><code>ALTER TABLE table_name ADD column_name datatype;</code></pre>
+        <p>示例：</p>
+        <pre><code>ALTER TABLE students ADD email VARCHAR(100);</code></pre>
+        
+        <p>修改列：</p>
+        <pre><code>ALTER TABLE table_name MODIFY column_name new_datatype;</code></pre>
+        <p>示例：</p>
+        <pre><code>ALTER TABLE students MODIFY name VARCHAR(100);</code></pre>
+        
+        <p>删除列：</p>
+        <pre><code>ALTER TABLE table_name DROP COLUMN column_name;</code></pre>
+        <p>示例：</p>
+        <pre><code>ALTER TABLE students DROP COLUMN email;</code></pre>
+    </div>
+    
+    <h3 onclick="toggleContent('constraints')">3.3 约束条件</h3>
+    <div id="constraints" class="content">
+        <p>约束用于限制表中数据的规则，确保数据的准确性和可靠性。</p>
+        
+        <h4>常用约束：</h4>
+        <ul>
+            <li><strong>PRIMARY KEY</strong> - 唯一标识表中的每一行</li>
+            <li><strong>FOREIGN KEY</strong> - 保证一个表中的数据匹配另一个表中的值的参照完整性</li>
+            <li><strong>NOT NULL</strong> - 列不能存储NULL值</li>
+            <li><strong>UNIQUE</strong> - 确保列中的所有值都是不同的</li>
+            <li><strong>DEFAULT</strong> - 为列设置默认值</li>
+            <li><strong>CHECK</strong> - 确保列中的值满足特定条件</li>
+            <li><strong>AUTO_INCREMENT</strong> - 自动为列生成唯一编号</li>
+        </ul>
+        
+        <h4>示例：</h4>
+        <pre><code>CREATE TABLE employees (
+    emp_id INT PRIMARY KEY AUTO_INCREMENT,
+    emp_name VARCHAR(50) NOT NULL,
+    emp_email VARCHAR(100) UNIQUE,
+    dept_id INT,
+    salary DECIMAL(10,2) CHECK (salary > 0),
+    hire_date DATE DEFAULT (CURRENT_DATE),
+    FOREIGN KEY (dept_id) REFERENCES departments(dept_id)
+);</code></pre>
+    </div>
+
+    <h2>四、数据操作语言(DML)</h2>
+    
+    <h3 onclick="toggleContent('insert')">4.1 插入数据(INSERT)</h3>
+    <div id="insert" class="content">
+        <h4>基本语法：</h4>
+        <pre><code>INSERT INTO table_name (column1, column2, ...)
+VALUES (value1, value2, ...);</code></pre>
+        <p>示例：</p>
+        <pre><code>INSERT INTO students (name, age, gender, enrollment_date)
+VALUES ('张三', 20, 'M', '2023-09-01');</code></pre>
+        
+        <h4>插入多行数据：</h4>
+        <pre><code>INSERT INTO table_name (column1, column2, ...)
+VALUES 
+    (value1, value2, ...),
+    (value1, value2, ...),
+    ...;</code></pre>
+        <p>示例：</p>
+        <pre><code>INSERT INTO students (name, age, gender, enrollment_date)
+VALUES 
+    ('李四', 21, 'F', '2023-09-01'),
+    ('王五', 22, 'M', '2023-09-02'),
+    ('赵六', 20, 'F', '2023-09-03');</code></pre>
+        
+        <h4>从其他表插入数据：</h4>
+        <pre><code>INSERT INTO table1 (column1, column2, ...)
+SELECT column1, column2, ...
+FROM table2
+WHERE condition;</code></pre>
+    </div>
+    
+    <h3 onclick="toggleContent('update')">4.2 更新数据(UPDATE)</h3>
+    <div id="update" class="content">
+        <h4>基本语法：</h4>
+        <pre><code>UPDATE table_name
+SET column1 = value1, column2 = value2, ...
+WHERE condition;</code></pre>
+        <p>示例：</p>
+        <pre><code>UPDATE students
+SET age = 23
+WHERE name = '张三';</code></pre>
+        
+        <h4>更新多个字段：</h4>
+        <pre><code>UPDATE students
+SET age = age + 1, enrollment_date = '2023-09-15'
+WHERE gender = 'M';</code></pre>
+        
+        <p><strong>注意：</strong>如果没有WHERE子句，将更新表中的所有行！</p>
+    </div>
+    
+    <h3 onclick="toggleContent('delete')">4.3 删除数据(DELETE)</h3>
+    <div id="delete" class="content">
+        <h4>基本语法：</h4>
+        <pre><code>DELETE FROM table_name WHERE condition;</code></pre>
+        <p>示例：</p>
+        <pre><code>DELETE FROM students WHERE name = '张三';</code></pre>
+        
+        <h4>删除所有数据：</h4>
+        <pre><code>DELETE FROM table_name;</code></pre>
+        <p>或</p>
+        <pre><code>TRUNCATE TABLE table_name;</code></pre>
+        <p>TRUNCATE 比 DELETE 更快，因为它不记录单个行删除操作。</p>
+        
+        <p><strong>注意：</strong>如果没有WHERE子句，将删除表中的所有数据！</p>
+    </div>
+
+    <h2>五、数据查询语言(DQL)</h2>
+    
+    <h3 onclick="toggleContent('select')">5.1 基本查询(SELECT)</h3>
+    <div id="select" class="content">
+        <h4>基本语法：</h4>
+        <pre><code>SELECT column1, column2, ...
+FROM table_name;</code></pre>
+        <p>示例：</p>
+        <pre><code>SELECT name, age FROM students;</code></pre>
+        
+        <h4>查询所有列：</h4>
+        <pre><code>SELECT * FROM table_name;</code></pre>
+        <p>示例：</p>
+        <pre><code>SELECT * FROM students;</code></pre>
+        
+        <h4>使用别名：</h4>
+        <pre><code>SELECT column_name AS alias_name FROM table_name;</code></pre>
+        <p>示例：</p>
+        <pre><code>SELECT name AS student_name, age AS student_age FROM students;</code></pre>
+    </div>
+    
+    <h3 onclick="toggleContent('where')">5.2 条件查询(WHERE)</h3>
+    <div id="where" class="content">
+        <h4>基本语法：</h4>
+        <pre><code>SELECT column1, column2, ...
+FROM table_name
+WHERE condition;</code></pre>
+        
+        <h4>比较运算符：</h4>
+        <ul>
+            <li>= (等于)</li>
+            <li>&lt;&gt; 或 != (不等于)</li>
+            <li>&gt; (大于)</li>
+            <li>&lt; (小于)</li>
+            <li>&gt;= (大于等于)</li>
+            <li>&lt;= (小于等于)</li>
+            <li>BETWEEN (在某个范围内)</li>
+            <li>LIKE (搜索某种模式)</li>
+            <li>IN (指定多个可能值)</li>
+        </ul>
+        
+        <h4>示例：</h4>
+        <pre><code>-- 等于
+SELECT * FROM students WHERE age = 20;
+
+-- 不等于
+SELECT * FROM students WHERE gender != 'M';
+
+-- 大于
+SELECT * FROM students WHERE age > 20;
+
+-- BETWEEN
+SELECT * FROM students WHERE age BETWEEN 20 AND 22;
+
+-- LIKE
+SELECT * FROM students WHERE name LIKE '张%';
+
+-- IN
+SELECT * FROM students WHERE age IN (20, 22);</code></pre>
+    </div>
+    
+    <h3 onclick="toggleContent('order_group')">5.3 排序与分组</h3>
+    <div id="order_group" class="content">
+        <h4>排序(ORDER BY)：</h4>
+        <pre><code>SELECT column1, column2, ...
+FROM table_name
+ORDER BY column1 [ASC|DESC], column2 [ASC|DESC], ...;</code></pre>
+        <p>示例：</p>
+        <pre><code>-- 按年龄升序排列
+SELECT * FROM students ORDER BY age ASC;
+
+-- 按年龄降序排列，年龄相同按姓名升序排列
+SELECT * FROM students ORDER BY age DESC, name ASC;</code></pre>
+        
+        <h4>分组(GROUP BY)：</h4>
+        <pre><code>SELECT column_name(s), aggregate_function(column_name)
+FROM table_name
+WHERE condition
+GROUP BY column_name(s);</code></pre>
+        <p>示例：</p>
+        <pre><code>-- 按性别分组统计人数
+SELECT gender, COUNT(*) AS count
+FROM students
+GROUP BY gender;
+
+-- 按年龄分组统计平均成绩
+SELECT age, AVG(score) AS avg_score
+FROM students
+GROUP BY age;</code></pre>
+        
+        <h4>HAVING 子句：</h4>
+        <p>HAVING 用于过滤分组后的结果，类似于 WHERE 但用于分组。</p>
+        <pre><code>SELECT column_name(s), aggregate_function(column_name)
+FROM table_name
+WHERE condition
+GROUP BY column_name(s)
+HAVING condition;</code></pre>
+        <p>示例：</p>
+        <pre><code>-- 查找平均分大于80的班级
+SELECT class_id, AVG(score) AS avg_score
+FROM students
+GROUP BY class_id
+HAVING AVG(score) > 80;</code></pre>
+    </div>
+    
+    <h3 onclick="toggleContent('functions')">5.4 常用函数</h3>
+    <div id="functions" class="content">
+        <h4>聚合函数：</h4>
+        <ul>
+            <li><strong>COUNT()</strong> - 返回行数</li>
+            <li><strong>SUM()</strong> - 返回总和</li>
+            <li><strong>AVG()</strong> - 返回平均值</li>
+            <li><strong>MAX()</strong> - 返回最大值</li>
+            <li><strong>MIN()</strong> - 返回最小值</li>
+        </ul>
+        <p>示例：</p>
+        <pre><code>-- 统计学生总数
+SELECT COUNT(*) FROM students;
+
+-- 计算平均年龄
+SELECT AVG(age) FROM students;
+
+-- 查找最高分
+SELECT MAX(score) FROM students;</code></pre>
+        
+        <h4>字符串函数：</h4>
+        <ul>
+            <li><strong>CONCAT()</strong> - 连接字符串</li>
+            <li><strong>SUBSTRING()</strong> - 提取子字符串</li>
+            <li><strong>LENGTH()</strong> - 返回字符串长度</li>
+            <li><strong>UPPER()/LOWER()</strong> - 转换为大写/小写</li>
+            <li><strong>TRIM()</strong> - 去除空格</li>
+        </ul>
+        <p>示例：</p>
+        <pre><code>-- 连接姓和名
+SELECT CONCAT(first_name, ' ', last_name) AS full_name FROM employees;
+
+-- 提取姓氏
+SELECT SUBSTRING(name, 1, 1) AS surname FROM students;</code></pre>
+        
+        <h4>日期函数：</h4>
+        <ul>
+            <li><strong>NOW()</strong> - 返回当前日期和时间</li>
+            <li><strong>CURDATE()</strong> - 返回当前日期</li>
+            <li><strong>CURTIME()</strong> - 返回当前时间</li>
+            <li><strong>DATE_FORMAT()</strong> - 格式化日期</li>
+            <li><strong>DATEDIFF()</strong> - 计算两个日期之差</li>
+        </ul>
+        <p>示例：</p>
+        <pre><code>-- 获取当前日期和时间
+SELECT NOW();
+
+-- 格式化日期
+SELECT DATE_FORMAT(enrollment_date, '%Y年%m月%d日') FROM students;
+
+-- 计算入学天数
+SELECT name, DATEDIFF(NOW(), enrollment_date) AS days FROM students;</code></pre>
+    </div>
+
+    <h2>六、表连接与子查询</h2>
+    
+    <h3 onclick="toggleContent('joins')">6.1 表连接(JOIN)</h3>
+    <div id="joins" class="content">
+        <p>JOIN 用于基于两个或多个表之间的相关列组合行。</p>
+        
+        <h4>内连接(INNER JOIN)：</h4>
+        <p>返回两个表中匹配的行。</p>
+        <pre><code>SELECT columns
+FROM table1
+INNER JOIN table2 ON table1.column = table2.column;</code></pre>
+        <p>示例：</p>
+        <pre><code>SELECT students.name, classes.class_name
+FROM students
+INNER JOIN classes ON students.class_id = classes.id;</code></pre>
+        
+        <h4>左连接(LEFT JOIN)：</h4>
+        <p>返回左表的所有行，即使右表中没有匹配。</p>
+        <pre><code>SELECT columns
+FROM table1
+LEFT JOIN table2 ON table1.column = table2.column;</code></pre>
+        <p>示例：</p>
+        <pre><code>SELECT students.name, classes.class_name
+FROM students
+LEFT JOIN classes ON students.class_id = classes.id;</code></pre>
+        
+        <h4>右连接(RIGHT JOIN)：</h4>
+        <p>返回右表的所有行，即使左表中没有匹配。</p>
+        <pre><code>SELECT columns
+FROM table1
+RIGHT JOIN table2 ON table1.column = table2.column;</code></pre>
+        
+        <h4>全连接(FULL OUTER JOIN)：</h4>
+        <p>MySQL 不直接支持 FULL OUTER JOIN，但可以通过 UNION 实现：</p>
+        <pre><code>SELECT columns FROM table1 LEFT JOIN table2 ON table1.column = table2.column
+UNION
+SELECT columns FROM table1 RIGHT JOIN table2 ON table1.column = table2.column;</code></pre>
+        
+        <h4>自连接：</h4>
+        <p>表与自身连接。</p>
+        <pre><code>SELECT a.name, b.name AS manager
+FROM employees a
+JOIN employees b ON a.manager_id = b.emp_id;</code></pre>
+    </div>
+    
+    <h3 onclick="toggleContent('subqueries')">6.2 子查询</h3>
+    <div id="subqueries" class="content">
+        <p>子查询是嵌套在其他查询中的查询。</p>
+        
+        <h4>WHERE 子句中的子查询：</h4>
+        <pre><code>SELECT column_name(s)
+FROM table_name
+WHERE column_name OPERATOR (SELECT column_name FROM table_name WHERE condition);</code></pre>
+        <p>示例：</p>
+        <pre><code>-- 查找高于平均分的学生
+SELECT name, score
+FROM students
+WHERE score > (SELECT AVG(score) FROM students);</code></pre>
+        
+        <h4>FROM 子句中的子查询：</h4>
+        <pre><code>SELECT column_name(s)
+FROM (SELECT column_name FROM table_name WHERE condition) AS alias_name
+WHERE condition;</code></pre>
+        <p>示例：</p>
+        <pre><code>-- 查找每个班级的平均分
+SELECT class_id, AVG(avg_score)
+FROM (SELECT class_id, AVG(score) AS avg_score FROM students GROUP BY class_id) AS temp
+GROUP BY class_id;</code></pre>
+        
+        <h4>IN 操作符中的子查询：</h4>
+        <pre><code>SELECT column_name(s)
+FROM table_name
+WHERE column_name IN (SELECT column_name FROM table_name WHERE condition);</code></pre>
+        <p>示例：</p>
+        <pre><code>-- 查找有学生的班级
+SELECT class_name
+FROM classes
+WHERE id IN (SELECT DISTINCT class_id FROM students);</code></pre>
+        
+        <h4>EXISTS 操作符：</h4>
+        <pre><code>SELECT column_name(s)
+FROM table_name
+WHERE EXISTS (SELECT column_name FROM table_name WHERE condition);</code></pre>
+        <p>示例：</p>
+        <pre><code>-- 查找有学生的班级
+SELECT class_name
+FROM classes c
+WHERE EXISTS (SELECT 1 FROM students s WHERE s.class_id = c.id);</code></pre>
+    </div>
+    
+    <h3 onclick="toggleContent('set_operations')">6.3 集合操作</h3>
+    <div id="set_operations" class="content">
+        <h4>UNION：</h4>
+        <p>合并两个或多个 SELECT 语句的结果集，去除重复行。</p>
+        <pre><code>SELECT column_name(s) FROM table1
+UNION
+SELECT column_name(s) FROM table2;</code></pre>
+        <p>示例：</p>
+        <pre><code>-- 合并两个年级的学生名单
+SELECT name FROM grade1_students
+UNION
+SELECT name FROM grade2_students;</code></pre>
+        
+        <h4>UNION ALL：</h4>
+        <p>合并两个或多个 SELECT 语句的结果集，保留所有行包括重复行。</p>
+        <pre><code>SELECT column_name(s) FROM table1
+UNION ALL
+SELECT column_name(s) FROM table2;</code></pre>
+        
+        <h4>INTERSECT：</h4>
+        <p>MySQL 不直接支持 INTERSECT，但可以通过其他方式实现：</p>
+        <pre><code>SELECT DISTINCT column_name(s) FROM table1
+WHERE column_name IN (SELECT column_name FROM table2);</code></pre>
+        
+        <h4>EXCEPT/MINUS：</h4>
+        <p>MySQL 不直接支持 EXCEPT/MINUS，但可以通过其他方式实现：</p>
+        <pre><code>SELECT DISTINCT column_name(s) FROM table1
+WHERE column_name NOT IN (SELECT column_name FROM table2);</code></pre>
+    </div>
+
+    <h2>七、索引与性能优化</h2>
+    
+    <h3 onclick="toggleContent('indexes')">7.1 索引基础</h3>
+    <div id="indexes" class="content">
+        <p>索引是提高数据库查询性能的数据结构。</p>
+        
+        <h4>创建索引：</h4>
+        <pre><code>CREATE INDEX index_name ON table_name (column1, column2, ...);</code></pre>
+        <p>示例：</p>
+        <pre><code>CREATE INDEX idx_student_name ON students (name);</code></pre>
+        
+        <h4>创建唯一索引：</h4>
+        <pre><code>CREATE UNIQUE INDEX index_name ON table_name (column_name);</code></pre>
+        <p>示例：</p>
+        <pre><code>CREATE UNIQUE INDEX idx_student_email ON students (email);</code></pre>
+        
+        <h4>删除索引：</h4>
+        <pre><code>DROP INDEX index_name ON table_name;</code></pre>
+        <p>示例：</p>
+        <pre><code>DROP INDEX idx_student_name ON students;</code></pre>
+        
+        <h4>查看索引：</h4>
+        <pre><code>SHOW INDEX FROM table_name;</code></pre>
+        <p>示例：</p>
+        <pre><code>SHOW INDEX FROM students;</code></pre>
+        
+        <h4>索引类型：</h4>
+        <ul>
+            <li><strong>普通索引</strong> - 最基本的索引，没有唯一性限制</li>
+            <li><strong>唯一索引</strong> - 索引列的值必须唯一，但允许有空值</li>
+            <li><strong>主键索引</strong> - 特殊的唯一索引，不允许有空值</li>
+            <li><strong>复合索引</strong> - 多个列上创建的索引</li>
+            <li><strong>全文索引</strong> - 用于全文搜索</li>
+        </ul>
+    </div>
+    
+    <h3 onclick="toggleContent('explain')">7.2 EXPLAIN 执行计划</h3>
+    <div id="explain" class="content">
+        <p>EXPLAIN 用于分析 SQL 查询的执行计划，帮助优化查询。</p>
+        
+        <h4>基本用法：</h4>
+        <pre><code>EXPLAIN SELECT * FROM table_name WHERE condition;</code></pre>
+        <p>示例：</p>
+        <pre><code>EXPLAIN SELECT * FROM students WHERE age > 20;</code></pre>
+        
+        <h4>EXPLAIN 输出关键列：</h4>
+        <table>
+            <tr>
+                <th>列名</th>
+                <th>描述</th>
+            </tr>
+            <tr>
+                <td>id</td>
+                <td>查询标识符</td>
+            </tr>
+            <tr>
+                <td>select_type</td>
+                <td>查询类型(SIMPLE, PRIMARY, SUBQUERY等)</td>
+            </tr>
+            <tr>
+                <td>table</td>
+                <td>访问的表</td>
+            </tr>
+            <tr>
+                <td>type</td>
+                <td>连接类型(ALL, index, range, ref等)</td>
+            </tr>
+            <tr>
+                <td>possible_keys</td>
+                <td>可能使用的索引</td>
+            </tr>
+            <tr>
+                <td>key</td>
+                <td>实际使用的索引</td>
+            </tr>
+            <tr>
+                <td>rows</td>
+                <td>估计要检查的行数</td>
+            </tr>
+            <tr>
+                <td>Extra</td>
+                <td>额外信息(Using where, Using index等)</td>
+            </tr>
+        </table>
+        
+        <h4>优化建议：</h4>
+        <ul>
+            <li>避免全表扫描(type=ALL)</li>
+            <li>确保查询使用了适当的索引</li>
+            <li>注意 rows 列的值，过大可能需要优化</li>
+            <li>避免 Using filesort 和 Using temporary</li>
+        </ul>
+    </div>
+    
+    <h3 onclick="toggleContent('optimization')">7.3 查询优化技巧</h3>
+    <div id="optimization" class="content">
+        <h4>SQL 优化原则：</h4>
+        <ul>
+            <li>只查询需要的列，避免 SELECT *</li>
+            <li>合理使用索引</li>
+            <li>避免在索引列上使用函数或计算</li>
+            <li>使用 LIMIT 限制返回的行数</li>
+            <li>避免使用 OR 连接条件，考虑使用 UNION</li>
+            <li>合理使用 JOIN 代替子查询</li>
+        </ul>
+        
+        <h4>优化示例：</h4>
+        <p>不好的写法：</p>
+        <pre><code>SELECT * FROM students WHERE YEAR(enrollment_date) = 2023;</code></pre>
+        
+        <p>优化后的写法：</p>
+        <pre><code>SELECT * FROM students 
+WHERE enrollment_date BETWEEN '2023-01-01' AND '2023-12-31';</code></pre>
+        
+        <h4>数据库设计优化：</h4>
+        <ul>
+            <li>选择合适的数据类型</li>
+            <li>规范化数据库设计(但有时需要适当反规范化)</li>
+            <li>合理使用分区表</li>
+            <li>考虑使用缓存</li>
+        </ul>
+    </div>
+
+    <h2>八、视图与存储过程</h2>
+    
+    <h3 onclick="toggleContent('views')">8.1 视图(VIEW)</h3>
+    <div id="views" class="content">
+        <p>视图是基于 SQL 语句的结果集的虚拟表。</p>
+        
+        <h4>创建视图：</h4>
+        <pre><code>CREATE VIEW view_name AS
+SELECT column1, column2, ...
+FROM table_name
+WHERE condition;</code></pre>
+        <p>示例：</p>
+        <pre><code>CREATE VIEW student_scores AS
+SELECT s.name, c.class_name, sc.score
+FROM students s
+JOIN classes c ON s.class_id = c.id
+JOIN scores sc ON s.id = sc.student_id;</code></pre>
+        
+        <h4>使用视图：</h4>
+        <pre><code>SELECT * FROM view_name;</code></pre>
+        <p>示例：</p>
+        <pre><code>SELECT * FROM student_scores WHERE score > 80;</code></pre>
+        
+        <h4>修改视图：</h4>
+        <pre><code>ALTER VIEW view_name AS
+SELECT column1, column2, ...
+FROM table_name
+WHERE condition;</code></pre>
+        
+        <h4>删除视图：</h4>
+        <pre><code>DROP VIEW view_name;</code></pre>
+        
+        <h4>视图的优点：</h4>
+        <ul>
+            <li>简化复杂查询</li>
+            <li>提供安全性(隐藏敏感数据)</li>
+            <li>保持数据一致性</li>
+            <li>重用 SQL 语句</li>
+        </ul>
+    </div>
+    
+    <h3 onclick="toggleContent('procedures')">8.2 存储过程(PROCEDURE)</h3>
+    <div id="procedures" class="content">
+        <p>存储过程是一组为了完成特定功能的 SQL 语句集。</p>
+        
+        <h4>创建存储过程：</h4>
+        <pre><code>DELIMITER //
+CREATE PROCEDURE procedure_name(parameters)
+BEGIN
+    -- SQL 语句
+END //
+DELIMITER ;</code></pre>
+        <p>示例：</p>
+        <pre><code>DELIMITER //
+CREATE PROCEDURE GetStudentsByClass(IN class_id INT)
+BEGIN
+    SELECT * FROM students WHERE class_id = class_id;
+END //
+DELIMITER ;</code></pre>
+        
+        <h4>调用存储过程：</h4>
+        <pre><code>CALL procedure_name(parameters);</code></pre>
+        <p>示例：</p>
+        <pre><code>CALL GetStudentsByClass(1);</code></pre>
+        
+        <h4>删除存储过程：</h4>
+        <pre><code>DROP PROCEDURE IF EXISTS procedure_name;</code></pre>
+        
+        <h4>存储过程参数：</h4>
+        <ul>
+            <li><strong>IN</strong> - 输入参数(默认)</li>
+            <li><strong>OUT</strong> - 输出参数</li>
+            <li><strong>INOUT</strong> - 输入输出参数</li>
+        </ul>
+        <p>示例：</p>
+        <pre><code>DELIMITER //
+CREATE PROCEDURE GetStudentCountByClass(
+    IN class_id INT,
+    OUT student_count INT
+)
+BEGIN
+    SELECT COUNT(*) INTO student_count 
+    FROM students 
+    WHERE class_id = class_id;
+END //
+DELIMITER ;
+
+-- 调用
+CALL GetStudentCountByClass(1, @count);
+SELECT @count;</code></pre>
+    </div>
+    
+    <h3 onclick="toggleContent('functions_proc')">8.3 存储函数(FUNCTION)</h3>
+    <div id="functions_proc" class="content">
+        <p>存储函数与存储过程类似，但必须有返回值。</p>
+        
+        <h4>创建存储函数：</h4>
+        <pre><code>DELIMITER //
+CREATE FUNCTION function_name(parameters)
+RETURNS datatype
+[DETERMINISTIC]
+BEGIN
+    -- SQL 语句
+    RETURN value;
+END //
+DELIMITER ;</code></pre>
+        <p>示例：</p>
+        <pre><code>DELIMITER //
+CREATE FUNCTION GetStudentCount(class_id INT)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE count INT;
+    SELECT COUNT(*) INTO count FROM students WHERE class_id = class_id;
+    RETURN count;
+END //
+DELIMITER ;</code></pre>
+        
+        <h4>调用存储函数：</h4>
+        <pre><code>SELECT function_name(parameters);</code></pre>
+        <p>示例：</p>
+        <pre><code>SELECT GetStudentCount(1);</code></pre>
+        
+        <h4>删除存储函数：</h4>
+        <pre><code>DROP FUNCTION IF EXISTS function_name;</code></pre>
+        
+        <h4>存储函数与存储过程的区别：</h4>
+        <ul>
+            <li>函数必须有返回值，过程可以没有</li>
+            <li>函数可以在 SQL 语句中直接调用，过程需要用 CALL</li>
+            <li>函数通常用于计算，过程用于执行操作</li>
+        </ul>
+    </div>
+
+    <h2>九、触发器与事务</h2>
+    
+    <h3 onclick="toggleContent('triggers')">9.1 触发器(TRIGGER)</h3>
+    <div id="triggers" class="content">
+        <p>触发器是在表发生特定事件时自动执行的存储过程。</p>
+        
+        <h4>创建触发器：</h4>
+        <pre><code>DELIMITER //
+CREATE TRIGGER trigger_name
+trigger_time trigger_event ON table_name
+FOR EACH ROW
+BEGIN
+    -- 触发器逻辑
+END //
+DELIMITER ;</code></pre>
+        <p>trigger_time: BEFORE 或 AFTER</p>
+        <p>trigger_event: INSERT, UPDATE 或 DELETE</p>
+        
+        <p>示例：</p>
+        <pre><code>DELIMITER //
+CREATE TRIGGER before_student_insert
+BEFORE INSERT ON students
+FOR EACH ROW
+BEGIN
+    SET NEW.created_at = NOW();
+END //
+DELIMITER ;</code></pre>
+        
+        <h4>查看触发器：</h4>
+        <pre><code>SHOW TRIGGERS;</code></pre>
+        
+        <h4>删除触发器：</h4>
+        <pre><code>DROP TRIGGER trigger_name;</code></pre>
+        
+        <h4>触发器应用场景：</h4>
+        <ul>
+            <li>审计跟踪(记录数据变更)</li>
+            <li>数据验证</li>
+            <li>自动计算派生数据</li>
+            <li>维护冗余数据</li>
+        </ul>
+    </div>
+    
+    <h3 onclick="toggleContent('transactions')">9.2 事务(TRANSACTION)</h3>
+    <div id="transactions" class="content">
+        <p>事务是一组原子性的 SQL 查询，要么全部执行成功，要么全部失败。</p>
+        
+        <h4>事务特性(ACID)：</h4>
+        <ul>
+            <li><strong>原子性(Atomicity)</strong> - 事务是不可分割的工作单位</li>
+            <li><strong>一致性(Consistency)</strong> - 事务执行前后数据库保持一致状态</li>
+            <li><strong>隔离性(Isolation)</strong> - 多个事务并发执行时互不干扰</li>
+            <li><strong>持久性(Durability)</strong> - 事务提交后对数据库的改变是永久的</li>
+        </ul>
+        
+        <h4>事务基本语法：</h4>
+        <pre><code>START TRANSACTION;
+-- SQL 语句
+COMMIT;  -- 提交事务
+或
+ROLLBACK;  -- 回滚事务</code></pre>
+        <p>示例：</p>
+        <pre><code>START TRANSACTION;
+UPDATE accounts SET balance = balance - 100 WHERE id = 1;
+UPDATE accounts SET balance = balance + 100 WHERE id = 2;
+COMMIT;</code></pre>
+        
+        <h4>设置保存点：</h4>
+        <pre><code>SAVEPOINT savepoint_name;
+ROLLBACK TO savepoint_name;</code></pre>
+        
+        <h4>事务隔离级别：</h4>
+        <ul>
+            <li><strong>READ UNCOMMITTED</strong> - 读未提交</li>
+            <li><strong>READ COMMITTED</strong> - 读已提交</li>
+            <li><strong>REPEATABLE READ</strong> - 可重复读(MySQL默认)</li>
+            <li><strong>SERIALIZABLE</strong> - 串行化</li>
+        </ul>
+        <p>查看当前隔离级别：</p>
+        <pre><code>SELECT @@transaction_isolation;</code></pre>
+        <p>设置隔离级别：</p>
+        <pre><code>SET TRANSACTION ISOLATION LEVEL level;</code></pre>
+    </div>
+    
+    <h3 onclick="toggleContent('locks')">9.3 锁机制</h3>
+    <div id="locks" class="content">
+        <p>MySQL 使用锁机制来管理并发访问。</p>
+        
+        <h4>锁类型：</h4>
+        <ul>
+            <li><strong>共享锁(S锁)</strong> - 读锁，多个事务可以同时持有</li>
+            <li><strong>排他锁(X锁)</strong> - 写锁，一次只能由一个事务持有</li>
+        </ul>
+        
+        <h4>显式加锁：</h4>
+        <pre><code>-- 共享锁
+SELECT * FROM table_name WHERE ... LOCK IN SHARE MODE;
+
+-- 排他锁
+SELECT * FROM table_name WHERE ... FOR UPDATE;</code></pre>
+        
+        <h4>表锁与行锁：</h4>
+        <ul>
+            <li><strong>表锁</strong> - 锁定整张表，MyISAM 使用表锁</li>
+            <li><strong>行锁</strong> - 锁定行，InnoDB 支持行锁</li>
+        </ul>
+        
+        <h4>死锁：</h4>
+        <p>当两个或多个事务互相等待对方释放锁时发生死锁。</p>
+        <p>MySQL 能自动检测死锁并回滚其中一个事务。</p>
+        
+        <h4>锁优化建议：</h4>
+        <ul>
+            <li>尽量使用较低的隔离级别</li>
+            <li>设计良好的索引以减少锁定的数据量</li>
+            <li>保持事务简短</li>
+            <li>避免在事务中与用户交互</li>
+        </ul>
+    </div>
+
+    <h2>十、用户管理与安全</h2>
+    
+    <h3 onclick="toggleContent('users')">10.1 用户管理</h3>
+    <div id="users" class="content">
+        <h4>创建用户：</h4>
+        <pre><code>CREATE USER 'username'@'host' IDENTIFIED BY 'password';</code></pre>
+        <p>示例：</p>
+        <pre><code>CREATE USER 'app_user'@'localhost' IDENTIFIED BY 'password123';
+CREATE USER 'remote_user'@'%' IDENTIFIED BY 'password456';</code></pre>
+        
+        <h4>修改用户密码：</h4>
+        <pre><code>ALTER USER 'username'@'host' IDENTIFIED BY 'new_password';</code></pre>
+        <p>或</p>
+        <pre><code>SET PASSWORD FOR 'username'@'host' = PASSWORD('new_password');</code></pre>
+        
+        <h4>删除用户：</h4>
+        <pre><code>DROP USER 'username'@'host';</code></pre>
+        
+        <h4>查看用户：</h4>
+        <pre><code>SELECT User, Host FROM mysql.user;</code></pre>
+    </div>
+    
+    <h3 onclick="toggleContent('privileges')">10.2 权限管理</h3>
+    <div id="privileges" class="content">
+        <h4>授予权限：</h4>
+        <pre><code>GRANT privilege_type ON database_name.table_name TO 'username'@'host';</code></pre>
+        <p>示例：</p>
+        <pre><code>-- 授予所有权限
+GRANT ALL PRIVILEGES ON school.* TO 'app_user'@'localhost';
+
+-- 授予特定权限
+GRANT SELECT, INSERT ON school.students TO 'report_user'@'%';</code></pre>
+        
+        <h4>撤销权限：</h4>
+        <pre><code>REVOKE privilege_type ON database_name.table_name FROM 'username'@'host';</code></pre>
+        <p>示例：</p>
+        <pre><code>REVOKE INSERT ON school.students FROM 'app_user'@'localhost';</code></pre>
+        
+        <h4>刷新权限：</h4>
+        <pre><code>FLUSH PRIVILEGES;</code></pre>
+        
+        <h4>查看用户权限：</h4>
+        <pre><code>SHOW GRANTS FOR 'username'@'host';</code></pre>
+        
+        <h4>常用权限：</h4>
+        <ul>
+            <li>ALL PRIVILEGES - 所有权限</li>
+            <li>CREATE - 创建数据库/表</li>
+            <li>DROP - 删除数据库/表</li>
+            <li>SELECT - 查询数据</li>
+            <li>INSERT - 插入数据</li>
+            <li>UPDATE - 更新数据</li>
+            <li>DELETE - 删除数据</li>
+            <li>GRANT OPTION - 授予权限权限</li>
+        </ul>
+    </div>
+    
+    <h3 onclick="toggleContent('security')">10.3 数据库安全</h3>
+    <div id="security" class="content">
+        <h4>安全最佳实践：</h4>
+        <ul>
+            <li>使用强密码</li>
+            <li>限制远程访问</li>
+            <li>遵循最小权限原则</li>
+            <li>定期备份数据</li>
+            <li>保持 MySQL 版本更新</li>
+            <li>禁用不必要的功能</li>
+            <li>加密敏感数据</li>
+            <li>监控数据库活动</li>
+        </ul>
+        
+        <h4>数据加密：</h4>
+        <p>MySQL 提供多种加密函数：</p>
+        <pre><code>-- 单向加密
+SELECT MD5('password');
+SELECT SHA1('password');
+SELECT SHA2('password', 256);
+
+-- 双向加密
+SELECT AES_ENCRYPT('text', 'key');
+SELECT AES_DECRYPT(encrypted_text, 'key');</code></pre>
+        
+        <h4>SSL 连接：</h4>
+        <p>配置 MySQL 使用 SSL 加密客户端与服务器之间的通信。</p>
+        <p>检查 SSL 状态：</p>
+        <pre><code>SHOW VARIABLES LIKE '%ssl%';</code></pre>
+    </div>
+
+    <h2>十一、备份与恢复</h2>
+    
+    <h3 onclick="toggleContent('backup')">11.1 数据库备份</h3>
+    <div id="backup" class="content">
+        <h4>使用 mysqldump：</h4>
+        <p>备份单个数据库：</p>
+        <pre><code>mysqldump -u username -p database_name > backup_file.sql</code></pre>
+        <p>示例：</p>
+        <pre><code>mysqldump -u root -p school > school_backup.sql</code></pre>
+        
+        <p>备份所有数据库：</p>
+        <pre><code>mysqldump -u username -p --all-databases > all_backup.sql</code></pre>
+        
+        <p>仅备份结构：</p>
+        <pre><code>mysqldump -u username -p --no-data database_name > structure.sql</code></pre>
+        
+        <p>仅备份数据：</p>
+        <pre><code>mysqldump -u username -p --no-create-info database_name > data.sql</code></pre>
+        
+        <h4>使用 MySQL Workbench 备份：</h4>
+        <ol>
+            <li>打开 MySQL Workbench</li>
+            <li>选择"Server"菜单</li>
+            <li>选择"Data Export"</li>
+            <li>选择要备份的数据库和表</li>
+            <li>选择导出选项和文件位置</li>
+            <li>点击"Start Export"</li>
+        </ol>
+    </div>
+    
+    <h3 onclick="toggleContent('restore')">11.2 数据库恢复</h3>
+    <div id="restore" class="content">
+        <h4>使用 mysql 命令行恢复：</h4>
+        <pre><code>mysql -u username -p database_name < backup_file.sql</code></pre>
+        <p>示例：</p>
+        <pre><code>mysql -u root -p school < school_backup.sql</code></pre>
+        
+        <p>恢复所有数据库：</p>
+        <pre><code>mysql -u username -p < all_backup.sql</code></pre>
+        
+        <h4>使用 MySQL Workbench 恢复：</h4>
+        <ol>
+            <li>打开 MySQL Workbench</li>
+            <li>选择"Server"菜单</li>
+            <li>选择"Data Import"</li>
+            <li>选择导入来源(文件或自包含文件夹)</li>
+            <li>选择目标数据库</li>
+            <li>点击"Start Import"</li>
+        </ol>
+        
+        <h4>恢复特定表：</h4>
+        <pre><code>mysql -u username -p database_name < table_backup.sql</code></pre>
+    </div>
+    
+    <h3 onclick="toggleContent('binlog')">11.3 二进制日志与时间点恢复</h3>
+    <div id="binlog" class="content">
+        <p>MySQL 二进制日志(binlog)记录所有更改数据的 SQL 语句。</p>
+        
+        <h4>启用二进制日志：</h4>
+        <p>在 my.cnf 或 my.ini 配置文件中添加：</p>
+        <pre><code>[mysqld]
+log-bin=mysql-bin
+server-id=1</code></pre>
+        
+        <h4>查看二进制日志：</h4>
+        <pre><code>SHOW BINARY LOGS;
+SHOW BINLOG EVENTS IN 'mysql-bin.000001';</code></pre>
+        
+        <h4>使用 mysqlbinlog 工具：</h4>
+        <pre><code>mysqlbinlog mysql-bin.000001</code></pre>
+        
+        <h4>时间点恢复：</h4>
+        <ol>
+            <li>恢复最近的全量备份</li>
+            <li>应用二进制日志中的事件直到指定时间点</li>
+        </ol>
+        <pre><code>mysqlbinlog --stop-datetime="2023-01-01 12:00:00" mysql-bin.000001 | mysql -u root -p</code></pre>
+    </div>
+
+    <h2>十二、MySQL 进阶主题</h2>
+    
+    <h3 onclick="toggleContent('partitioning')">12.1 分区表</h3>
+    <div id="partitioning" class="content">
+        <p>分区是将一个大表分成多个物理部分的技术。</p>
+        
+        <h4>分区类型：</h4>
+        <ul>
+            <li><strong>RANGE 分区</strong> - 基于列值范围</li>
+            <li><strong>LIST 分区</strong> - 基于列值列表</li>
+            <li><strong>HASH 分区</strong> - 基于用户定义的表达式</li>
+            <li><strong>KEY 分区</strong> - 类似于 HASH，但使用 MySQL 提供的哈希函数</li>
+        </ul>
+        
+        <h4>创建分区表示例：</h4>
+        <pre><code>CREATE TABLE sales (
+    id INT,
+    sale_date DATE,
+    amount DECIMAL(10,2)
+PARTITION BY RANGE (YEAR(sale_date)) (
+    PARTITION p2020 VALUES LESS THAN (2021),
+    PARTITION p2021 VALUES LESS THAN (2022),
+    PARTITION p2022 VALUES LESS THAN (2023),
+    PARTITION pmax VALUES LESS THAN MAXVALUE
+);</code></pre>
+        
+        <h4>管理分区：</h4>
+        <pre><code>-- 添加分区
+ALTER TABLE sales ADD PARTITION (PARTITION p2023 VALUES LESS THAN (2024));
+
+-- 删除分区
+ALTER TABLE sales DROP PARTITION p2020;
+
+-- 重建分区
+ALTER TABLE sales REBUILD PARTITION p2021, p2022;
+
+-- 查看分区信息
+SELECT * FROM information_schema.PARTITIONS 
+WHERE TABLE_NAME = 'sales';</code></pre>
+    </div>
+    
+    <h3 onclick="toggleContent('replication')">12.2 主从复制</h3>
+    <div id="replication" class="content">
+        <p>MySQL 复制允许将数据从一个 MySQL 服务器(主)复制到一个或多个 MySQL 服务器(从)。</p>
+        
+        <h4>复制配置步骤：</h4>
+        <ol>
+            <li>在主服务器上启用二进制日志并设置 server-id</li>
+            <li>创建复制用户</li>
+            <li>获取主服务器二进制日志位置</li>
+            <li>配置从服务器连接主服务器</li>
+            <li>启动从服务器复制进程</li>
+        </ol>
+        
+        <h4>主服务器配置(my.cnf)：</h4>
+        <pre><code>[mysqld]
+log-bin=mysql-bin
+server-id=1</code></pre>
+        
+        <h4>创建复制用户：</h4>
+        <pre><code>CREATE USER 'repl'@'%' IDENTIFIED BY 'password';
+GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%';</code></pre>
+        
+        <h4>查看主服务器状态：</h4>
+        <pre><code>SHOW MASTER STATUS;</code></pre>
+        
+        <h4>从服务器配置(my.cnf)：</h4>
+        <pre><code>[mysqld]
+server-id=2
+relay-log=mysql-relay-bin
+read-only=1</code></pre>
+        
+        <h4>配置从服务器连接主服务器：</h4>
+        <pre><code>CHANGE MASTER TO
+MASTER_HOST='master_host',
+MASTER_USER='repl',
+MASTER_PASSWORD='password',
+MASTER_LOG_FILE='mysql-bin.000001',
+MASTER_LOG_POS=position;</code></pre>
+        
+        <h4>启动复制：</h4>
+        <pre><code>START SLAVE;</code></pre>
+        
+        <h4>检查复制状态：</h4>
+        <pre><code>SHOW SLAVE STATUS\G</code></pre>
+    </div>
+    
+    <h3 onclick="toggleContent('performance_schema')">12.3 Performance Schema</h3>
+    <div id="performance_schema" class="content">
+        <p>Performance Schema 是 MySQL 提供的用于监控服务器性能的工具。</p>
+        
+        <h4>启用 Performance Schema：</h4>
+        <p>在 my.cnf 中确保有以下配置：</p>
+        <pre><code>[mysqld]
+performance_schema=ON</code></pre>
+        
+        <h4>常用查询：</h4>
+        <pre><code>-- 查看已启用的监控项
+SELECT * FROM performance_schema.setup_instruments
+WHERE ENABLED = 'YES';
+
+-- 查看等待事件
+SELECT * FROM performance_schema.events_waits_current;
+
+-- 查看 SQL 语句统计
+SELECT * FROM performance_schema.events_statements_summary_by_digest
+ORDER BY SUM_TIMER_WAIT DESC LIMIT 10;
+
+-- 查看内存使用情况
+SELECT * FROM performance_schema.memory_summary_global_by_event_name
+ORDER BY SUM_NUMBER_OF_BYTES_ALLOC DESC LIMIT 10;</code></pre>
+        
+        <h4>配置监控：</h4>
+        <pre><code>-- 启用所有等待事件监控
+UPDATE performance_schema.setup_instruments
+SET ENABLED = 'YES', TIMED = 'YES'
+WHERE NAME LIKE 'wait/%';
+
+-- 启用所有阶段事件监控
+UPDATE performance_schema.setup_instruments
+SET ENABLED = 'YES', TIMED = 'YES'
+WHERE NAME LIKE 'stage/%';
+
+-- 启用所有语句事件监控
+UPDATE performance_schema.setup_instruments
+SET ENABLED = 'YES', TIMED = 'YES'
+WHERE NAME LIKE 'statement/%';
+
+-- 启用消费者
+UPDATE performance_schema.setup_consumers
+SET ENABLED = 'YES'
+WHERE NAME LIKE '%events%';</code></pre>
+    </div>
+
+    <script>
+        function toggleContent(id) {
+            const content = document.getElementById(id);
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html>
