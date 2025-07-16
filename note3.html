@@ -1,90 +1,49 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java基础学习大纲（详细版）</title>
+    <title>Java 学习大纲</title>
+    <!-- Prism.js CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            color: #333;
-        }
-        h1 {
-            color: #2c3e50;
-            text-align: center;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 10px;
-        }
-        h2 {
-            color: #2980b9;
-            border-left: 4px solid #3498db;
-            padding-left: 10px;
-            margin-top: 30px;
-        }
-        h3 {
-            color: #16a085;
-        }
-        ul {
-            padding-left: 20px;
-        }
-        li {
-            margin-bottom: 8px;
-        }
-        .module {
-            background-color: #f9f9f9;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            border-left: 4px solid #3498db;
-        }
-        .sub-module {
-            margin-left: 20px;
-        }
-        .details {
-            display: none;
-            background-color: #f0f8ff;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border-left: 3px solid #5dade2;
-        }
-        .toggle-btn {
-            background-color: #5dade2;
-            color: white;
-            border: none;
-            padding: 2px 8px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 12px;
-            margin-left: 5px;
-        }
-        .toggle-btn:hover {
-            background-color: #3498db;
-        }
-        pre {
-            background-color: #f5f5f5;
-            padding: 10px;
-            border-radius: 5px;
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1, h2, h3 { color: #333; }
+        h2 { margin-top: 20px; }
+        .section { margin-bottom: 40px; }
+        .section-details { margin-left: 20px; }
+        pre { 
+            background-color: #f8f8f8; 
+            padding: 15px; 
+            border-radius: 8px; 
             overflow-x: auto;
+            border: 1px solid #e1e1e1;
         }
-        .code {
-            font-family: Consolas, Monaco, 'Andale Mono', monospace;
+        code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
             font-size: 14px;
+            line-height: 1.5;
+        }
+        .token.comment { color: #6a9955; }
+        .token.string { color: #ce9178; }
+        .token.keyword { color: #569cd6; }
+        .token.function { color: #dcdcaa; }
+        .token.number { color: #b5cea8; }
+        .token.operator { color: #d4d4d4; }
+        .token.builtin { color: #4ec9b0; }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 10px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
         }
     </style>
-    <script>
-        function toggleDetails(id) {
-            var element = document.getElementById(id);
-            if (element.style.display === "none") {
-                element.style.display = "block";
-            } else {
-                element.style.display = "none";
-            }
-        }
-    </script>
 </head>
 <body>
     <h1>Java基础学习大纲（详细版）</h1>
@@ -93,8 +52,7 @@
         <h2>第一部分：Java入门</h2>
         <ul>
             <li>Java简介与发展历史
-                <button class="toggle-btn" onclick="toggleDetails('java-intro')">展开</button>
-                <div id="java-intro" class="details">
+                <div class="details">
                     <p>Java由Sun Microsystems公司于1995年推出，后被Oracle收购。主要版本发展：</p>
                     <ul>
                         <li>Java 1.0 (1996)</li>
@@ -107,8 +65,7 @@
                 </div>
             </li>
             <li>Java平台与JVM原理
-                <button class="toggle-btn" onclick="toggleDetails('jvm-principle')">展开</button>
-                <div id="jvm-principle" class="details">
+                <div class="details">
                     <p>Java平台组成：</p>
                     <ul>
                         <li>Java虚拟机(JVM) - 执行字节码</li>
@@ -121,8 +78,7 @@
                 </div>
             </li>
             <li>JDK安装与环境配置
-                <button class="toggle-btn" onclick="toggleDetails('jdk-install')">展开</button>
-                <div id="jdk-install" class="details">
+                <div class="details">
                     <p>安装步骤：</p>
                     <ol>
                         <li>从Oracle官网下载JDK安装包</li>
@@ -144,8 +100,7 @@ export PATH=$JAVA_HOME/bin:$PATH</pre>
                 </div>
             </li>
             <li>第一个Java程序：Hello World
-                <button class="toggle-btn" onclick="toggleDetails('hello-world')">展开</button>
-                <div id="hello-world" class="details">
+                <div class="details">
                     <p>创建HelloWorld.java文件：</p>
                     <pre class="code">
 public class HelloWorld {
@@ -169,8 +124,7 @@ java HelloWorld</pre>
                 </div>
             </li>
             <li>Java开发工具介绍（Eclipse/IntelliJ IDEA/VSCode）
-                <button class="toggle-btn" onclick="toggleDetails('ide-intro')">展开</button>
-                <div id="ide-intro" class="details">
+                <div class="details">
                     <h4>常用Java开发工具比较：</h4>
                     <table border="1" cellpadding="5">
                         <tr>
@@ -210,11 +164,21 @@ java HelloWorld</pre>
         <h2>第二部分：Java基础语法</h2>
         <div class="sub-module">
             <h3>1. 基本语法结构</h3>
-            <ul>
-                <li>标识符与关键字
-                    <button class="toggle-btn" onclick="toggleDetails('identifiers-keywords')">展开</button>
-                    <div id="identifiers-keywords" class="details">
-                        <p>标识符规则：</p>
+                    <ul>
+                        <li>标识符与关键字
+                            <div class="details">
+                                <p>字符串操作：</p>
+                                <pre class="code">
+String s1 = "Hello";
+String s2 = "World";
+String message = s1 + " " + s2;  // Hello World
+int len = message.length();  // 11
+boolean isEqual = s1.equals(s2);  // false
+String upper = message.toUpperCase();  // HELLO WORLD
+String replaced = message.replace("World", "Java");  // Hello Java
+String[] split = message.split(" ");  // ["Hello", "World"]
+                                </pre>
+                                <p>标识符规则：</p>
                         <ul>
                             <li>以字母、下划线(_)或美元符号($)开头</li>
                             <li>后续可以是字母、数字、_或$</li>
@@ -235,8 +199,7 @@ super, extends, implements, interface, package, import</pre>
                     </div>
                 </li>
                 <li>注释与文档注释
-                    <button class="toggle-btn" onclick="toggleDetails('comments')">展开</button>
-                    <div id="comments" class="details">
+                    <div class="details">
                         <p>Java注释类型：</p>
                         <pre class="code">
 // 单行注释
@@ -265,8 +228,7 @@ public int add(int a, int b) {
                     </div>
                 </li>
                 <li>Java基本数据类型
-                    <button class="toggle-btn" onclick="toggleDetails('data-types')">展开</button>
-                    <div id="data-types" class="details">
+                    <div class="details">
                         <p>8种基本数据类型：</p>
                         <table border="1" cellpadding="5">
                             <tr>
@@ -336,8 +298,7 @@ public int add(int a, int b) {
                     </div>
                 </li>
                 <li>变量与常量
-                    <button class="toggle-btn" onclick="toggleDetails('variables')">展开</button>
-                    <div id="variables" class="details">
+                    <div class="details">
                         <p>变量声明与初始化：</p>
                         <pre class="code">
 // 声明
@@ -374,8 +335,7 @@ public class ScopeExample {
                     </div>
                 </li>
                 <li>运算符与表达式
-                    <button class="toggle-btn" onclick="toggleDetails('operators')">展开</button>
-                    <div id="operators" class="details">
+                    <div class="details">
                         <p>Java运算符分类：</p>
                         <table border="1" cellpadding="5">
                             <tr>
@@ -449,8 +409,7 @@ a += 5;  // a = 15</pre>
             <h3>2. 流程控制</h3>
             <ul>
                 <li>条件语句（if-else, switch）
-                    <button class="toggle-btn" onclick="toggleDetails('conditionals')">展开</button>
-                    <div id="conditionals" class="details">
+                    <div class="details">
                         <p>if-else语句：</p>
                         <pre class="code">
 // 简单if
@@ -500,8 +459,7 @@ String season = switch (month) {
                     </div>
                 </li>
                 <li>循环结构（for, while, do-while）
-                    <button class="toggle-btn" onclick="toggleDetails('loops')">展开</button>
-                    <div id="loops" class="details">
+                    <div class="details">
                         <p>for循环：</p>
                         <pre class="code">
 // 传统for循环
@@ -546,8 +504,7 @@ for (int i = 0; i < 10; i++) {
                     </div>
                 </li>
                 <li>跳转语句（break, continue, return）
-                    <button class="toggle-btn" onclick="toggleDetails('jumps')">展开</button>
-                    <div id="jumps" class="details">
+                    <div class="details">
                         <p>break语句：</p>
                         <pre class="code">
 // 1. 跳出循环
@@ -611,11 +568,161 @@ public void printPositive(int num) {
     <!-- 其他部分的HTML结构类似，可以根据需要继续添加 -->
     
     <div class="module">
+        <h2>第三部分：面向对象编程（OOP）</h2>
+        <ul>
+            <li>类与对象
+                <div class="details">
+                    <p>Java是一种面向对象的编程语言。类是对象的模板，对象是类的实例。</p>
+                    <ul>
+                        <li>定义类和对象、属性与方法、构造方法</li>
+                        <li>this关键字、static静态成员</li>
+                        <li>对象的创建与内存分配</li>
+                    </ul>
+                    <pre class="code">
+class Student {
+    String name;
+    int age;
+    
+    Student(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+    void print() {
+        System.out.println(name + ", " + age);
+    }
+}</pre>
+                </div>
+            </li>
+            <li>封装、继承、多态和抽象
+                <div class="details">
+                    <ul>
+                        <li>访问控制修饰符（private, protected, public, 默认包权限）</li>
+                        <li>继承（extends）、方法重写（@Override）、super关键字</li>
+                        <li>多态（父类引用指向子类对象、动态绑定）、抽象类与接口（interface）</li>
+                        <li>final关键字（常量、不可继承、终止方法重写）</li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="module">
+        <h2>第四部分：异常处理与Java常用类库</h2>
+        <ul>
+            <li>Java异常体系
+                <div class="details">
+                    <ul>
+                        <li>受检异常（checked）与非受检异常（unchecked）</li>
+                        <li>try-catch-finally语句，throw/throws用法</li>
+                        <li>自定义异常</li>
+                    </ul>
+                    <pre class="code">
+// 自定义异常类
+class CustomException extends Exception {
+    public CustomException(String message) {
+        super(message);
+    }
+}
+
+// 使用自定义异常
+public void testException() throws CustomException {
+    throw new CustomException("自定义异常发生");
+}
+
+// 捕获自定义异常
+try {
+    testException();
+} catch (CustomException e) {
+    System.out.println(e.getMessage());
+}
+
+try {
+    int x = 1 / 0;
+} catch (ArithmeticException e) {
+    e.printStackTrace();
+} finally {
+    System.out.println("执行完成");
+</pre>
+                </div>
+            </li>
+            <li>常用类库（String, Math, Arrays, System等）
+                <div class="details">
+                    <ul>
+                        <li>String字符串操作、Math数学工具类、Arrays数组工具类及排序查找</li>
+                        <li>System类（输出、时间、环境变量、垃圾回收）</li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="module">
+        <h2>第五部分：Java集合框架</h2>
+        <ul>
+            <li>集合接口与主要实现类
+                <div class="details">
+                    <ul>
+                        <li>Collection, List, Set, Map等接口</li>
+                        <li>ArrayList、LinkedList、HashSet、TreeSet、HashMap、TreeMap等常用实现方式</li>
+                        <li>迭代器Iterator/增强for循环遍历</li>
+                        <li>并发集合：ConcurrentHashMap等</li>
+                    </ul>
+                </div>
+            </li>
+            <li>集合框架常用操作
+                <div class="details">
+                    <pre class="code">
+List<String> list = new ArrayList<>();
+list.add("A");
+list.remove("A");
+for (String item : list) {
+    System.out.println(item);
+}
+</pre>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="module">
+        <h2>第六部分：多线程与IO</h2>
+        <ul>
+            <li>多线程基础
+                <div class="details">
+                    <ul>
+                        <li>线程创建（继承Thread/实现Runnable/使用线程池）</li>
+                        <li>线程同步：synchronized关键字、Lock接口</li>
+                        <li>线程通信与等待/唤醒（wait/notify）</li>
+                        <li>volatile与原子操作</li>
+                    </ul>
+                </div>
+            </li>
+            <li>输入输出流（I/O）
+                <div class="details">
+                    <ul>
+                        <li>字节流InputStream/OutputStream</li>
+                        <li>字符流Reader/Writer</li>
+                        <li>缓冲流BufferedReader/BufferedWriter</li>
+                        <li>文件I/O及try-with-resources写法</li>
+                    </ul>
+                    <pre class="code">
+try (BufferedReader br = new BufferedReader(new FileReader("file.txt"))) {
+    String line;
+    while ((line = br.readLine()) != null) {
+        System.out.println(line);
+    }
+}
+</pre>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="module">
         <h2>第七部分：进阶学习方向</h2>
         <ul>
             <li>Java网络编程
-                <button class="toggle-btn" onclick="toggleDetails('network')">展开</button>
-                <div id="network" class="details">
+                <div class="details">
                     <p>Java网络编程核心类：</p>
                     <ul>
                         <li>URL/URLConnection - 处理URL资源</li>
@@ -652,8 +759,7 @@ try (Socket socket = new Socket("localhost", 8080);
                 </div>
             </li>
             <li>Java数据库连接（JDBC）
-                <button class="toggle-btn" onclick="toggleDetails('jdbc')">展开</button>
-                <div id="jdbc" class="details">
+                <div class="details">
                     <p>JDBC基本步骤：</p>
                     <pre class="code">
 // 1. 加载驱动（JDBC 4.0+自动加载）
@@ -692,8 +798,7 @@ try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
                 </div>
             </li>
             <li>Java GUI编程（Swing/JavaFX）
-                <button class="toggle-btn" onclick="toggleDetails('gui')">展开</button>
-                <div id="gui" class="details">
+                <div class="details">
                     <p>Swing简单示例：</p>
                     <pre class="code">
 import javax.swing.*;
@@ -752,8 +857,7 @@ public class JavaFXDemo extends Application {
                 </div>
             </li>
             <li>Java Web开发（Servlet/JSP）
-                <button class="toggle-btn" onclick="toggleDetails('web')">展开</button>
-                <div id="web" class="details">
+                <div class="details">
                     <p>Servlet示例：</p>
                     <pre class="code">
 @WebServlet("/hello")
@@ -782,8 +886,7 @@ public class HelloServlet extends HttpServlet {
                 </div>
             </li>
             <li>Spring框架
-                <button class="toggle-btn" onclick="toggleDetails('spring')">展开</button>
-                <div id="spring" class="details">
+                <div class="details">
                     <p>Spring核心模块：</p>
                     <ul>
                         <li>Spring Core - 依赖注入(IoC)容器</li>
@@ -820,8 +923,7 @@ public class MyApp {
                 </div>
             </li>
             <li>Java性能优化
-                <button class="toggle-btn" onclick="toggleDetails('performance')">展开</button>
-                <div id="performance" class="details">
+                <div class="details">
                     <p>Java性能优化技巧：</p>
                     <ul>
                         <li>使用StringBuilder代替字符串拼接</li>
@@ -852,5 +954,29 @@ public class MyApp {
             </li>
         </ul>
     </div>
+
+    <!-- Prism.js JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+    
+    <script>
+        // 页面加载后初始化代码高亮
+        document.addEventListener('DOMContentLoaded', function() {
+            // 为所有代码块添加语言类
+            document.querySelectorAll('pre.code').forEach(function(block) {
+                // 将内容包装在code元素中
+                const codeElement = document.createElement('code');
+                codeElement.className = 'language-java';
+                codeElement.textContent = block.textContent;
+                block.innerHTML = '';
+                block.appendChild(codeElement);
+            });
+            
+            // 重新运行Prism语法高亮
+            if (typeof Prism !== 'undefined') {
+                Prism.highlightAll();
+            }
+        });
+    </script>
 </body>
 </html>

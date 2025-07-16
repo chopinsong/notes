@@ -1,517 +1,141 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Python基础学习大纲（详细版）</title>
+    <title>Python 学习大纲</title>
+    <!-- Prism.js CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            color: #333;
-        }
-        h1 {
-            color: #2c3e50;
-            text-align: center;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 10px;
-        }
-        h2 {
-            color: #2980b9;
-            border-left: 4px solid #3498db;
-            padding-left: 10px;
-            margin-top: 30px;
-        }
-        h3 {
-            color: #16a085;
-        }
-        ul {
-            padding-left: 20px;
-        }
-        li {
-            margin-bottom: 8px;
-        }
-        .module {
-            background-color: #f9f9f9;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            border-left: 4px solid #3498db;
-        }
-        .sub-module {
-            margin-left: 20px;
-        }
-        .details {
-            display: none;
-            background-color: #f0f8ff;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border-left: 3px solid #5dade2;
-        }
-        .toggle-btn {
-            background-color: #5dade2;
-            color: white;
-            border: none;
-            padding: 2px 8px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 12px;
-            margin-left: 5px;
-        }
-        .toggle-btn:hover {
-            background-color: #3498db;
-        }
-        pre {
-            background-color: #f5f5f5;
-            padding: 10px;
-            border-radius: 5px;
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1, h2, h3 { color: #333; }
+        h2 { margin-top: 20px; }
+        .section { margin-bottom: 40px; }
+        .section-details { margin-left: 20px; }
+        pre { 
+            background-color: #f8f8f8; 
+            padding: 15px; 
+            border-radius: 8px; 
             overflow-x: auto;
+            border: 1px solid #e1e1e1;
         }
-        .code {
-            font-family: Consolas, Monaco, 'Andale Mono', monospace;
+        code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
             font-size: 14px;
+            line-height: 1.5;
         }
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin: 15px 0;
-        }
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
+        .token.comment { color: #6a9955; }
+        .token.string { color: #ce9178; }
+        .token.keyword { color: #569cd6; }
+        .token.function { color: #dcdcaa; }
+        .token.number { color: #b5cea8; }
+        .token.operator { color: #d4d4d4; }
+        .token.builtin { color: #4ec9b0; }
     </style>
-    <script>
-        function toggleDetails(id) {
-            var element = document.getElementById(id);
-            if (element.style.display === "none") {
-                element.style.display = "block";
-            } else {
-                element.style.display = "none";
-            }
-        }
-    </script>
 </head>
 <body>
-    <h1>Python基础学习大纲（详细版）</h1>
+    <h1>Python 学习大纲</h1>
+
+    <div class="section">
+        <h2>1. Python 基础</h2>
+        <div class="section-details">
+            <h3>1.1 语法和语义</h3>
+            <p><strong>定义：</strong> 定义 Python 代码结构的一套规则。</p>
+            <p><strong>描述：</strong> 理解语法和语义对于编写正确和有效的 Python 代码至关重要。</p>
+            <pre><code class="language-python"># Python 语法示例
+print("Hello, World!")
+
+# 缩进是 Python 语法的重要组成部分
+if True:
+    print("缩进很重要")  # 4个空格缩进
     
-    <div class="module">
-        <h2>第一部分：Python入门</h2>
-        <ul>
-            <li>Python简介与特点
-                <button class="toggle-btn" onclick="toggleDetails('python-intro')">展开</button>
-                <div id="python-intro" class="details">
-                    <p>Python由Guido van Rossum于1991年发布，主要特点：</p>
-                    <ul>
-                        <li>解释型语言 - 无需编译，直接运行</li>
-                        <li>动态类型 - 变量无需声明类型</li>
-                        <li>跨平台 - 支持Windows、Linux、Mac等</li>
-                        <li>丰富的标准库 - "电池包含"哲学</li>
-                        <li>多种编程范式 - 面向对象、函数式、过程式</li>
-                    </ul>
-                    <p>Python主要应用领域：</p>
-                    <ul>
-                        <li>Web开发（Django, Flask）</li>
-                        <li>数据分析（Pandas, NumPy）</li>
-                        <li>人工智能（TensorFlow, PyTorch）</li>
-                        <li>自动化运维</li>
-                        <li>科学计算</li>
-                    </ul>
-                    <p>Python版本选择：</p>
-                    <pre>
-Python 2.x (已停止维护)
-Python 3.x (推荐使用3.8+版本)</pre>
-                </div>
-            </li>
-            <li>Python安装与环境配置
-                <button class="toggle-btn" onclick="toggleDetails('python-install')">展开</button>
-                <div id="python-install" class="details">
-                    <p>安装步骤：</p>
-                    <ol>
-                        <li>从Python官网下载安装包（https://www.python.org/downloads/）</li>
-                        <li>运行安装程序（Windows注意勾选"Add Python to PATH"）</li>
-                        <li>验证安装：
-                            <pre class="code">
-# 命令行输入
-python --version
-# 或
-python3 --version</pre>
-                        </li>
-                    </ol>
-                    <p>推荐开发工具：</p>
-                    <table>
-                        <tr>
-                            <th>工具</th>
-                            <th>特点</th>
-                        </tr>
-                        <tr>
-                            <td>IDLE</td>
-                            <td>Python自带的简易IDE</td>
-                        </tr>
-                        <tr>
-                            <td>PyCharm</td>
-                            <td>专业Python IDE（社区版免费）</td>
-                        </tr>
-                        <tr>
-                            <td>VS Code</td>
-                            <td>轻量级编辑器+Python插件</td>
-                        </tr>
-                        <tr>
-                            <td>Jupyter Notebook</td>
-                            <td>交互式笔记本，适合数据分析</td>
-                        </tr>
-                    </table>
-                    <p>虚拟环境配置：</p>
-                    <pre class="code">
-# 创建虚拟环境
-python -m venv myenv
-
-# 激活虚拟环境
-# Windows:
-myenv\Scripts\activate
-# Linux/Mac:
-source myenv/bin/activate
-
-# 安装包
-pip install package_name
-
-# 退出虚拟环境
-deactivate</pre>
-                </div>
-            </li>
-            <li>第一个Python程序
-                <button class="toggle-btn" onclick="toggleDetails('first-program')">展开</button>
-                <div id="first-program" class="details">
-                    <p>创建hello.py文件：</p>
-                    <pre class="code">
-# 这是一个简单的Python程序
-print("Hello, World!")  # 打印输出
-
-# 计算1+1
-result = 1 + 1
-print("1 + 1 =", result)</pre>
-                    <p>运行程序：</p>
-                    <pre class="code">
-# 命令行执行
-python hello.py</pre>
-                    <p>程序输出：</p>
-                    <pre class="code">
-Hello, World!
-1 + 1 = 2</pre>
-                    <p>交互式解释器使用：</p>
-                    <pre class="code">
-# 命令行输入python进入交互模式
->>> name = "Alice"
->>> print(f"Hello, {name}!")
-Hello, Alice!
->>> 2 ** 10  # 计算2的10次方
-1024
->>> exit()  # 退出</pre>
-                </div>
-            </li>
-            <li>Python基础语法规则
-                <button class="toggle-btn" onclick="toggleDetails('basic-syntax')">展开</button>
-                <div id="basic-syntax" class="details">
-                    <p>Python语法特点：</p>
-                    <ul>
-                        <li>使用缩进表示代码块（通常4个空格）</li>
-                        <li>不需要分号结尾（但可以加）</li>
-                        <li>单行注释用#，多行注释用三引号 ''' 或 """</li>
-                        <li>大小写敏感</li>
-                    </ul>
-                    <p>代码示例：</p>
-                    <pre class="code">
-# 这是一个注释
-'''
-这是多行注释
-可以写多行
-'''
-
-# 变量命名
-my_variable = 10
-MY_CONSTANT = 3.14  # 约定全大写表示常量
-
-# 条件语句
-if my_variable > 5:
-    print("大于5")
-else:
-    print("小于等于5")
-
-# 函数定义
-def greet(name):
-    """这是一个文档字符串"""
-    return f"Hello, {name}!"
-
-print(greet("Alice"))</pre>
-                    <p>Python编码规范（PEP 8）：</p>
-                    <ul>
-                        <li>模块名：小写字母，可使用下划线（my_module.py）</li>
-                        <li>类名：大驼峰（MyClass）</li>
-                        <li>函数/变量名：小写字母，下划线分隔（my_function）</li>
-                        <li>每行不超过79个字符</li>
-                        <li>运算符两侧各留一个空格</li>
-                    </ul>
-                </div>
-            </li>
-        </ul>
-    </div>
-    
-    <div class="module">
-        <h2>第二部分：Python基础语法</h2>
-        <div class="sub-module">
-            <h3>1. 变量与数据类型</h3>
-            <ul>
-                <li>基本数据类型
-                    <button class="toggle-btn" onclick="toggleDetails('basic-types')">展开</button>
-                    <div id="basic-types" class="details">
-                        <p>Python基本数据类型：</p>
-                        <table>
-                            <tr>
-                                <th>类型</th>
-                                <th>描述</th>
-                                <th>示例</th>
-                            </tr>
-                            <tr>
-                                <td>int</td>
-                                <td>整数</td>
-                                <td>10, -5, 0</td>
-                            </tr>
-                            <tr>
-                                <td>float</td>
-                                <td>浮点数</td>
-                                <td>3.14, -0.001, 2.0</td>
-                            </tr>
-                            <tr>
-                                <td>bool</td>
-                                <td>布尔值</td>
-                                <td>True, False</td>
-                            </tr>
-                            <tr>
-                                <td>str</td>
-                                <td>字符串</td>
-                                <td>"hello", 'Python'</td>
-                            </tr>
-                            <tr>
-                                <td>NoneType</td>
-                                <td>空值</td>
-                                <td>None</td>
-                            </tr>
-                        </table>
-                        <p>类型检查与转换：</p>
-                        <pre class="code">
-# 类型检查
-type(10)       # &lt;class 'int'&gt;
-type(3.14)     # &lt;class 'float'&gt;
-type(True)     # &lt;class 'bool'&gt;
-type("hello")  # &lt;class 'str'&gt;
-
-# 类型转换
-int("10")      # 10
-float(3)       # 3.0
-str(100)       # "100"
-bool(1)        # True
-bool("")       # False</pre>
-                    </div>
-                </li>
-                <li>变量与赋值
-                    <button class="toggle-btn" onclick="toggleDetails('variables')">展开</button>
-                    <div id="variables" class="details">
-                        <p>Python变量特点：</p>
-                        <ul>
-                            <li>无需声明类型</li>
-                            <li>通过赋值创建变量</li>
-                            <li>变量名区分大小写</li>
-                            <li>动态类型（变量可以重新赋值为不同类型）</li>
-                        </ul>
-                        <p>变量命名规则：</p>
-                        <ul>
-                            <li>可以包含字母、数字和下划线</li>
-                            <li>不能以数字开头</li>
-                            <li>不能是关键字</li>
-                            <li>避免使用内置函数名</li>
-                        </ul>
-                        <p>变量操作示例：</p>
-                        <pre class="code">
-# 简单赋值
-x = 10
-name = "Alice"
-
-# 多重赋值
-a, b, c = 1, 2, 3
-
-# 交换变量
-x, y = 10, 20
-x, y = y, x  # 交换后x=20, y=10
-
-# 增量赋值
-count = 5
-count += 2  # 等同于count = count + 2
-
-# 链式赋值
-a = b = c = 0  # 三个变量都赋值为0</pre>
-                        <p>Python关键字：</p>
-                        <pre class="code">
-False   class     finally   is       return
-None    continue  for       lambda   try
-True    def       from      nonlocal while
-and     del       global    not      with
-as      elif      if        or       yield
-assert  else      import    pass
-break   except    in        raise</pre>
-                    </div>
-                </li>
-                <li>字符串操作
-                    <button class="toggle-btn" onclick="toggleDetails('strings')">展开</button>
-                    <div id="strings" class="details">
-                        <p>字符串创建：</p>
-                        <pre class="code">
-# 单引号或双引号
-s1 = 'hello'
-s2 = "world"
-
-# 多行字符串
-multi_line = """这是
-多行
-字符串"""
-
-# 转义字符
-escaped = "这是\"引号\"和换行符\n第二行"</pre>
-                        <p>字符串常用操作：</p>
-                        <pre class="code">
-s = "Python Programming"
-
-# 长度
-len(s)  # 18
-
-# 索引
-s[0]    # 'P' (第一个字符)
-s[-1]   # 'g' (最后一个字符)
-
-# 切片
-s[0:6]  # 'Python' (0到5)
-s[7:]   # 'Programming' (7到最后)
-s[::2]  # 'Pto rgamn' (步长2)
-
-# 连接
-"Hello" + " " + "World"  # "Hello World"
-
-# 重复
-"Hi" * 3  # "HiHiHi"
-
-# 成员检查
-"Py" in s  # True
-"py" in s  # False (区分大小写)</pre>
-                        <p>字符串方法：</p>
-                        <pre class="code">
-s = "  hello, world!  "
-
-# 大小写转换
-s.upper()       # "  HELLO, WORLD!  "
-s.lower()       # "  hello, world!  "
-s.title()       # "  Hello, World!  "
-
-# 去除空白
-s.strip()       # "hello, world!"
-
-# 分割与连接
-"a,b,c".split(",")       # ['a', 'b', 'c']
-"-".join(['a', 'b', 'c']) # "a-b-c"
-
-# 查找与替换
-s.find("world")  # 9
-s.replace("world", "Python") # "  hello, Python!  "
-
-# 格式化
-name = "Alice"
-age = 25
-f"Name: {name}, Age: {age}"  # "Name: Alice, Age: 25"
-"{0} is {1} years old".format(name, age)  # 旧式格式化</pre>
-                    </div>
-                </li>
-                <li>数字与数学运算
-                    <button class="toggle-btn" onclick="toggleDetails('numbers')">展开</button>
-                    <div id="numbers" class="details">
-                        <p>数字类型：</p>
-                        <ul>
-                            <li>int - 整数（Python 3无大小限制）</li>
-                            <li>float - 浮点数（双精度）</li>
-                            <li>complex - 复数（如3+5j）</li>
-                        </ul>
-                        <p>基本数学运算：</p>
-                        <pre class="code">
-# 算术运算
-10 + 3   # 13
-10 - 3   # 7
-10 * 3   # 30
-10 / 3   # 3.333... (浮点除法)
-10 // 3  # 3 (整数除法)
-10 % 3   # 1 (取模)
-10 ** 3  # 1000 (幂运算)
-
-# 比较运算
-10 == 10  # True
-10 != 5   # True
-10 > 5    # True
-10 <= 10  # True
-
-# 赋值运算
-x = 5
-x += 2    # x = 7
-x *= 3    # x = 21</pre>
-                        <p>数学函数：</p>
-                        <pre class="code">
-# 内置函数
-abs(-5)       # 5
-round(3.14159, 2) # 3.14
-pow(2, 3)     # 8 (等同于2**3)
-
-# math模块
-import math
-math.sqrt(16)     # 4.0
-math.ceil(3.2)    # 4
-math.floor(3.8)   # 3
-math.pi           # 3.141592653589793
-math.sin(math.pi/2) # 1.0</pre>
-                        <p>随机数：</p>
-                        <pre class="code">
-import random
-
-random.random()       # [0.0, 1.0)之间的随机浮点数
-random.randint(1, 10) # 1到10的随机整数
-random.choice(['a', 'b', 'c']) # 随机选择一个元素
-random.shuffle([1,2,3,4])     # 随机打乱列表</pre>
-                    </div>
-                </li>
-            </ul>
+# 注释以 # 开始
+"""
+多行注释
+使用三引号
+"""
+</code></pre>
             
-            <h3>2. 流程控制</h3>
-            <ul>
-                <li>条件语句（if-elif-else）
-                    <button class="toggle-btn" onclick="toggleDetails('conditionals')">展开</button>
-                    <div id="conditionals" class="details">
-                        <p>基本语法：</p>
-                        <pre class="code">
-# 简单if
-age = 18
-if age >= 18:
-    print("成年人")
+            <h3>1.2 变量和数据类型</h3>
+            <p><strong>定义：</strong> 变量是用于存储数据值的容器；数据类型指定数据的类型。</p>
+            <p><strong>描述：</strong> Python 支持多种数据类型，包括整数、浮点数、字符串和布尔值。</p>
+            <pre><code class="language-python"># 基本数据类型
+a = 10           # 整数 (int)
+b = 3.14         # 浮点数 (float)
+c = "Hello"     # 字符串 (str)
+d = True         # 布尔值 (bool)
 
-# if-else
+# 复合数据类型
+e = [1, 2, 3]    # 列表 (list)
+f = (1, 2, 3)    # 元组 (tuple)
+g = {"key": "value"}  # 字典 (dict)
+h = {1, 2, 3}    # 集合 (set)
+
+# 类型检查
+print(type(a))   # <class 'int'>
+print(isinstance(a, int))  # True
+</code></pre>
+
+            <h3>1.3 运算符</h3>
+            <p><strong>定义：</strong> 用于执行操作的符号。</p>
+            <p><strong>描述：</strong> Python 支持算术、比较、逻辑和赋值运算符。</p>
+            <pre><code class="language-python"># 算术运算符
+x = 10
+y = 3
+print(x + y)    # 加法: 13
+print(x - y)    # 减法: 7
+print(x * y)    # 乘法: 30
+print(x / y)    # 除法: 3.333...
+print(x // y)   # 整除: 3
+print(x % y)    # 取模: 1
+print(x ** y)   # 幂运算: 1000
+
+# 比较运算符
+print(x == y)   # 等于: False
+print(x != y)   # 不等于: True
+print(x > y)    # 大于: True
+print(x < y)    # 小于: False
+print(x >= y)   # 大于等于: True
+print(x <= y)   # 小于等于: False
+
+# 逻辑运算符
+print(True and False)  # False
+print(True or False)   # True
+print(not True)        # False
+</code></pre>
+
+            <h3>1.4 输入输出</h3>
+            <p><strong>定义：</strong> 与用户交互的方式。</p>
+            <p><strong>描述：</strong> input() 函数用于接收用户输入，print() 函数用于输出。</p>
+            <pre><code class="language-python"># 输入输出示例
+name = input("请输入您的姓名: ")
+age = int(input("请输入您的年龄: "))
+
+print(f"您好，{name}！您今年{age}岁。")
+print("您好，{}！您今年{}岁。".format(name, age))
+print("您好，%s！您今年%d岁。" % (name, age))
+</code></pre>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>2. 控制流</h2>
+        <div class="section-details">
+            <h3>2.1 if 语句</h3>
+            <p><strong>定义：</strong> 条件语句，当指定条件为真时执行代码块。</p>
+            <p><strong>描述：</strong> 对于 Python 脚本中的决策过程至关重要。</p>
+            <pre><code class="language-python"># if 语句示例
+a = 5
+if a > 3:
+    print("a 大于 3")
+
+# if-else 语句
+age = 18
 if age >= 18:
     print("成年人")
 else:
     print("未成年人")
 
-# if-elif-else
+# if-elif-else 语句
 score = 85
 if score >= 90:
     print("优秀")
@@ -522,481 +146,802 @@ elif score >= 60:
 else:
     print("不及格")
 
-# 三元表达式
-result = "通过" if score >= 60 else "不通过"</pre>
-                        <p>条件表达式：</p>
-                        <ul>
-                            <li>比较运算符：==, !=, >, <, >=, <=</li>
-                            <li>逻辑运算符：and, or, not</li>
-                            <li>成员运算符：in, not in</li>
-                            <li>身份运算符：is, is not</li>
-                        </ul>
-                        <p>复杂条件示例：</p>
-                        <pre class="code">
-# 检查用户名和密码
-username = "admin"
-password = "123456"
-
-if username == "admin" and password == "123456":
-    print("登录成功")
+# 嵌套 if 语句
+weather = "sunny"
+temperature = 25
+if weather == "sunny":
+    if temperature > 20:
+        print("适合出游")
+    else:
+        print("有点冷")
 else:
-    print("用户名或密码错误")
+    print("不适合出游")
+</code></pre>
 
-# 检查数字范围
-num = 15
-if 10 <= num <= 20:
-    print("数字在10到20之间")
+            <h3>2.2 for 循环</h3>
+            <p><strong>定义：</strong> 用于遍历序列（列表、元组、字符串等）的循环结构。</p>
+            <p><strong>描述：</strong> 常用于迭代已知次数的循环。</p>
+            <pre><code class="language-python"># 基本 for 循环
+for i in range(5):
+    print(i)  # 输出 0, 1, 2, 3, 4
 
-# 检查列表包含
-fruits = ['apple', 'banana', 'orange']
-if 'apple' in fruits:
-    print("有苹果")</pre>
-                    </div>
-                </li>
-                <li>循环结构（for, while）
-                    <button class="toggle-btn" onclick="toggleDetails('loops')">展开</button>
-                    <div id="loops" class="details">
-                        <p>for循环：</p>
-                        <pre class="code">
-# 遍历序列
-fruits = ['apple', 'banana', 'orange']
+# 遍历列表
+fruits = ["apple", "banana", "cherry"]
 for fruit in fruits:
     print(fruit)
 
 # 遍历字符串
-for char in "Python":
+for char in "Hello":
     print(char)
 
-# 使用range
-for i in range(5):      # 0到4
-    print(i)
+# 使用 enumerate 获取索引
+for index, fruit in enumerate(fruits):
+    print(f"索引 {index}: {fruit}")
 
-for i in range(1, 6):   # 1到5
-    print(i)
+# 嵌套 for 循环
+for i in range(3):
+    for j in range(3):
+        print(f"({i}, {j})")
 
-for i in range(0, 10, 2): # 0,2,4,6,8
-    print(i)</pre>
-                        <p>while循环：</p>
-                        <pre class="code">
-# 基本while
+# 使用 break 和 continue
+for i in range(10):
+    if i == 3:
+        continue  # 跳过当前迭代
+    if i == 7:
+        break     # 终止循环
+    print(i)
+</code></pre>
+
+            <h3>2.3 while 循环</h3>
+            <p><strong>定义：</strong> 在条件为真时重复执行代码块的循环结构。</p>
+            <p><strong>描述：</strong> 适用于不知道确切循环次数的情况。</p>
+            <pre><code class="language-python"># 基本 while 循环
 count = 0
 while count < 5:
     print(count)
     count += 1
 
-# 无限循环+break
+# 使用 while 循环进行用户输入
 while True:
-    user_input = input("输入quit退出: ")
-    if user_input == "quit":
+    user_input = input("请输入 'quit' 退出: ")
+    if user_input.lower() == 'quit':
         break
-    print(f"你输入了: {user_input}")
+    print(f"您输入了: {user_input}")
 
-# continue示例
-num = 0
-while num < 10:
-    num += 1
-    if num % 2 == 0:
-        continue  # 跳过偶数
-    print(num)</pre>
-                        <p>循环中的else：</p>
-                        <pre class="code">
-# for-else: 循环正常结束时执行
-for i in range(5):
-    print(i)
-else:
-    print("循环完成")
+# 计算阶乘
+n = 5
+factorial = 1
+while n > 0:
+    factorial *= n
+    n -= 1
+print(f"5! = {factorial}")
+</code></pre>
 
-# while-else
-count = 0
-while count < 3:
-    print(count)
-    count += 1
-else:
-    print("循环结束")
-
-# 如果循环被break中断，else不会执行
-for i in range(5):
-    if i == 3:
+            <h3>2.4 循环控制语句</h3>
+            <p><strong>定义：</strong> 用于控制循环执行流程的语句。</p>
+            <p><strong>描述：</strong> 包括 break、continue 和 else 子句。</p>
+            <pre><code class="language-python"># break 语句 - 终止循环
+for i in range(10):
+    if i == 5:
         break
-    print(i)
-else:
-    print("这不会执行")</pre>
-                    </div>
-                </li>
-                <li>循环控制（break, continue, pass）
-                    <button class="toggle-btn" onclick="toggleDetails('loop-control')">展开</button>
-                    <div id="loop-control" class="details">
-                        <p>break语句：</p>
-                        <pre class="code">
-# 查找第一个偶数
-numbers = [1, 3, 5, 8, 10, 12]
-for num in numbers:
-    if num % 2 == 0:
-        print(f"找到第一个偶数: {num}")
-        break
+    print(i)  # 输出 0, 1, 2, 3, 4
 
-# while循环中的break
-while True:
-    answer = input("输入quit退出: ")
-    if answer == "quit":
-        break
-    print(f"你输入了: {answer}")</pre>
-                        <p>continue语句：</p>
-                        <pre class="code">
-# 打印1-10的奇数
-for i in range(1, 11):
+# continue 语句 - 跳过当前迭代
+for i in range(10):
     if i % 2 == 0:
         continue
+    print(i)  # 输出 1, 3, 5, 7, 9
+
+# else 子句 - 循环正常结束时执行
+for i in range(3):
     print(i)
+else:
+    print("循环正常结束")
 
-# 跳过特定元素
-fruits = ['apple', 'banana', 'orange', 'grape']
-for fruit in fruits:
-    if fruit == 'orange':
-        continue
-    print(fruit)</pre>
-                        <p>pass语句：</p>
-                        <pre class="code">
-# 空函数/类定义
-def empty_function():
-    pass  # 什么都不做，但语法需要
-
-class EmptyClass:
-    pass
-
-# 占位符
-for i in range(5):
-    if i == 3:
-        pass  # 以后实现
-    else:
-        print(i)</pre>
-                        <p>循环控制对比：</p>
-                        <table>
-                            <tr>
-                                <th>语句</th>
-                                <th>作用</th>
-                                <th>示例</th>
-                            </tr>
-                            <tr>
-                                <td>break</td>
-                                <td>立即退出整个循环</td>
-                                <td>找到目标后终止搜索</td>
-                            </tr>
-                            <tr>
-                                <td>continue</td>
-                                <td>跳过当前迭代，继续下一次</td>
-                                <td>跳过某些特定元素</td>
-                            </tr>
-                            <tr>
-                                <td>pass</td>
-                                <td>空操作，语法占位符</td>
-                                <td>暂时不实现某代码块</td>
-                            </tr>
-                        </table>
-                    </div>
-                </li>
-            </ul>
+# 在有 break 的情况下，else 不会执行
+for i in range(10):
+    if i == 5:
+        break
+    print(i)
+else:
+    print("这不会被打印")
+</code></pre>
         </div>
     </div>
-    
-    <div class="module">
-        <h2>第三部分：Python数据结构</h2>
-        <div class="sub-module">
-            <h3>1. 列表(List)</h3>
-            <ul>
-                <li>列表操作与方法
-                    <button class="toggle-btn" onclick="toggleDetails('lists')">展开</button>
-                    <div id="lists" class="details">
-                        <p>列表创建：</p>
-                        <pre class="code">
-# 空列表
-empty_list = []
-empty_list = list()
 
-# 初始化列表
+    <div class="section">
+        <h2>3. 函数</h2>
+        <div class="section-details">
+            <h3>3.1 定义函数</h3>
+            <p><strong>定义：</strong> 函数是用于执行单一动作的组织、可重用代码块。</p>
+            <p><strong>描述：</strong> 函数有助于将程序分为更小和模块化的块。</p>
+            <pre><code class="language-python"># 基本函数定义
+def greet(name):
+    return "Hello, " + name
+
+# 调用函数
+result = greet("Alice")
+print(result)  # 输出: Hello, Alice
+
+# 带默认参数的函数
+def greet_with_title(name, title="先生"):
+    return f"您好，{title} {name}！"
+
+print(greet_with_title("张三"))  # 您好，先生 张三！
+print(greet_with_title("李四", "女士"))  # 您好，女士 李四！
+
+# 可变参数函数
+def sum_numbers(*args):
+    return sum(args)
+
+print(sum_numbers(1, 2, 3, 4, 5))  # 15
+
+# 关键字参数函数
+def create_profile(**kwargs):
+    return kwargs
+
+profile = create_profile(name="张三", age=25, city="北京")
+print(profile)  # {'name': '张三', 'age': 25, 'city': '北京'}
+
+# 混合参数函数
+def complex_function(required, default="默认值", *args, **kwargs):
+    print(f"必需参数: {required}")
+    print(f"默认参数: {default}")
+    print(f"可变参数: {args}")
+    print(f"关键字参数: {kwargs}")
+
+complex_function("必需", "自定义", 1, 2, 3, key1="value1", key2="value2")
+</code></pre>
+
+            <h3>3.2 函数作用域</h3>
+            <p><strong>定义：</strong> 变量的可见性和生命周期范围。</p>
+            <p><strong>描述：</strong> 理解局部变量和全局变量的区别。</p>
+            <pre><code class="language-python"># 全局变量
+global_var = "我是全局变量"
+
+def test_scope():
+    # 局部变量
+    local_var = "我是局部变量"
+    print(global_var)  # 可以访问全局变量
+    print(local_var)
+
+test_scope()
+# print(local_var)  # 错误：无法访问局部变量
+
+# 修改全局变量
+counter = 0
+
+def increment():
+    global counter
+    counter += 1
+    return counter
+
+print(increment())  # 1
+print(increment())  # 2
+
+# 嵌套函数和闭包
+def outer_function(x):
+    def inner_function(y):
+        return x + y
+    return inner_function
+
+add_10 = outer_function(10)
+print(add_10(5))  # 15
+</code></pre>
+
+            <h3>3.3 Lambda 函数</h3>
+            <p><strong>定义：</strong> 小型匿名函数，可以有任意数量的输入参数，但只能有一个表达式。</p>
+            <p><strong>描述：</strong> 对于简短和简单的函数有用，通常用于函数式编程结构中。</p>
+            <pre><code class="language-python"># 基本 Lambda 函数
+square = lambda x: x * x
+print(square(5))  # 25
+
+# 多参数 Lambda
+add = lambda x, y: x + y
+print(add(3, 4))  # 7
+
+# 在内置函数中使用 Lambda
 numbers = [1, 2, 3, 4, 5]
-fruits = ['apple', 'banana', 'orange']
-mixed = [1, 'hello', 3.14, True]</pre>
-                        <p>列表操作：</p>
-                        <pre class="code">
-# 索引和切片
-lst = [10, 20, 30, 40, 50]
-lst[0]    # 10
-lst[-1]   # 50
-lst[1:3]  # [20, 30]
-lst[::2]  # [10, 30, 50]
+squared = list(map(lambda x: x**2, numbers))
+print(squared)  # [1, 4, 9, 16, 25]
 
-# 修改元素
-lst[1] = 99  # [10, 99, 30, 40, 50]
+# 过滤偶数
+even_numbers = list(filter(lambda x: x % 2 == 0, numbers))
+print(even_numbers)  # [2, 4]
 
-# 列表连接
-lst1 = [1, 2, 3]
-lst2 = [4, 5, 6]
-combined = lst1 + lst2  # [1, 2, 3, 4, 5, 6]
+# 排序
+students = [('Alice', 85), ('Bob', 90), ('Charlie', 78)]
+students.sort(key=lambda x: x[1])  # 按分数排序
+print(students)  # [('Charlie', 78), ('Alice', 85), ('Bob', 90)]
+</code></pre>
 
-# 列表重复
-repeated = lst1 * 2  # [1, 2, 3, 1, 2, 3]</pre>
-                        <p>列表方法：</p>
-                        <pre class="code">
-lst = [1, 2, 3]
+            <h3>3.4 高阶函数</h3>
+            <p><strong>定义：</strong> 接受函数作为参数或返回函数的函数。</p>
+            <p><strong>描述：</strong> 函数式编程的重要概念，使代码更加灵活和模块化。</p>
+            <pre><code class="language-python"># 函数作为参数
+def apply_operation(x, y, operation):
+    return operation(x, y)
+
+def multiply(a, b):
+    return a * b
+
+result = apply_operation(5, 3, multiply)
+print(result)  # 15
+
+# 使用 Lambda 作为参数
+result2 = apply_operation(5, 3, lambda a, b: a + b)
+print(result2)  # 8
+
+# 返回函数的函数
+def create_multiplier(factor):
+    def multiplier(x):
+        return x * factor
+    return multiplier
+
+double = create_multiplier(2)
+triple = create_multiplier(3)
+
+print(double(5))  # 10
+print(triple(5))  # 15
+
+# 装饰器示例
+def timer_decorator(func):
+    import time
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        end = time.time()
+        print(f"{func.__name__} 执行时间: {end - start:.4f} 秒")
+        return result
+    return wrapper
+
+@timer_decorator
+def slow_function():
+    import time
+    time.sleep(1)
+    return "完成！"
+
+slow_function()  # 会显示执行时间
+</code></pre>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>4. 集合</h2>
+        <div class="section-details">
+            <h3>4.1 列表 (List)</h3>
+            <p><strong>定义：</strong> 有序的、可变的项目集合。</p>
+            <p><strong>描述：</strong> 列表可以在单个变量中存储多个项目，允许动态数据处理。</p>
+            <pre><code class="language-python"># 创建列表
+fruits = ["apple", "banana", "cherry"]
+numbers = [1, 2, 3, 4, 5]
+mixed = [1, "hello", 3.14, True]
+
+# 访问列表元素
+print(fruits[0])     # apple
+print(fruits[-1])    # cherry (负索引)
+print(fruits[1:3])   # ['banana', 'cherry'] (切片)
+
+# 修改列表
+fruits[1] = "blueberry"
+print(fruits)        # ['apple', 'blueberry', 'cherry']
 
 # 添加元素
-lst.append(4)        # [1, 2, 3, 4]
-lst.insert(1, 1.5)   # [1, 1.5, 2, 3, 4]
-lst.extend([5, 6])   # [1, 1.5, 2, 3, 4, 5, 6]
+fruits.append("orange")        # 末尾添加
+fruits.insert(1, "grape")      # 指定位置插入
+fruits.extend(["kiwi", "mango"]) # 添加多个元素
 
 # 删除元素
-lst.remove(1.5)      # 移除第一个匹配项
-popped = lst.pop()   # 移除并返回最后一个元素(6)
-popped = lst.pop(1)  # 移除并返回索引1的元素(2)
-del lst[0]           # 删除索引0的元素
+fruits.remove("grape")         # 删除指定值
+popped = fruits.pop()          # 删除并返回最后一个元素
+popped_index = fruits.pop(1)   # 删除指定索引的元素
+del fruits[0]                  # 删除指定索引的元素
 
-# 其他操作
-lst.index(3)         # 返回第一个3的索引
-lst.count(3)         # 统计3出现的次数
-lst.sort()           # 原地排序
-lst.reverse()        # 原地反转
-lst.copy()           # 浅拷贝
-lst.clear()          # 清空列表</pre>
-                        <p>列表推导式：</p>
-                        <pre class="code">
-# 创建平方数列表
+# 列表方法
+print(len(fruits))             # 获取长度
+print(fruits.count("apple"))   # 计算某元素出现次数
+print(fruits.index("cherry"))  # 查找元素索引
+fruits.sort()                  # 排序
+fruits.reverse()               # 反转
+
+# 列表推导式
 squares = [x**2 for x in range(10)]
-
-# 带条件的推导式
 even_squares = [x**2 for x in range(10) if x % 2 == 0]
+print(squares)      # [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+print(even_squares) # [0, 4, 16, 36, 64]
+</code></pre>
 
-# 嵌套推导式
-matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
-flattened = [num for row in matrix for num in row]  # [1,2,3,4,5,6,7,8,9]</pre>
-                    </div>
-                </li>
-            </ul>
-            
-            <h3>2. 元组(Tuple)</h3>
-            <ul>
-                <li>元组操作与特性
-                    <button class="toggle-btn" onclick="toggleDetails('tuples')">展开</button>
-                    <div id="tuples" class="details">
-                        <p>元组特性：</p>
-                        <ul>
-                            <li>不可变序列</li>
-                            <li>通常用于存储异构数据</li>
-                            <li>可以作为字典的键</li>
-                            <li>比列表更节省内存</li>
-                        </ul>
-                        <p>元组创建：</p>
-                        <pre class="code">
-# 空元组
-empty_tuple = ()
-empty_tuple = tuple()
+            <h3>4.2 元组 (Tuple)</h3>
+            <p><strong>定义：</strong> 有序的、不可变的项目集合。</p>
+            <p><strong>描述：</strong> 类似于列表，但一旦创建就不能修改。</p>
+            <pre><code class="language-python"># 创建元组
+coordinates = (10, 20)
+colors = ("red", "green", "blue")
+singleton = (42,)  # 单元素元组需要逗号
 
-# 单元素元组(注意逗号)
-single = (1,)  # 必须加逗号
-not_single = (1)  # 这不是元组，是整数1
-
-# 多元素元组
-colors = ('red', 'green', 'blue')
-numbers = (1, 2, 3, 4, 5)
-
-# 不加括号也可以(但不推荐)
-mixed = 'a', 1, True</pre>
-                        <p>元组操作：</p>
-                        <pre class="code">
-t = (10, 20, 30, 40, 50)
-
-# 索引和切片
-t[0]    # 10
-t[-1]   # 50
-t[1:3]  # (20, 30)
+# 访问元组元素
+print(coordinates[0])  # 10
+print(colors[1:3])     # ('green', 'blue')
 
 # 元组解包
-a, b, c = (1, 2, 3)  # a=1, b=2, c=3
+x, y = coordinates
+print(f"x: {x}, y: {y}")
 
-# 交换变量
-x, y = 10, 20
-x, y = y, x  # 使用元组解包交换
+# 嵌套元组
+point_3d = (10, 20, 30)
+points = ((0, 0), (1, 1), (2, 2))
 
-# 作为返回值
-def get_stats(numbers):
-    return min(numbers), max(numbers), len(numbers)
+# 元组方法
+print(len(colors))           # 获取长度
+print(colors.count("red"))   # 计算某元素出现次数
+print(colors.index("green")) # 查找元素索引
 
-min_val, max_val, count = get_stats([1, 2, 3, 4, 5])</pre>
-                        <p>元组方法：</p>
-                        <pre class="code">
-t = (1, 2, 3, 2, 4, 2)
+# 元组用于函数返回多个值
+def get_name_age():
+    return "张三", 25
 
-t.count(2)  # 3 (统计2出现的次数)
-t.index(3)  # 2 (返回第一个3的索引)</pre>
-                        <p>元组与列表比较：</p>
-                        <table>
-                            <tr>
-                                <th>特性</th>
-                                <th>列表(List)</th>
-                                <th>元组(Tuple)</th>
-                            </tr>
-                            <tr>
-                                <td>可变性</td>
-                                <td>可变</td>
-                                <td>不可变</td>
-                            </tr>
-                            <tr>
-                                <td>语法</td>
-                                <td>方括号[]</td>
-                                <td>圆括号()</td>
-                            </tr>
-                            <tr>
-                                <td>性能</td>
-                                <td>较慢</td>
-                                <td>较快</td>
-                            </tr>
-                            <tr>
-                                <td>用途</td>
-                                <td>存储同构数据</td>
-                                <td>存储异构数据</td>
-                            </tr>
-                            <tr>
-                                <td>作为字典键</td>
-                                <td>不可以</td>
-                                <td>可以</td>
-                            </tr>
-                        </table>
-                    </div>
-                </li>
-            </ul>
-            
-            <h3>3. 字典(Dictionary)</h3>
-            <ul>
-                <li>字典操作与方法
-                    <button class="toggle-btn" onclick="toggleDetails('dicts')">展开</button>
-                    <div id="dicts" class="details">
-                        <p>字典特性：</p>
-                        <ul>
-                            <li>键值对集合</li>
-                            <li>键必须是不可变类型（字符串、数字、元组）</li>
-                            <li>值可以是任意类型</li>
-                            <li>无序（Python 3.7+保持插入顺序）</li>
-                        </ul>
-                        <p>字典创建：</p>
-                        <pre class="code">
-# 空字典
-empty_dict = {}
-empty_dict = dict()
+name, age = get_name_age()
+print(f"姓名: {name}, 年龄: {age}")
+</code></pre>
 
-# 初始化字典
-person = {'name': 'Alice', 'age': 25, 'city': 'New York'}
-grades = dict(math=90, english=85, history=92)
+            <h3>4.3 字典 (Dictionary)</h3>
+            <p><strong>定义：</strong> 无序的、可变的集合，以键值对形式存储数据。</p>
+            <p><strong>描述：</strong> 用于表示结构化数据；键必须唯一且不可变。</p>
+            <pre><code class="language-python"># 创建字典
+person = {"name": "John", "age": 30, "city": "北京"}
+student = dict(name="Alice", grade=90, subject="数学")
+
+# 访问字典元素
+print(person["name"])          # John
+print(person.get("age"))       # 30
+print(person.get("phone", "未知")) # 未知 (默认值)
+
+# 修改字典
+person["age"] = 31
+person["phone"] = "123-456-7890"
+
+# 删除元素
+del person["city"]
+phone = person.pop("phone", "未找到")
+
+# 字典方法
+print(person.keys())       # 获取所有键
+print(person.values())     # 获取所有值
+print(person.items())      # 获取所有键值对
+
+# 遍历字典
+for key in person:
+    print(f"{key}: {person[key]}")
+
+for key, value in person.items():
+    print(f"{key}: {value}")
 
 # 字典推导式
-squares = {x: x**2 for x in range(1, 6)}  # {1:1, 2:4, 3:9, 4:16, 5:25}</pre>
-                        <p>字典操作：</p>
-                        <pre class="code">
-d = {'name': 'Alice', 'age': 25}
+numbers = [1, 2, 3, 4, 5]
+square_dict = {x: x**2 for x in numbers}
+even_square_dict = {x: x**2 for x in numbers if x % 2 == 0}
+print(square_dict)      # {1: 1, 2: 4, 3: 9, 4: 16, 5: 25}
+print(even_square_dict) # {2: 4, 4: 16}
 
-# 访问元素
-d['name']  # 'Alice'
-d.get('age')  # 25
-d.get('salary', 0)  # 键不存在返回默认值0
+# 嵌套字典
+students = {
+    "student1": {"name": "张三", "grade": 85},
+    "student2": {"name": "李四", "grade": 90}
+}
+print(students["student1"]["name"])  # 张三
+</code></pre>
 
-# 添加/修改元素
-d['city'] = 'New York'  # 添加
-d['age'] = 26           # 修改
+            <h3>4.4 集合 (Set)</h3>
+            <p><strong>定义：</strong> 无序的、可变的集合，不包含重复元素。</p>
+            <p><strong>描述：</strong> 用于数学集合操作，如并集、交集等。</p>
+            <pre><code class="language-python"># 创建集合
+fruits = {"apple", "banana", "cherry"}
+numbers = set([1, 2, 3, 4, 5])
+empty_set = set()  # 空集合
 
-# 删除元素
-del d['city']  # 删除键'city'
-age = d.pop('age')  # 删除并返回值
-d.clear()  # 清空字典</pre>
-                        <p>字典方法：</p>
-                        <pre class="code">
-d = {'a': 1, 'b': 2, 'c': 3}
+# 添加和删除元素
+fruits.add("orange")
+fruits.remove("banana")    # 如果元素不存在会报错
+fruits.discard("grape")    # 如果元素不存在不会报错
+popped = fruits.pop()      # 随机删除一个元素
 
-# 获取所有键
-d.keys()    # dict_keys(['a', 'b', 'c'])
-
-# 获取所有值
-d.values()  # dict_values([1, 2, 3])
-
-# 获取键值对
-d.items()   # dict_items([('a', 1), ('b', 2), ('c', 3)])
-
-# 更新字典
-d.update({'b': 20, 'd': 4})  # {'a':1, 'b':20, 'c':3, 'd':4}
-
-# 设置默认值
-d.setdefault('e', 5)  # 如果'e'不存在，设置为5</pre>
-                        <p>字典遍历：</p>
-                        <pre class="code">
-# 遍历键
-for key in d:
-    print(key)
-
-for key in d.keys():
-    print(key)
-
-# 遍历值
-for value in d.values():
-    print(value)
-
-# 遍历键值对
-for key, value in d.items():
-    print(f"{key}: {value}")</pre>
-                    </div>
-                </li>
-            </ul>
-            
-            <h3>4. 集合(Set)</h3>
-            <ul>
-                <li>集合操作与方法
-                    <button class="toggle-btn" onclick="toggleDetails('sets')">展开</button>
-                    <div id="sets" class="details">
-                        <p>集合特性：</p>
-                        <ul>
-                            <li>无序的唯一元素集合</li>
-                            <li>可变（frozenset是不可变版本）</li>
-                            <li>支持数学集合运算</li>
-                            <li>元素必须是不可变类型</li>
-                        </ul>
-                        <p>集合创建：</p>
-                        <pre class="code">
-# 空集合(必须用set())
-empty_set = set()
-
-# 初始化集合
-numbers = {1, 2, 3, 4, 5}
-letters = set('hello')  # {'h', 'e', 'l', 'o'}
-
-# 集合推导式
-squares = {x**2 for x in range(1, 6)}  # {1, 4, 9, 16, 25}</pre>
-                        <p>集合操作：</p>
-                        <pre class="code">
-a = {1, 2, 3}
-b = {3, 4, 5}
+# 集合操作
+set1 = {1, 2, 3, 4}
+set2 = {3, 4, 5, 6}
 
 # 并集
-a | b  # {1, 2, 3, 4, 5}
-a.union(b)
+union_set = set1 | set2
+print(union_set)           # {1, 2, 3, 4, 5, 6}
 
 # 交集
-a & b  # {3}
-a.intersection(b)
+intersection_set = set1 & set2
+print(intersection_set)    # {3, 4}
 
 # 差集
-a - b  # {1, 2}
-a.difference(b)
+difference_set = set1 - set2
+print(difference_set)      # {1, 2}
 
-# 对称差集(只在其中一个集合中的元素)
-a ^ b  # {1, 2, 4, 5}
-a.symmetric_difference(b)</pre>
-                        <p>集合方法：</p>
-                        <pre class="code">
-s = {1, 2, 3}
+# 对称差集
+symmetric_diff = set1 ^ set2
+print(symmetric_diff)      # {1, 2, 5, 6}
 
-# 添加元素
-s.add(4)       # {1, 2, 3, 4}
-s.update([5, 6]) # {1, 2, 3, 4, 5, 6}
+# 集合推导式
+even_squares = {x**2 for x in range(10) if x % 2 == 0}
+print(even_squares)        # {0, 4, 16, 36, 64}
 
-# 删除元素
-s.remove(6)    # 如果6不存在会报错
-s.discard(5)   # 如果5不存在不会报错
-popped = s.pop()  # 移除并返回任意元素
-s.clear()      # 清空集合
+# 去重
+duplicates = [1, 2, 2, 3, 3, 4, 5]
+unique = list(set(duplicates))
+print(unique)              # [1, 2, 3, 4, 5]
+</code></pre>
+
+            <h3>4.5 字符串 (String)</h3>
+            <p><strong>定义：</strong> 字符序列，是不可变的数据类型。</p>
+            <p><strong>描述：</strong> 用于处理文本数据，支持多种操作方法。</p>
+            <pre><code class="language-python"># 创建字符串
+text = "Hello, World!"
+multiline = """这是一个
+多行字符串
+示例"""
+
+# 字符串索引和切片
+print(text[0])      # H
+print(text[-1])     # !
+print(text[7:12])   # World
+print(text[:5])     # Hello
+print(text[7:])     # World!
+
+# 字符串方法
+print(text.upper())       # HELLO, WORLD!
+print(text.lower())       # hello, world!
+print(text.title())       # Hello, World!
+print(text.capitalize())  # Hello, world!
+
+# 字符串查找和替换
+print(text.find("World"))     # 7
+print(text.replace("World", "Python"))  # Hello, Python!
+print(text.count("l"))        # 3
+
+# 字符串分割和连接
+words = text.split(", ")
+print(words)                  # ['Hello', 'World!']
+joined = " - ".join(words)
+print(joined)                 # Hello - World!
+
+# 字符串格式化
+name = "Alice"
+age = 25
+
+# f-string (推荐)
+formatted = f"我的名字是 {name}，我今年 {age} 岁"
+print(formatted)
+
+# format() 方法
+formatted2 = "我的名字是 {}，我今年 {} 岁".format(name, age)
+print(formatted2)
+
+# % 格式化
+formatted3 = "我的名字是 %s，我今年 %d 岁" % (name, age)
+print(formatted3)
+
+# 字符串验证
+print("123".isdigit())      # True
+print("abc".isalpha())      # True
+print("abc123".isalnum())   # True
+print("   ".isspace())      # True
+
+# 字符串清理
+text_with_spaces = "  Hello, World!  "
+print(text_with_spaces.strip())   # "Hello, World!"
+print(text_with_spaces.lstrip())  # "Hello, World!  "
+print(text_with_spaces.rstrip())  # "  Hello, World!"
+</code></pre>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>5. 面向对象编程</h2>
+        <div class="section-details">
+            <h3>5.1 类和对象</h3>
+            <p><strong>定义：</strong> 类是用于创建对象（特定数据结构）的蓝图。</p>
+            <p><strong>描述：</strong> Python 是一种面向对象的语言，使用类来定义数据类型。</p>
+            <pre><code class="language-python"># 基本类定义
+class Dog:
+    # 类变量
+    species = "Canis lupus"
+    
+    # 构造函数
+    def __init__(self, name, age):
+        self.name = name      # 实例变量
+        self.age = age        # 实例变量
+    
+    # 实例方法
+    def bark(self):
+        return f"{self.name} says: Woof!"
+    
+    def get_info(self):
+        return f"Name: {self.name}, Age: {self.age}, Species: {self.species}"
+    
+    # 类方法
+    @classmethod
+    def create_puppy(cls, name):
+        return cls(name, 0)
+    
+    # 静态方法
+    @staticmethod
+    def sound():
+        return "Dogs make woof sound"
+
+# 创建对象
+my_dog = Dog("Rex", 3)
+puppy = Dog.create_puppy("Buddy")
+
+print(my_dog.bark())        # Rex says: Woof!
+print(my_dog.get_info())    # Name: Rex, Age: 3, Species: Canis lupus
+print(Dog.sound())          # Dogs make woof sound
+print(puppy.get_info())     # Name: Buddy, Age: 0, Species: Canis lupus
+</code></pre>
+
+            <h3>5.2 继承</h3>
+            <p><strong>定义：</strong> 一种机制，新类可以继承现有类的属性和方法。</p>
+            <p><strong>描述：</strong> 支持面向对象编程中的代码重用和扩展。</p>
+            <pre><code class="language-python"># 基础类
+class Animal:
+    def __init__(self, name, species):
+        self.name = name
+        self.species = species
+    
+    def speak(self):
+        print(f"{self.name} makes a sound")
+    
+    def get_info(self):
+        return f"Name: {self.name}, Species: {self.species}"
+
+# 继承类
+class Dog(Animal):
+    def __init__(self, name, breed):
+        super().__init__(name, "Canis lupus")  # 调用父类构造函数
+        self.breed = breed
+    
+    def speak(self):  # 方法重写
+        print(f"{self.name} barks: Woof!")
+    
+    def fetch(self):  # 新方法
+        print(f"{self.name} fetches the ball")
+
+class Cat(Animal):
+    def __init__(self, name, indoor=True):
+        super().__init__(name, "Felis catus")
+        self.indoor = indoor
+    
+    def speak(self):  # 方法重写
+        print(f"{self.name} meows: Meow!")
+    
+    def purr(self):  # 新方法
+        print(f"{self.name} purrs contentedly")
+
+# 使用继承
+dog = Dog("Buddy", "Golden Retriever")
+cat = Cat("Whiskers", indoor=True)
+
+dog.speak()     # Buddy barks: Woof!
+cat.speak()     # Whiskers meows: Meow!
+dog.fetch()     # Buddy fetches the ball
+cat.purr()      # Whiskers purrs contentedly
+
+# 多态性
+animals = [dog, cat]
+for animal in animals:
+    animal.speak()  # 每个动物都会有不同的叫声
+</code></pre>
+
+            <h3>5.3 封装</h3>
+            <p><strong>定义：</strong> 将数据和方法封装在类中，控制对数据的访问。</p>
+            <p><strong>描述：</strong> 通过私有变量和方法来隐藏内部实现细节。</p>
+            <pre><code class="language-python"># 封装示例
+class BankAccount:
+    def __init__(self, account_number, initial_balance=0):
+        self.account_number = account_number
+        self.__balance = initial_balance  # 私有变量
+    
+    def deposit(self, amount):
+        if amount > 0:
+            self.__balance += amount
+            print(f"存入 {amount} 元，当前余额: {self.__balance} 元")
+        else:
+            print("存入金额必须大于0")
+    
+    def withdraw(self, amount):
+        if amount > 0 and amount <= self.__balance:
+            self.__balance -= amount
+            print(f"取出 {amount} 元，当前余额: {self.__balance} 元")
+        else:
+            print("余额不足或金额无效")
+    
+    def get_balance(self):
+        return self.__balance
+    
+    def __str__(self):
+        return f"账户: {self.account_number}, 余额: {self.__balance} 元"
+
+# 使用封装
+account = BankAccount("123456789", 1000)
+print(account)              # 账户: 123456789, 余额: 1000 元
+account.deposit(500)        # 存入 500 元，当前余额: 1500 元
+account.withdraw(200)       # 取出 200 元，当前余额: 1300 元
+print(account.get_balance()) # 1300
+
+# 私有变量无法直接访问
+# print(account.__balance)  # 会报错
+</code></pre>
+
+            <h3>5.4 多态性</h3>
+            <p><strong>定义：</strong> 不同的类可以有相同的方法名，但实现不同的功能。</p>
+            <p><strong>描述：</strong> 允许使用统一的接口处理不同类型的对象。</p>
+            <pre><code class="language-python"># 多态性示例
+class Shape:
+    def area(self):
+        pass
+    
+    def perimeter(self):
+        pass
+
+class Circle(Shape):
+    def __init__(self, radius):
+        self.radius = radius
+    
+    def area(self):
+        return 3.14159 * self.radius ** 2
+    
+    def perimeter(self):
+        return 2 * 3.14159 * self.radius
+
+class Rectangle(Shape):
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+    
+    def area(self):
+        return self.width * self.height
+    
+    def perimeter(self):
+        return 2 * (self.width + self.height)
+
+class Triangle(Shape):
+    def __init__(self, base, height, side1, side2, side3):
+        self.base = base
+        self.height = height
+        self.side1 = side1
+        self.side2 = side2
+        self.side3 = side3
+    
+    def area(self):
+        return 0.5 * self.base * self.height
+    
+    def perimeter(self):
+        return self.side1 + self.side2 + self.side3
+
+# 多态性使用
+shapes = [
+    Circle(5),
+    Rectangle(4, 6),
+    Triangle(3, 4, 3, 4, 5)
+]
+
+for shape in shapes:
+    print(f"面积: {shape.area():.2f}")
+    print(f"周长: {shape.perimeter():.2f}")
+    print("---")
+</code></pre>
+
+            <h3>5.5 特殊方法（魔术方法）</h3>
+            <p><strong>定义：</strong> 以双下划线开头和结尾的方法，定义对象的特殊行为。</p>
+            <p><strong>描述：</strong> 允许自定义类与Python内置操作符和函数的交互。</p>
+            <pre><code class="language-python"># 特殊方法示例
+class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+    
+    def __str__(self):
+        return f"Point({self.x}, {self.y})"
+    
+    def __repr__(self):
+        return f"Point({self.x}, {self.y})"
+    
+    def __add__(self, other):
+        return Point(self.x + other.x, self.y + other.y)
+    
+    def __sub__(self, other):
+        return Point(self.x - other.x, self.y - other.y)
+    
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
+    
+    def __lt__(self, other):
+        return (self.x**2 + self.y**2) < (other.x**2 + other.y**2)
+    
+    def __len__(self):
+        return int((self.x**2 + self.y**2)**0.5)
+    
+    def __getitem__(self, key):
+        if key == 0:
+            return self.x
+        elif key == 1:
+            return self.y
+        else:
+            raise IndexError("Index out of range")
+
+# 使用特殊方法
+p1 = Point(3, 4)
+p2 = Point(1, 2)
+
+print(p1)           # Point(3, 4)
+print(p1 + p2)      # Point(4, 6)
+print(p1 - p2)      # Point(2, 2)
+print(p1 == p2)     # False
+print(p1 < p2)      # False
+print(len(p1))      # 5
+print(p1[0])        # 3
+print(p1[1])        # 4
+</code></pre>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>6. 错误处理</h2>
+        <div class="section-details">
+            <h3>6.1 Try 和 Except</h3>
+            <p><strong>定义：</strong> 用于在 Python 中处理异常（错误）的块。</p>
+            <p><strong>描述：</strong> 通过捕捉和处理异常，帮助防止程序崩溃。</p>
+            <pre><code class="language-python"># Try 和 except 示例
+try:
+    x = 1 / 0
+except ZeroDivisionError:
+    print("不能除以零")
+</code></pre>
+
+            <h3>6.2 Finally</h3>
+            <p><strong>定义：</strong> 无论是否发生异常都会执行代码的块。</p>
+            <p><strong>描述：</strong> 用于清理任务，如关闭文件或释放资源。</p>
+            <pre><code class="language-python"># Finally 示例
+try:
+    x = 1 / 0
+except ZeroDivisionError:
+    print("不能除以零")
+finally:
+    print("执行完毕")
+</code></pre>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>7. 模块和包</h2>
+        <div class="section-details">
+            <h3>7.1 导入模块</h3>
+            <p><strong>定义：</strong> 模块是包含 Python 代码的文件，可以导入到其他脚本中。</p>
+            <p><strong>描述：</strong> 允许大型项目中的代码重用和组织。</p>
+            <pre><code class="language-python"># 导入模块示例
+import math
+print(math.sqrt(16))
+</code></pre>
+
+            <h3>7.2 创建包</h3>
+            <p><strong>定义：</strong> 包是目录中的模块集合，形成包层次结构。</p>
+            <p><strong>描述：</strong> 用于分发应用程序和库代码。</p>
+            <pre><code class="language-python"># 创建包
+# 假设此目录结构：
+# mypackage/
+# ├── __init__.py
+# └── mymodule.py
+
+# __init__.py 可以为空或包含包初始化代码。
+</code></pre>
+        </div>
+    </div>
+
+    <!-- Prism.js JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+</body>
+</html>
