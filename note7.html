@@ -1,0 +1,1656 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring Boot 基础教程</title>
+    <!-- Prism.js CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #333;
+        }
+
+        h2 {
+            margin-top: 20px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-details {
+            margin-left: 20px;
+        }
+
+        pre {
+            background-color: #f8f8f8;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            border: 1px solid #e1e1e1;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .token.comment {
+            color: #6a9955;
+        }
+
+        .token.string {
+            color: #ce9178;
+        }
+
+        .token.keyword {
+            color: #569cd6;
+        }
+
+        .token.function {
+            color: #dcdcaa;
+        }        .
+token.number {
+            color: #b5cea8;
+        }
+
+        .token.operator {
+            color: #d4d4d4;
+        }
+
+        .token.builtin {
+            color: #4ec9b0;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .content {
+            display: none;
+        }
+
+        .content.active {
+            display: block;
+        }
+
+        .warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .info {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head><body
+>
+    <header
+        style="position: fixed; top: 0; left: 0; width: 100%; background: #fff; border-bottom: 1px solid #ddd; padding: 10px 15px; z-index: 1000; display: flex; align-items: center; justify-content: space-between;">
+        <h1 style="margin: 0; font-size: 18px;">Spring Boot 基础教程</h1>
+        <button id="menuButton" style="
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+            outline: none;
+        " onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 12px rgba(102, 126, 234, 0.4)'" 
+           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(102, 126, 234, 0.3)'"
+           onmousedown="this.style.transform='translateY(0)'; this.style.boxShadow='0 1px 4px rgba(102, 126, 234, 0.4)'"
+           onmouseup="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 12px rgba(102, 126, 234, 0.4)'">
+            ☰ 菜单
+        </button>
+    </header>
+    <nav id="menu"
+        style="display: none; position: fixed; right: 0; top: 0; height: 100vh; width: 300px; background: #fff; border-left: 1px solid #ddd; padding: 60px 20px 20px 20px; z-index: 999; overflow-y: auto; box-shadow: -2px 0 10px rgba(0,0,0,0.1); transform: translateX(100%); transition: transform 0.3s ease;">
+        <ul style="list-style: none; padding: 0; margin: 0;">
+            <li><a href="#intro" style="display: block; padding: 5px 0; text-decoration: none; color: #333;">Spring Boot 简介</a></li>
+            <li><a href="#features" style="display: block; padding: 5px 0; text-decoration: none; color: #333;">核心特性</a></li>
+            <li><a href="#setup" style="display: block; padding: 5px 0; text-decoration: none; color: #333;">环境搭建</a></li>
+            <li><a href="#first_app" style="display: block; padding: 5px 0; text-decoration: none; color: #333;">第一个应用</a></li>
+            <li><a href="#project_structure" style="display: block; padding: 5px 0; text-decoration: none; color: #333;">项目结构</a></li>
+            <li><a href="#annotations" style="display: block; padding: 5px 0; text-decoration: none; color: #333;">核心注解</a></li>
+            <li><a href="#configuration" style="display: block; padding: 5px 0; text-decoration: none; color: #333;">配置管理</a></li>
+            <li><a href="#web_development" style="display: block; padding: 5px 0; text-decoration: none; color: #333;">Web 开发</a></li>
+            <li><a href="#data_access" style="display: block; padding: 5px 0; text-decoration: none; color: #333;">数据访问</a></li>
+            <li><a href="#security" style="display: block; padding: 5px 0; text-decoration: none; color: #333;">安全配置</a></li>
+            <li><a href="#testing" style="display: block; padding: 5px 0; text-decoration: none; color: #333;">测试</a></li>
+            <li><a href="#actuator" style="display: block; padding: 5px 0; text-decoration: none; color: #333;">监控管理</a></li>
+            <li><a href="#deployment" style="display: block; padding: 5px 0; text-decoration: none; color: #333;">部署</a></li>
+            <li><a href="#best_practices" style="display: block; padding: 5px 0; text-decoration: none; color: #333;">最佳实践</a></li>
+        </ul>
+    </nav>    <
+div style="padding-top: 60px;">
+        <h1>Spring Boot 基础教程</h1>
+
+        <h2>一、Spring Boot 简介与特性</h2>
+
+        <h3 onclick="toggleContent('intro')">1.1 Spring Boot 简介</h3>
+        <div id="intro" class="content">
+            <p>Spring Boot 是由 Pivotal 团队提供的全新框架，旨在简化 Spring 应用的初始搭建以及开发过程。</p>
+            <p>主要目标：</p>
+            <ul>
+                <li>为所有 Spring 开发提供更快的入门体验</li>
+                <li>开箱即用，但通过不采用默认设置可以快速摆脱这种方式</li>
+                <li>提供一系列大型项目中常见的非功能性特性（如嵌入式服务器、安全、指标、健康检测、外部配置等）</li>
+                <li>绝对没有代码生成，也无需 XML 配置</li>
+            </ul>
+            <p>Spring Boot 的核心思想是约定优于配置（Convention over Configuration），通过合理的默认配置减少开发者的配置工作。</p>
+        </div>
+
+        <h3 onclick="toggleContent('features')">1.2 核心特性</h3>
+        <div id="features" class="content">
+            <h4>自动配置 (Auto Configuration)：</h4>
+            <p>Spring Boot 会根据类路径中的依赖自动配置应用程序。</p>
+            <pre><code>// 自动配置示例
+@SpringBootApplication
+public class Application {
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
+}</code></pre>
+
+            <h4>起步依赖 (Starter Dependencies)：</h4>
+            <p>提供一站式的依赖管理，简化 Maven/Gradle 配置。</p>
+            <table>
+                <tr>
+                    <th>Starter</th>
+                    <th>功能</th>
+                    <th>包含的主要依赖</th>
+                </tr>
+                <tr>
+                    <td>spring-boot-starter-web</td>
+                    <td>Web 应用开发</td>
+                    <td>Spring MVC, Tomcat, Jackson</td>
+                </tr>
+                <tr>
+                    <td>spring-boot-starter-data-jpa</td>
+                    <td>JPA 数据访问</td>
+                    <td>Spring Data JPA, Hibernate</td>
+                </tr>
+                <tr>
+                    <td>spring-boot-starter-security</td>
+                    <td>安全框架</td>
+                    <td>Spring Security</td>
+                </tr>
+                <tr>
+                    <td>spring-boot-starter-test</td>
+                    <td>测试支持</td>
+                    <td>JUnit, Mockito, Spring Test</td>
+                </tr>
+            </table>
+
+            <h4>嵌入式服务器：</h4>
+            <ul>
+                <li>内置 Tomcat、Jetty 或 Undertow 服务器</li>
+                <li>无需部署 WAR 文件到外部服务器</li>
+                <li>支持可执行 JAR 包</li>
+            </ul>
+
+            <h4>生产就绪特性：</h4>
+            <ul>
+                <li>健康检查</li>
+                <li>应用监控</li>
+                <li>外部化配置</li>
+                <li>日志管理</li>
+            </ul>
+        </div>
+
+        <h2>二、环境搭建与第一个应用</h2>
+
+        <h3 onclick="toggleContent('setup')">2.1 开发环境搭建</h3>
+        <div id="setup" class="content">
+            <h4>前置要求：</h4>
+            <ul>
+                <li>JDK 8 或更高版本</li>
+                <li>Maven 3.6+ 或 Gradle 6.8+</li>
+                <li>IDE（推荐 IntelliJ IDEA 或 Eclipse）</li>
+            </ul>
+
+            <h4>验证环境：</h4>
+            <pre><code># 检查 Java 版本
+java -version
+
+# 检查 Maven 版本
+mvn -version</code></pre>
+
+            <h4>创建项目的方式：</h4>
+            <ol>
+                <li><strong>Spring Initializr 网站</strong>：https://start.spring.io/</li>
+                <li><strong>IDE 插件</strong>：IntelliJ IDEA 或 Eclipse 的 Spring Boot 插件</li>
+                <li><strong>命令行工具</strong>：Spring Boot CLI</li>
+                <li><strong>Maven Archetype</strong>：使用 Maven 原型创建</li>
+            </ol>
+
+            <h4>使用 Spring Initializr 创建项目：</h4>
+            <ol>
+                <li>访问 https://start.spring.io/</li>
+                <li>选择项目类型：Maven Project</li>
+                <li>选择语言：Java</li>
+                <li>选择 Spring Boot 版本：2.7.x（稳定版）</li>
+                <li>填写项目信息：
+                    <ul>
+                        <li>Group: com.example</li>
+                        <li>Artifact: demo</li>
+                        <li>Name: demo</li>
+                        <li>Package name: com.example.demo</li>
+                        <li>Packaging: Jar</li>
+                        <li>Java: 11</li>
+                    </ul>
+                </li>
+                <li>添加依赖：Spring Web</li>
+                <li>点击 Generate 下载项目</li>
+            </ol>
+        </div>
+
+        <h3 onclick="toggleContent('first_app')">2.2 第一个 Spring Boot 应用</h3>
+        <div id="first_app" class="content">
+            <h4>项目结构：</h4>
+            <pre><code>demo/
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/example/demo/
+│   │   │       └── DemoApplication.java
+│   │   └── resources/
+│   │       ├── static/
+│   │       ├── templates/
+│   │       └── application.properties
+│   └── test/
+│       └── java/
+│           └── com/example/demo/
+│               └── DemoApplicationTests.java
+├── target/
+├── pom.xml
+└── README.md</code></pre>
+
+            <h4>主应用类：</h4>
+            <pre><code>package com.example.demo;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class DemoApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+    }
+}</code></pre>
+
+            <h4>创建第一个控制器：</h4>
+            <pre><code>package com.example.demo.controller;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class HelloController {
+    
+    @GetMapping("/")
+    public String hello() {
+        return "Hello, Spring Boot!";
+    }
+    
+    @GetMapping("/hello")
+    public String helloWorld() {
+        return "Hello, World!";
+    }
+}</code></pre>
+
+            <h4>运行应用：</h4>
+            <pre><code># 使用 Maven 运行
+mvn spring-boot:run
+
+# 或者先打包再运行
+mvn clean package
+java -jar target/demo-0.0.1-SNAPSHOT.jar</code></pre>
+
+            <div class="success">
+                <p>应用启动后，访问 http://localhost:8080 即可看到 "Hello, Spring Boot!" 消息。</p>
+            </div>
+        </div>    
+    <h2>三、项目结构与核心注解</h2>
+
+        <h3 onclick="toggleContent('project_structure')">3.1 标准项目结构</h3>
+        <div id="project_structure" class="content">
+            <h4>推荐的包结构：</h4>
+            <pre><code>com.example.demo/
+├── DemoApplication.java          # 主启动类
+├── config/                       # 配置类
+│   ├── WebConfig.java
+│   └── DatabaseConfig.java
+├── controller/                   # 控制器层
+│   ├── UserController.java
+│   └── ProductController.java
+├── service/                      # 服务层
+│   ├── UserService.java
+│   ├── impl/
+│   │   └── UserServiceImpl.java
+│   └── ProductService.java
+├── repository/                   # 数据访问层
+│   ├── UserRepository.java
+│   └── ProductRepository.java
+├── entity/                       # 实体类
+│   ├── User.java
+│   └── Product.java
+├── dto/                         # 数据传输对象
+│   ├── UserDTO.java
+│   └── ProductDTO.java
+└── util/                        # 工具类
+    ├── DateUtil.java
+    └── StringUtil.java</code></pre>
+
+            <h4>资源目录结构：</h4>
+            <pre><code>src/main/resources/
+├── static/                      # 静态资源
+│   ├── css/
+│   ├── js/
+│   └── images/
+├── templates/                   # 模板文件
+│   ├── index.html
+│   └── user/
+│       └── profile.html
+├── application.properties       # 主配置文件
+├── application-dev.properties   # 开发环境配置
+├── application-prod.properties  # 生产环境配置
+└── logback-spring.xml          # 日志配置</code></pre>
+
+            <h4>分层架构原则：</h4>
+            <ul>
+                <li><strong>Controller 层</strong>：处理 HTTP 请求，参数验证，调用 Service</li>
+                <li><strong>Service 层</strong>：业务逻辑处理，事务管理</li>
+                <li><strong>Repository 层</strong>：数据访问，与数据库交互</li>
+                <li><strong>Entity 层</strong>：数据模型，对应数据库表</li>
+                <li><strong>DTO 层</strong>：数据传输对象，用于层间数据传递</li>
+            </ul>
+        </div>
+
+        <h3 onclick="toggleContent('annotations')">3.2 核心注解详解</h3>
+        <div id="annotations" class="content">
+            <h4>启动相关注解：</h4>
+            <table>
+                <tr>
+                    <th>注解</th>
+                    <th>作用</th>
+                    <th>示例</th>
+                </tr>
+                <tr>
+                    <td>@SpringBootApplication</td>
+                    <td>组合注解，包含 @Configuration、@EnableAutoConfiguration、@ComponentScan</td>
+                    <td>主启动类</td>
+                </tr>
+                <tr>
+                    <td>@EnableAutoConfiguration</td>
+                    <td>启用自动配置</td>
+                    <td>通常包含在 @SpringBootApplication 中</td>
+                </tr>
+                <tr>
+                    <td>@ComponentScan</td>
+                    <td>组件扫描</td>
+                    <td>扫描指定包下的组件</td>
+                </tr>
+            </table>
+
+            <h4>Web 相关注解：</h4>
+            <pre><code>// RESTful API 控制器
+@RestController
+@RequestMapping("/api/users")
+public class UserController {
+    
+    @GetMapping
+    public List&lt;User&gt; getAllUsers() {
+        return userService.findAll();
+    }
+    
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable Long id) {
+        return userService.findById(id);
+    }
+    
+    @PostMapping
+    public User createUser(@RequestBody @Valid User user) {
+        return userService.save(user);
+    }
+    
+    @PutMapping("/{id}")
+    public User updateUser(@PathVariable Long id, @RequestBody @Valid User user) {
+        return userService.update(id, user);
+    }
+    
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Long id) {
+        userService.delete(id);
+    }
+}</code></pre>
+
+            <h4>依赖注入注解：</h4>
+            <pre><code>@Service
+public class UserService {
+    
+    // 构造器注入（推荐）
+    private final UserRepository userRepository;
+    
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+    
+    // 或使用 @Autowired
+    @Autowired
+    private UserRepository userRepository;
+    
+    // 或使用 @Resource
+    @Resource
+    private UserRepository userRepository;
+}</code></pre>
+
+            <h4>配置相关注解：</h4>
+            <pre><code>@Configuration
+public class AppConfig {
+    
+    @Bean
+    @Primary
+    public DataSource primaryDataSource() {
+        return DataSourceBuilder.create().build();
+    }
+    
+    @Bean
+    @Qualifier("secondary")
+    public DataSource secondaryDataSource() {
+        return DataSourceBuilder.create().build();
+    }
+    
+    @Value("${app.name}")
+    private String appName;
+    
+    @ConfigurationProperties(prefix = "app.database")
+    @Bean
+    public DatabaseProperties databaseProperties() {
+        return new DatabaseProperties();
+    }
+}</code></pre>
+        </div>
+
+        <h2>四、配置管理</h2>
+
+        <h3 onclick="toggleContent('configuration')">4.1 配置文件</h3>
+        <div id="configuration" class="content">
+            <h4>application.properties 配置：</h4>
+            <pre><code># 服务器配置
+server.port=8080
+server.servlet.context-path=/api
+
+# 数据库配置
+spring.datasource.url=jdbc:mysql://localhost:3306/demo
+spring.datasource.username=root
+spring.datasource.password=password
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+# JPA 配置
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+
+# 日志配置
+logging.level.com.example.demo=DEBUG
+logging.level.org.springframework.web=INFO
+logging.file.name=logs/application.log
+
+# 应用配置
+app.name=Demo Application
+app.version=1.0.0</code></pre>
+
+            <h4>application.yml 配置（推荐）：</h4>
+            <pre><code>server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/demo
+    username: root
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+logging:
+  level:
+    com.example.demo: DEBUG
+    org.springframework.web: INFO
+  file:
+    name: logs/application.log
+
+app:
+  name: Demo Application
+  version: 1.0.0</code></pre>
+
+            <h4>多环境配置：</h4>
+            <pre><code># application.yml
+spring:
+  profiles:
+    active: dev
+
+---
+# 开发环境
+spring:
+  profiles: dev
+  datasource:
+    url: jdbc:mysql://localhost:3306/demo_dev
+
+---
+# 测试环境
+spring:
+  profiles: test
+  datasource:
+    url: jdbc:mysql://test-server:3306/demo_test
+
+---
+# 生产环境
+spring:
+  profiles: prod
+  datasource:
+    url: jdbc:mysql://prod-server:3306/demo_prod</code></pre>
+
+            <h4>自定义配置属性：</h4>
+            <pre><code>@ConfigurationProperties(prefix = "app")
+@Component
+public class AppProperties {
+    private String name;
+    private String version;
+    private Database database = new Database();
+    
+    // getters and setters
+    
+    public static class Database {
+        private int maxConnections = 10;
+        private int timeout = 30;
+        
+        // getters and setters
+    }
+}</code></pre>
+        </div>       
+ <h2>五、Web 开发</h2>
+
+        <h3 onclick="toggleContent('web_development')">5.1 RESTful API 开发</h3>
+        <div id="web_development" class="content">
+            <h4>完整的 REST 控制器示例：</h4>
+            <pre><code>@RestController
+@RequestMapping("/api/users")
+@Validated
+public class UserController {
+    
+    private final UserService userService;
+    
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+    
+    @GetMapping
+    public ResponseEntity&lt;Page&lt;UserDTO&gt;&gt; getUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sort) {
+        
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
+        Page&lt;UserDTO&gt; users = userService.findAll(pageable);
+        return ResponseEntity.ok(users);
+    }
+    
+    @GetMapping("/{id}")
+    public ResponseEntity&lt;UserDTO&gt; getUser(@PathVariable @Min(1) Long id) {
+        UserDTO user = userService.findById(id);
+        return ResponseEntity.ok(user);
+    }
+    
+    @PostMapping
+    public ResponseEntity&lt;UserDTO&gt; createUser(@RequestBody @Valid CreateUserRequest request) {
+        UserDTO user = userService.create(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(user);
+    }
+    
+    @PutMapping("/{id}")
+    public ResponseEntity&lt;UserDTO&gt; updateUser(
+            @PathVariable Long id,
+            @RequestBody @Valid UpdateUserRequest request) {
+        UserDTO user = userService.update(id, request);
+        return ResponseEntity.ok(user);
+    }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity&lt;Void&gt; deleteUser(@PathVariable Long id) {
+        userService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+}</code></pre>
+
+            <h4>请求参数验证：</h4>
+            <pre><code>public class CreateUserRequest {
+    
+    @NotBlank(message = "用户名不能为空")
+    @Size(min = 3, max = 20, message = "用户名长度必须在3-20之间")
+    private String username;
+    
+    @NotBlank(message = "邮箱不能为空")
+    @Email(message = "邮箱格式不正确")
+    private String email;
+    
+    @NotBlank(message = "密码不能为空")
+    @Size(min = 6, message = "密码长度不能少于6位")
+    private String password;
+    
+    @Min(value = 18, message = "年龄不能小于18")
+    @Max(value = 100, message = "年龄不能大于100")
+    private Integer age;
+    
+    // getters and setters
+}</code></pre>
+
+            <h4>全局异常处理：</h4>
+            <pre><code>@RestControllerAdvice
+public class GlobalExceptionHandler {
+    
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleValidationException(
+            MethodArgumentNotValidException ex) {
+        
+        Map&lt;String, String&gt; errors = new HashMap&lt;&gt;();
+        ex.getBindingResult().getFieldErrors().forEach(error -&gt; 
+            errors.put(error.getField(), error.getDefaultMessage())
+        );
+        
+        ErrorResponse errorResponse = new ErrorResponse("参数验证失败", errors);
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
+    
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleEntityNotFoundException(
+            EntityNotFoundException ex) {
+        ErrorResponse errorResponse = new ErrorResponse("资源未找到", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+    
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleGenericException(Exception ex) {
+        ErrorResponse errorResponse = new ErrorResponse("服务器内部错误", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+    }
+}</code></pre>
+
+            <h4>跨域配置：</h4>
+            <pre><code>@Configuration
+public class CorsConfig {
+    
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowCredentials(true);
+        
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+}</code></pre>
+        </div>
+
+        <h2>六、数据访问</h2>
+
+        <h3 onclick="toggleContent('data_access')">6.1 Spring Data JPA</h3>
+        <div id="data_access" class="content">
+            <h4>实体类定义：</h4>
+            <pre><code>@Entity
+@Table(name = "users")
+public class User {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(unique = true, nullable = false, length = 50)
+    private String username;
+    
+    @Column(unique = true, nullable = false, length = 100)
+    private String email;
+    
+    @Column(nullable = false)
+    private String password;
+    
+    @Column(name = "created_at")
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+    
+    @Column(name = "updated_at")
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+    
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List&lt;Order&gt; orders = new ArrayList&lt;&gt;();
+    
+    // constructors, getters, setters
+}</code></pre>
+
+            <h4>Repository 接口：</h4>
+            <pre><code>@Repository
+public interface UserRepository extends JpaRepository&lt;User, Long&gt; {
+    
+    // 方法名查询
+    Optional&lt;User&gt; findByUsername(String username);
+    Optional&lt;User&gt; findByEmail(String email);
+    List&lt;User&gt; findByUsernameContaining(String keyword);
+    
+    // @Query 注解查询
+    @Query("SELECT u FROM User u WHERE u.createdAt &gt;= :startDate")
+    List&lt;User&gt; findUsersCreatedAfter(@Param("startDate") LocalDateTime startDate);
+    
+    @Query(value = "SELECT * FROM users WHERE email LIKE %:domain%", nativeQuery = true)
+    List&lt;User&gt; findUsersByEmailDomain(@Param("domain") String domain);
+    
+    // 分页查询
+    Page&lt;User&gt; findByUsernameContaining(String keyword, Pageable pageable);
+    
+    // 更新操作
+    @Modifying
+    @Query("UPDATE User u SET u.email = :email WHERE u.id = :id")
+    int updateUserEmail(@Param("id") Long id, @Param("email") String email);
+    
+    // 删除操作
+    @Modifying
+    @Query("DELETE FROM User u WHERE u.createdAt &lt; :date")
+    int deleteOldUsers(@Param("date") LocalDateTime date);
+}</code></pre>
+
+            <h4>Service 层实现：</h4>
+            <pre><code>@Service
+@Transactional
+public class UserService {
+    
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+    
+    @Transactional(readOnly = true)
+    public Page&lt;UserDTO&gt; findAll(Pageable pageable) {
+        return userRepository.findAll(pageable)
+                .map(this::convertToDTO);
+    }
+    
+    @Transactional(readOnly = true)
+    public UserDTO findById(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -&gt; new EntityNotFoundException("用户不存在: " + id));
+        return convertToDTO(user);
+    }
+    
+    public UserDTO create(CreateUserRequest request) {
+        // 检查用户名是否已存在
+        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+            throw new DuplicateResourceException("用户名已存在");
+        }
+        
+        User user = new User();
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        
+        User savedUser = userRepository.save(user);
+        return convertToDTO(savedUser);
+    }
+    
+    public UserDTO update(Long id, UpdateUserRequest request) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -&gt; new EntityNotFoundException("用户不存在: " + id));
+        
+        user.setEmail(request.getEmail());
+        // 更新其他字段...
+        
+        User updatedUser = userRepository.save(user);
+        return convertToDTO(updatedUser);
+    }
+    
+    public void delete(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new EntityNotFoundException("用户不存在: " + id);
+        }
+        userRepository.deleteById(id);
+    }
+    
+    private UserDTO convertToDTO(User user) {
+        UserDTO dto = new UserDTO();
+        dto.setId(user.getId());
+        dto.setUsername(user.getUsername());
+        dto.setEmail(user.getEmail());
+        dto.setCreatedAt(user.getCreatedAt());
+        return dto;
+    }
+}</code></pre>
+        </div>    
+    <h2>七、安全配置</h2>
+
+        <h3 onclick="toggleContent('security')">7.1 Spring Security 基础</h3>
+        <div id="security" class="content">
+            <h4>添加依赖：</h4>
+            <pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-security&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;io.jsonwebtoken&lt;/groupId&gt;
+    &lt;artifactId&gt;jjwt-api&lt;/artifactId&gt;
+    &lt;version&gt;0.11.5&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+
+            <h4>安全配置类：</h4>
+            <pre><code>@Configuration
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class SecurityConfig {
+    
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtRequestFilter jwtRequestFilter;
+    
+    public SecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
+                         JwtRequestFilter jwtRequestFilter) {
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+        this.jwtRequestFilter = jwtRequestFilter;
+    }
+    
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+    
+    @Bean
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration authConfig) throws Exception {
+        return authConfig.getAuthenticationManager();
+    }
+    
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.csrf().disable()
+            .authorizeHttpRequests(authz -&gt; authz
+                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/public/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/users").hasRole("USER")
+                .requestMatchers(HttpMethod.POST, "/api/users").hasRole("ADMIN")
+                .anyRequest().authenticated()
+            )
+            .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
+            .and()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        
+        return http.build();
+    }
+}</code></pre>
+
+            <h4>JWT 工具类：</h4>
+            <pre><code>@Component
+public class JwtTokenUtil {
+    
+    private String secret = "mySecretKey";
+    private int jwtExpiration = 86400; // 24小时
+    
+    public String generateToken(UserDetails userDetails) {
+        Map&lt;String, Object&gt; claims = new HashMap&lt;&gt;();
+        return createToken(claims, userDetails.getUsername());
+    }
+    
+    private String createToken(Map&lt;String, Object&gt; claims, String subject) {
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(subject)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration * 1000))
+                .signWith(SignatureAlgorithm.HS512, secret)
+                .compact();
+    }
+    
+    public Boolean validateToken(String token, UserDetails userDetails) {
+        final String username = getUsernameFromToken(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+    
+    public String getUsernameFromToken(String token) {
+        return getClaimFromToken(token, Claims::getSubject);
+    }
+    
+    public Date getExpirationDateFromToken(String token) {
+        return getClaimFromToken(token, Claims::getExpiration);
+    }
+    
+    public &lt;T&gt; T getClaimFromToken(String token, Function&lt;Claims, T&gt; claimsResolver) {
+        final Claims claims = getAllClaimsFromToken(token);
+        return claimsResolver.apply(claims);
+    }
+    
+    private Claims getAllClaimsFromToken(String token) {
+        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+    }
+    
+    private Boolean isTokenExpired(String token) {
+        final Date expiration = getExpirationDateFromToken(token);
+        return expiration.before(new Date());
+    }
+}</code></pre>
+
+            <h4>认证控制器：</h4>
+            <pre><code>@RestController
+@RequestMapping("/api/auth")
+public class AuthController {
+    
+    private final AuthenticationManager authenticationManager;
+    private final UserService userService;
+    private final JwtTokenUtil jwtTokenUtil;
+    
+    public AuthController(AuthenticationManager authenticationManager,
+                         UserService userService,
+                         JwtTokenUtil jwtTokenUtil) {
+        this.authenticationManager = authenticationManager;
+        this.userService = userService;
+        this.jwtTokenUtil = jwtTokenUtil;
+    }
+    
+    @PostMapping("/login")
+    public ResponseEntity&lt;JwtResponse&gt; login(@RequestBody @Valid LoginRequest request) {
+        authenticate(request.getUsername(), request.getPassword());
+        
+        UserDetails userDetails = userService.loadUserByUsername(request.getUsername());
+        String token = jwtTokenUtil.generateToken(userDetails);
+        
+        return ResponseEntity.ok(new JwtResponse(token));
+    }
+    
+    @PostMapping("/register")
+    public ResponseEntity&lt;UserDTO&gt; register(@RequestBody @Valid RegisterRequest request) {
+        UserDTO user = userService.register(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(user);
+    }
+    
+    private void authenticate(String username, String password) {
+        try {
+            authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(username, password)
+            );
+        } catch (DisabledException e) {
+            throw new RuntimeException("用户已被禁用", e);
+        } catch (BadCredentialsException e) {
+            throw new RuntimeException("用户名或密码错误", e);
+        }
+    }
+}</code></pre>
+        </div>
+
+        <h2>八、测试</h2>
+
+        <h3 onclick="toggleContent('testing')">8.1 单元测试与集成测试</h3>
+        <div id="testing" class="content">
+            <h4>测试依赖：</h4>
+            <pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;</code></pre>
+
+            <h4>Service 层单元测试：</h4>
+            <pre><code>@ExtendWith(MockitoExtension.class)
+class UserServiceTest {
+    
+    @Mock
+    private UserRepository userRepository;
+    
+    @Mock
+    private PasswordEncoder passwordEncoder;
+    
+    @InjectMocks
+    private UserService userService;
+    
+    @Test
+    void shouldCreateUserSuccessfully() {
+        // Given
+        CreateUserRequest request = new CreateUserRequest();
+        request.setUsername("testuser");
+        request.setEmail("test@example.com");
+        request.setPassword("password");
+        
+        User savedUser = new User();
+        savedUser.setId(1L);
+        savedUser.setUsername("testuser");
+        savedUser.setEmail("test@example.com");
+        
+        when(userRepository.findByUsername("testuser")).thenReturn(Optional.empty());
+        when(passwordEncoder.encode("password")).thenReturn("encodedPassword");
+        when(userRepository.save(any(User.class))).thenReturn(savedUser);
+        
+        // When
+        UserDTO result = userService.create(request);
+        
+        // Then
+        assertThat(result.getId()).isEqualTo(1L);
+        assertThat(result.getUsername()).isEqualTo("testuser");
+        assertThat(result.getEmail()).isEqualTo("test@example.com");
+        
+        verify(userRepository).findByUsername("testuser");
+        verify(passwordEncoder).encode("password");
+        verify(userRepository).save(any(User.class));
+    }
+    
+    @Test
+    void shouldThrowExceptionWhenUserNotFound() {
+        // Given
+        Long userId = 1L;
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+        
+        // When & Then
+        assertThatThrownBy(() -&gt; userService.findById(userId))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessage("用户不存在: " + userId);
+    }
+}</code></pre>
+
+            <h4>Controller 层集成测试：</h4>
+            <pre><code>@SpringBootTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@TestPropertySource(locations = "classpath:application-test.properties")
+class UserControllerIntegrationTest {
+    
+    @Autowired
+    private TestRestTemplate restTemplate;
+    
+    @Autowired
+    private UserRepository userRepository;
+    
+    @Test
+    void shouldCreateUserSuccessfully() {
+        // Given
+        CreateUserRequest request = new CreateUserRequest();
+        request.setUsername("testuser");
+        request.setEmail("test@example.com");
+        request.setPassword("password");
+        
+        // When
+        ResponseEntity&lt;UserDTO&gt; response = restTemplate.postForEntity(
+                "/api/users", request, UserDTO.class);
+        
+        // Then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(response.getBody().getUsername()).isEqualTo("testuser");
+        
+        // 验证数据库中的数据
+        Optional&lt;User&gt; savedUser = userRepository.findByUsername("testuser");
+        assertThat(savedUser).isPresent();
+        assertThat(savedUser.get().getEmail()).isEqualTo("test@example.com");
+    }
+}</code></pre>
+
+            <h4>Web 层测试：</h4>
+            <pre><code>@WebMvcTest(UserController.class)
+class UserControllerTest {
+    
+    @Autowired
+    private MockMvc mockMvc;
+    
+    @MockBean
+    private UserService userService;
+    
+    @Test
+    void shouldReturnUserWhenValidId() throws Exception {
+        // Given
+        Long userId = 1L;
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(userId);
+        userDTO.setUsername("testuser");
+        userDTO.setEmail("test@example.com");
+        
+        when(userService.findById(userId)).thenReturn(userDTO);
+        
+        // When & Then
+        mockMvc.perform(get("/api/users/{id}", userId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(userId))
+                .andExpect(jsonPath("$.username").value("testuser"))
+                .andExpect(jsonPath("$.email").value("test@example.com"));
+    }
+    
+    @Test
+    void shouldReturnBadRequestWhenInvalidInput() throws Exception {
+        // Given
+        String invalidJson = "{\"username\":\"\",\"email\":\"invalid-email\"}";
+        
+        // When & Then
+        mockMvc.perform(post("/api/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(invalidJson))
+                .andExpect(status().isBadRequest());
+    }
+}</code></pre>
+        </div>        <
+h2>九、监控管理</h2>
+
+        <h3 onclick="toggleContent('actuator')">9.1 Spring Boot Actuator</h3>
+        <div id="actuator" class="content">
+            <h4>添加依赖：</h4>
+            <pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+
+            <h4>Actuator 配置：</h4>
+            <pre><code># application.yml
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,env,configprops
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when-authorized
+      show-components: always
+  info:
+    env:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+info:
+  app:
+    name: @project.name@
+    version: @project.version@
+    description: Spring Boot Demo Application</code></pre>
+
+            <h4>自定义健康检查：</h4>
+            <pre><code>@Component
+public class DatabaseHealthIndicator implements HealthIndicator {
+    
+    private final DataSource dataSource;
+    
+    public DatabaseHealthIndicator(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+    
+    @Override
+    public Health health() {
+        try (Connection connection = dataSource.getConnection()) {
+            if (connection.isValid(1)) {
+                return Health.up()
+                        .withDetail("database", "Available")
+                        .withDetail("validationQuery", "SELECT 1")
+                        .build();
+            } else {
+                return Health.down()
+                        .withDetail("database", "Not available")
+                        .build();
+            }
+        } catch (Exception e) {
+            return Health.down()
+                    .withDetail("database", "Connection failed")
+                    .withException(e)
+                    .build();
+        }
+    }
+}</code></pre>
+
+            <h4>自定义指标：</h4>
+            <pre><code>@Component
+public class UserMetrics {
+    
+    private final MeterRegistry meterRegistry;
+    private final UserRepository userRepository;
+    private final Counter userCreationCounter;
+    private final Timer userQueryTimer;
+    
+    public UserMetrics(MeterRegistry meterRegistry, UserRepository userRepository) {
+        this.meterRegistry = meterRegistry;
+        this.userRepository = userRepository;
+        this.userCreationCounter = Counter.builder("user.creation")
+                .description("Number of users created")
+                .register(meterRegistry);
+        this.userQueryTimer = Timer.builder("user.query")
+                .description("Time taken to query users")
+                .register(meterRegistry);
+    }
+    
+    public void incrementUserCreation() {
+        userCreationCounter.increment();
+    }
+    
+    public &lt;T&gt; T timeUserQuery(Supplier&lt;T&gt; supplier) {
+        return userQueryTimer.recordCallable(supplier::get);
+    }
+    
+    @EventListener
+    @Async
+    public void handleUserCreatedEvent(UserCreatedEvent event) {
+        incrementUserCreation();
+    }
+    
+    @Scheduled(fixedRate = 60000) // 每分钟更新一次
+    public void recordUserCount() {
+        Gauge.builder("user.total")
+                .description("Total number of users")
+                .register(meterRegistry, this, UserMetrics::getTotalUsers);
+    }
+    
+    private double getTotalUsers(UserMetrics userMetrics) {
+        return userRepository.count();
+    }
+}</code></pre>
+
+            <h4>常用 Actuator 端点：</h4>
+            <table>
+                <tr>
+                    <th>端点</th>
+                    <th>描述</th>
+                    <th>URL</th>
+                </tr>
+                <tr>
+                    <td>health</td>
+                    <td>应用健康状态</td>
+                    <td>/actuator/health</td>
+                </tr>
+                <tr>
+                    <td>info</td>
+                    <td>应用信息</td>
+                    <td>/actuator/info</td>
+                </tr>
+                <tr>
+                    <td>metrics</td>
+                    <td>应用指标</td>
+                    <td>/actuator/metrics</td>
+                </tr>
+                <tr>
+                    <td>env</td>
+                    <td>环境变量</td>
+                    <td>/actuator/env</td>
+                </tr>
+                <tr>
+                    <td>configprops</td>
+                    <td>配置属性</td>
+                    <td>/actuator/configprops</td>
+                </tr>
+                <tr>
+                    <td>loggers</td>
+                    <td>日志配置</td>
+                    <td>/actuator/loggers</td>
+                </tr>
+            </table>
+        </div>
+
+        <h2>十、部署</h2>
+
+        <h3 onclick="toggleContent('deployment')">10.1 应用部署</h3>
+        <div id="deployment" class="content">
+            <h4>打包应用：</h4>
+            <pre><code># Maven 打包
+mvn clean package
+
+# 跳过测试打包
+mvn clean package -DskipTests
+
+# Gradle 打包
+./gradlew build</code></pre>
+
+            <h4>运行 JAR 包：</h4>
+            <pre><code># 基本运行
+java -jar target/demo-0.0.1-SNAPSHOT.jar
+
+# 指定配置文件
+java -jar target/demo-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
+
+# 指定端口
+java -jar target/demo-0.0.1-SNAPSHOT.jar --server.port=9090
+
+# JVM 参数优化
+java -Xms512m -Xmx1024m -jar target/demo-0.0.1-SNAPSHOT.jar</code></pre>
+
+            <h4>Docker 部署：</h4>
+            <pre><code># Dockerfile
+FROM openjdk:11-jre-slim
+
+VOLUME /tmp
+
+COPY target/demo-0.0.1-SNAPSHOT.jar app.jar
+
+EXPOSE 8080
+
+ENTRYPOINT ["java","-jar","/app.jar"]</code></pre>
+
+            <pre><code># 构建镜像
+docker build -t demo-app .
+
+# 运行容器
+docker run -d -p 8080:8080 --name demo-container demo-app
+
+# 使用环境变量
+docker run -d -p 8080:8080 \
+  -e SPRING_PROFILES_ACTIVE=prod \
+  -e SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/demo \
+  --name demo-container demo-app</code></pre>
+
+            <h4>Docker Compose 部署：</h4>
+            <pre><code># docker-compose.yml
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/demo
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=password
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=demo
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: unless-stopped
+
+volumes:
+  mysql_data:</code></pre>
+
+            <h4>系统服务部署：</h4>
+            <pre><code># /etc/systemd/system/demo-app.service
+[Unit]
+Description=Demo Spring Boot Application
+After=network.target
+
+[Service]
+Type=simple
+User=appuser
+ExecStart=/usr/bin/java -jar /opt/demo/demo-0.0.1-SNAPSHOT.jar
+Restart=always
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=demo-app
+
+[Install]
+WantedBy=multi-user.target</code></pre>
+
+            <pre><code># 启用和启动服务
+sudo systemctl enable demo-app
+sudo systemctl start demo-app
+sudo systemctl status demo-app</code></pre>
+        </div>
+
+        <h2>十一、最佳实践</h2>
+
+        <h3 onclick="toggleContent('best_practices')">11.1 开发最佳实践</h3>
+        <div id="best_practices" class="content">
+            <h4>项目结构最佳实践：</h4>
+            <ul>
+                <li>遵循标准的分层架构</li>
+                <li>使用合理的包命名规范</li>
+                <li>分离业务逻辑和数据访问逻辑</li>
+                <li>使用 DTO 进行数据传输</li>
+                <li>合理使用设计模式</li>
+            </ul>
+
+            <h4>配置管理最佳实践：</h4>
+            <ul>
+                <li>使用 Profile 管理不同环境配置</li>
+                <li>敏感信息使用环境变量或配置中心</li>
+                <li>使用 @ConfigurationProperties 管理复杂配置</li>
+                <li>配置文件优先使用 YAML 格式</li>
+            </ul>
+
+            <h4>安全最佳实践：</h4>
+            <ul>
+                <li>始终验证用户输入</li>
+                <li>使用 HTTPS 传输敏感数据</li>
+                <li>实施适当的认证和授权</li>
+                <li>定期更新依赖版本</li>
+                <li>记录安全相关事件</li>
+            </ul>
+
+            <h4>性能优化最佳实践：</h4>
+            <pre><code>// 数据库连接池配置
+spring:
+  datasource:
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      idle-timeout: 300000
+      max-lifetime: 1200000
+      connection-timeout: 20000
+
+// 缓存配置
+@EnableCaching
+@Configuration
+public class CacheConfig {
+    
+    @Bean
+    public CacheManager cacheManager() {
+        RedisCacheManager.Builder builder = RedisCacheManager
+                .RedisCacheManagerBuilder
+                .fromConnectionFactory(redisConnectionFactory())
+                .cacheDefaults(cacheConfiguration());
+        return builder.build();
+    }
+}</code></pre>
+
+            <h4>日志管理最佳实践：</h4>
+            <pre><code># logback-spring.xml
+&lt;configuration&gt;
+    &lt;springProfile name="dev"&gt;
+        &lt;appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender"&gt;
+            &lt;encoder&gt;
+                &lt;pattern&gt;%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n&lt;/pattern&gt;
+            &lt;/encoder&gt;
+        &lt;/appender&gt;
+        &lt;root level="DEBUG"&gt;
+            &lt;appender-ref ref="CONSOLE" /&gt;
+        &lt;/root&gt;
+    &lt;/springProfile&gt;
+    
+    &lt;springProfile name="prod"&gt;
+        &lt;appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender"&gt;
+            &lt;file&gt;logs/application.log&lt;/file&gt;
+            &lt;rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"&gt;
+                &lt;fileNamePattern&gt;logs/application.%d{yyyy-MM-dd}.log&lt;/fileNamePattern&gt;
+                &lt;maxHistory&gt;30&lt;/maxHistory&gt;
+            &lt;/rollingPolicy&gt;
+            &lt;encoder&gt;
+                &lt;pattern&gt;%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n&lt;/pattern&gt;
+            &lt;/encoder&gt;
+        &lt;/appender&gt;
+        &lt;root level="INFO"&gt;
+            &lt;appender-ref ref="FILE" /&gt;
+        &lt;/root&gt;
+    &lt;/springProfile&gt;
+&lt;/configuration&gt;</code></pre>
+
+            <h4>错误处理最佳实践：</h4>
+            <pre><code>// 自定义异常类
+public class BusinessException extends RuntimeException {
+    private final String errorCode;
+    
+    public BusinessException(String errorCode, String message) {
+        super(message);
+        this.errorCode = errorCode;
+    }
+    
+    // getters
+}
+
+// 统一响应格式
+public class ApiResponse&lt;T&gt; {
+    private boolean success;
+    private String message;
+    private String errorCode;
+    private T data;
+    
+    public static &lt;T&gt; ApiResponse&lt;T&gt; success(T data) {
+        ApiResponse&lt;T&gt; response = new ApiResponse&lt;&gt;();
+        response.setSuccess(true);
+        response.setData(data);
+        return response;
+    }
+    
+    public static &lt;T&gt; ApiResponse&lt;T&gt; error(String errorCode, String message) {
+        ApiResponse&lt;T&gt; response = new ApiResponse&lt;&gt;();
+        response.setSuccess(false);
+        response.setErrorCode(errorCode);
+        response.setMessage(message);
+        return response;
+    }
+}</code></pre>
+
+            <div class="warning">
+                <p><strong>注意事项：</strong></p>
+                <ul>
+                    <li>定期更新 Spring Boot 版本和依赖</li>
+                    <li>使用代码质量检查工具（如 SonarQube）</li>
+                    <li>编写充分的单元测试和集成测试</li>
+                    <li>监控应用性能和错误日志</li>
+                    <li>遵循 RESTful API 设计规范</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>    <
+!-- Prism.js JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+    <script>
+        // 菜单切换功能
+        document.getElementById('menuButton').addEventListener('click', function() {
+            const menu = document.getElementById('menu');
+            if (menu.style.display === 'none' || menu.style.display === '') {
+                menu.style.display = 'block';
+                setTimeout(() => {
+                    menu.style.transform = 'translateX(0)';
+                }, 10);
+            } else {
+                menu.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    menu.style.display = 'none';
+                }, 300);
+            }
+        });
+
+        // 内容切换功能
+        function toggleContent(id) {
+            const content = document.getElementById(id);
+            const allContents = document.querySelectorAll('.content');
+            
+            // 隐藏所有内容
+            allContents.forEach(function(item) {
+                item.classList.remove('active');
+            });
+            
+            // 显示选中的内容
+            content.classList.add('active');
+        }
+
+        // 点击菜单项时隐藏菜单并显示对应内容
+        document.querySelectorAll('#menu a').forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                toggleContent(targetId);
+                const menu = document.getElementById('menu');
+                menu.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    menu.style.display = 'none';
+                }, 300);
+            });
+        });
+
+        // 点击页面其他地方时隐藏菜单
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('menu');
+            const menuButton = document.getElementById('menuButton');
+            
+            if (!menu.contains(e.target) && !menuButton.contains(e.target)) {
+                menu.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    menu.style.display = 'none';
+                }, 300);
+            }
+        });
+
+        // 默认显示第一个内容
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleContent('intro');
+        });
+    </script>
+</body>
+
+</html>
