@@ -142,7 +142,7 @@
         </button>
     </header>
     <nav id="menu"
-        style="display: none; position: fixed; left: 0; top: 50px; background: #fff; border-right: 1px solid #ddd; padding: 10px; z-index: 999; max-height: 80vh; overflow-y: auto;">
+        style="display: none; position: fixed; right: 0; top: 0; height: 100vh; width: 300px; background: #fff; border-left: 1px solid #ddd; padding: 60px 20px 20px 20px; z-index: 999; overflow-y: auto; box-shadow: -2px 0 10px rgba(0,0,0,0.1); transform: translateX(100%); transition: transform 0.3s ease;">
         <ul style="list-style: none; padding: 0; margin: 0;">
             <li><a href="#intro" style="display: block; padding: 5px 0; text-decoration: none; color: #333;">Maven 简介</a></li>
             <li><a href="#install" style="display: block; padding: 5px 0; text-decoration: none; color: #333;">安装与配置</a></li>
@@ -1081,7 +1081,17 @@ mvn compile -Dmaven.compiler.useIncrementalCompilation=true</code></pre>
         // 菜单切换功能
         document.getElementById('menuButton').addEventListener('click', function() {
             const menu = document.getElementById('menu');
-            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+            if (menu.style.display === 'none' || menu.style.display === '') {
+                menu.style.display = 'block';
+                setTimeout(() => {
+                    menu.style.transform = 'translateX(0)';
+                }, 10);
+            } else {
+                menu.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    menu.style.display = 'none';
+                }, 300);
+            }
         });
 
         // 内容切换功能
@@ -1104,7 +1114,11 @@ mvn compile -Dmaven.compiler.useIncrementalCompilation=true</code></pre>
                 e.preventDefault();
                 const targetId = this.getAttribute('href').substring(1);
                 toggleContent(targetId);
-                document.getElementById('menu').style.display = 'none';
+                const menu = document.getElementById('menu');
+                menu.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    menu.style.display = 'none';
+                }, 300);
             });
         });
 
@@ -1114,7 +1128,10 @@ mvn compile -Dmaven.compiler.useIncrementalCompilation=true</code></pre>
             const menuButton = document.getElementById('menuButton');
             
             if (!menu.contains(e.target) && !menuButton.contains(e.target)) {
-                menu.style.display = 'none';
+                menu.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    menu.style.display = 'none';
+                }, 300);
             }
         });
 
