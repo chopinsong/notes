@@ -6,6 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>我的笔记</title>
     <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --background-color: #ffffff;
+            --text-color: #333333;
+            --border-color: #e1e1e1;
+            --sidebar-width: 320px;
+            --header-height: 60px;
+            --sidebar-bg: #f8f9fa;
+        }
+
         * {
             -webkit-tap-highlight-color: transparent;
             box-sizing: border-box;
@@ -15,48 +26,124 @@
             margin: 0;
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
         }
 
-        #listView {
-            position: fixed;
+        /* 主容器 - 桌面端使用CSS Grid */
+        .app-container {
             width: 100%;
-            height: 100%;
-            background: #f5f5f5;
+            height: 100vh;
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            grid-template-rows: 1fr;
+        }
+
+        /* 侧边栏 - 笔记列表区域 */
+        .sidebar {
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
             overflow-y: auto;
-            z-index: 10;
-            transition: transform 0.3s;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, width 0.3s ease;
         }
 
-        #detailView {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            background: white;
-            z-index: 20;
-            transform: translateX(100%);
-            transition: transform 0.3s;
+        /* 桌面端侧边栏折叠状态 */
+        .sidebar.collapsed {
+            width: 60px;
+            min-width: 60px;
+        }
+
+        .sidebar.collapsed .sidebar-header,
+        .sidebar.collapsed .note-list {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* 布局模式样式类 */
+        .app-container.desktop-layout {
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            grid-template-rows: 1fr;
+        }
+
+        .app-container.desktop-layout.sidebar-collapsed {
+            grid-template-columns: 60px 1fr;
+        }
+
+        .app-container.mobile-layout {
+            display: flex;
+            flex-direction: column;
+            grid-template-columns: none;
+            grid-template-rows: none;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--background-color);
+        }
+
+        .sidebar-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0;
+            color: var(--secondary-color);
         }
 
         .note-list {
-            padding: 15px;
+            flex: 1;
+            padding: 0;
         }
 
         .note-item {
-            padding: 15px;
-            margin-bottom: 10px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: background-color 0.2s;
+            background-color: var(--background-color);
         }
 
-        .back-btn {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            padding: 8px 15px;
-            background: #f0f0f0;
-            border-radius: 20px;
-            z-index: 30;
+        .note-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        .note-item.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .note-item-title {
+            font-size: 1rem;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        /* 主内容区域 */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .content-header {
+            display: none;
+            /* 桌面端隐藏 */
+        }
+
+        .content-area {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .welcome-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #666;
+            font-size: 1.1rem;
         }
 
         iframe {
@@ -65,20 +152,308 @@
             border: none;
         }
 
-        .show-detail {
-            transform: translateX(0) !important;
+        /* 移动端侧滑菜单样式 */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            max-width: 320px;
+            height: 100%;
+            background-color: var(--background-color);
+            border-left: 1px solid var(--border-color);
+            z-index: 1000;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .mobile-menu.show {
+            right: 0;
+        }
+
+        .mobile-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .mobile-menu-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-menu-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--sidebar-bg);
+        }
+
+        .mobile-menu-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0;
+            color: var(--secondary-color);
+        }
+
+        .mobile-menu-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-color);
+            cursor: pointer;
+            padding: 5px;
+            line-height: 1;
+        }
+
+        .table-of-contents {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        .toc-item {
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .toc-link {
+            display: block;
+            padding: 15px 20px;
+            color: var(--text-color);
+            text-decoration: none;
+            transition: background-color 0.2s;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .toc-link:hover {
+            background-color: #f0f0f0;
+        }
+
+        .toc-link.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .toc-level-1 {
+            font-weight: 600;
+        }
+
+        .toc-level-2 {
+            padding-left: 35px;
+            font-weight: 500;
+        }
+
+        .toc-level-3 {
+            padding-left: 50px;
+            font-weight: normal;
+            font-size: 0.9rem;
+        }
+
+        .toc-level-4,
+        .toc-level-5,
+        .toc-level-6 {
+            padding-left: 65px;
+            font-weight: normal;
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .no-toc-message {
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* 移动端布局 - 媒体查询 768px 断点 */
+        @media (max-width: 768px) {
+            .app-container {
+                display: flex;
+                flex-direction: column;
+                grid-template-columns: none;
+                grid-template-rows: none;
+            }
+
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 10;
+                transform: translateX(0);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.hidden {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 20;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+                background-color: var(--background-color);
+            }
+
+            .main-content.show {
+                transform: translateX(0);
+            }
+
+            .content-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                height: var(--header-height);
+                padding: 0 15px;
+                background-color: var(--background-color);
+                border-bottom: 1px solid var(--border-color);
+                position: sticky;
+                top: 0;
+                z-index: 30;
+            }
+
+            .back-btn {
+                padding: 8px 12px;
+                background-color: var(--primary-color);
+                color: white;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 0.9rem;
+                transition: background-color 0.2s;
+            }
+
+            .back-btn:hover {
+                background-color: #2980b9;
+            }
+
+            .content-title {
+                flex: 1;
+                text-align: center;
+                font-size: 1.1rem;
+                font-weight: 500;
+                margin: 0 15px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .menu-btn {
+                padding: 8px 12px;
+                background-color: var(--secondary-color);
+                color: white;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 0.9rem;
+                transition: background-color 0.2s;
+            }
+
+            .menu-btn:hover {
+                background-color: #1a252f;
+            }
+
+            .content-area {
+                height: calc(100% - var(--header-height));
+            }
+
+            .sidebar-header {
+                padding: 15px 20px;
+            }
+
+            .sidebar-title {
+                font-size: 1.3rem;
+            }
+
+            .note-item {
+                padding: 18px 20px;
+            }
+
+            .note-item-title {
+                font-size: 1.1rem;
+            }
+        }
+
+        /* 平板设备优化 */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            :root {
+                --sidebar-width: 280px;
+            }
+        }
+
+        /* 大屏幕优化 */
+        @media (min-width: 1200px) {
+            :root {
+                --sidebar-width: 360px;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div id="listView">
-        <div class="note-list" id="noteList"></div>
+    <div class="app-container">
+        <!-- 侧边栏 - 笔记列表区域 -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h1 class="sidebar-title">我的笔记</h1>
+            </div>
+            <div class="note-list" id="noteList"></div>
+        </div>
+
+        <!-- 主内容区域 -->
+        <div class="main-content" id="mainContent">
+            <!-- 移动端顶部导航栏 -->
+            <div class="content-header" id="contentHeader">
+                <button class="back-btn" id="backBtn">← 返回</button>
+                <h2 class="content-title" id="contentTitle">选择笔记</h2>
+                <button class="menu-btn" id="menuBtn">菜单</button>
+            </div>
+
+            <!-- 内容显示区域 -->
+            <div class="content-area" id="contentArea">
+                <div class="welcome-content" id="welcomeContent">
+                    请从左侧选择一篇笔记开始阅读
+                </div>
+                <iframe id="contentFrame" style="display: none;"></iframe>
+            </div>
+        </div>
     </div>
-    <div id="detailView">
-        <div class="back-btn" onclick="showListView()">← 返回</div>
-        <iframe id="contentFrame"></iframe>
+
+    <!-- 移动端侧滑菜单 -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <h3 class="mobile-menu-title">目录</h3>
+            <button class="mobile-menu-close" id="mobileMenuClose">×</button>
+        </div>
+        <ul class="table-of-contents" id="tableOfContents">
+            <li class="no-toc-message">暂无目录</li>
+        </ul>
     </div>
+
+    <!-- 引入布局管理器和样式处理器 -->
+    <script src="js/StyleProcessor.js"></script>
+    <script src="js/TableOfContents.js"></script>
+    <script src="js/LayoutManager.js"></script>
+    <script src="js/MobileMenu.js"></script>
+    <script src="js/NoteRenderer.js"></script>
 
     <script>
         const notes = [
@@ -91,31 +466,645 @@
             { id: 7, title: "Spring Boot 基础教程", content: "note7.html" }
         ];
 
+        let currentNoteId = null;
+        let layoutManager = null;
+        let mobileMenu = null;
+        let styleProcessor = null;
+        let noteRenderer = null;
+
+        // 渲染笔记列表
         function renderNotes() {
             const noteList = document.getElementById('noteList');
+            noteList.innerHTML = '';
+
             notes.forEach(note => {
                 const item = document.createElement('div');
                 item.className = 'note-item';
-                item.textContent = note.title;
-                item.onclick = () => showNoteDetail(note.content);
+                item.setAttribute('data-note-id', note.id);
+
+                const title = document.createElement('div');
+                title.className = 'note-item-title';
+                title.textContent = note.title;
+                item.appendChild(title);
+
+                item.onclick = () => showNoteDetail(note);
                 noteList.appendChild(item);
             });
         }
 
-        function showNoteDetail(url) {
-            document.getElementById('contentFrame').src = url;
-            document.getElementById('listView').classList.remove('show-detail');
-            document.getElementById('detailView').classList.add('show-detail');
+        // 显示笔记详情 - HTTP服务器兼容版本
+        async function showNoteDetail(note) {
+            console.log('showNoteDetail called for:', note.title);
+
+            currentNoteId = note.id;
+
+            // 更新活跃状态
+            document.querySelectorAll('.note-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`[data-note-id="${note.id}"]`).classList.add('active');
+
+            // 获取内容显示元素
+            const contentFrame = document.getElementById('contentFrame');
+            const welcomeContent = document.getElementById('welcomeContent');
+
+            // 隐藏欢迎内容，显示iframe
+            welcomeContent.style.display = 'none';
+            contentFrame.style.display = 'block';
+
+            // 更新标题
+            document.getElementById('contentTitle').textContent = note.title;
+
+            console.log('Loading note:', note.title);
+
+            // 检测是否为HTTP环境
+            const isHttpEnvironment = window.location.protocol.startsWith('http');
+
+            if (isHttpEnvironment) {
+                // HTTP环境：使用fetch + srcdoc方式
+                console.log('HTTP environment detected, using fetch method');
+                try {
+                    const response = await fetch(note.content);
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+
+                    const htmlContent = await response.text();
+                    console.log('Content fetched successfully, length:', htmlContent.length);
+
+                    // 使用srcdoc注入内容
+                    contentFrame.srcdoc = htmlContent;
+
+                    // 设置加载完成处理
+                    contentFrame.onload = function () {
+                        console.log('Note loaded successfully via srcdoc:', note.title);
+
+                        // 延迟应用样式，确保内容完全加载
+                        setTimeout(() => {
+                            if (styleProcessor) {
+                                try {
+                                    applyUnifiedStylesToIframe(contentFrame, note);
+                                } catch (error) {
+                                    console.warn('Failed to apply styles:', error);
+                                }
+                            }
+
+                            if (mobileMenu) {
+                                try {
+                                    generateTableOfContents(contentFrame);
+                                } catch (error) {
+                                    console.warn('Failed to generate TOC:', error);
+                                }
+                            }
+                        }, 200);
+                    };
+
+                } catch (error) {
+                    console.error('Failed to fetch note content:', error);
+                    contentFrame.srcdoc = `
+                        <html>
+                        <head><meta charset="UTF-8"><title>加载失败</title></head>
+                        <body style="font-family: Arial, sans-serif; padding: 40px; text-align: center; background-color: #f8f9fa;">
+                            <div style="max-width: 500px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                                <div style="font-size: 48px; margin-bottom: 20px;">⚠️</div>
+                                <h2 style="color: #e74c3c; margin: 0 0 16px 0;">加载失败</h2>
+                                <p style="color: #666; margin: 0 0 16px 0;">
+                                    无法加载笔记: <strong>${note.title}</strong>
+                                </p>
+                                <p style="color: #999; font-size: 14px; margin: 0 0 24px 0;">
+                                    文件: ${note.content}<br>
+                                    错误: ${error.message}
+                                </p>
+                                <button onclick="window.parent.location.reload()" style="
+                                    padding: 10px 20px;
+                                    background-color: #3498db;
+                                    color: white;
+                                    border: none;
+                                    border-radius: 4px;
+                                    cursor: pointer;
+                                    font-size: 14px;
+                                ">重新加载页面</button>
+                            </div>
+                        </body>
+                        </html>
+                    `;
+                }
+            } else {
+                // 文件环境：使用传统的src方式
+                console.log('File environment detected, using src method');
+
+                contentFrame.onload = function () {
+                    console.log('Note loaded successfully via src:', note.title);
+
+                    // 延迟应用样式，确保内容完全加载
+                    setTimeout(() => {
+                        if (styleProcessor) {
+                            try {
+                                applyUnifiedStylesToIframe(contentFrame, note);
+                            } catch (error) {
+                                console.warn('Failed to apply styles:', error);
+                            }
+                        }
+
+                        if (mobileMenu) {
+                            try {
+                                generateTableOfContents(contentFrame);
+                            } catch (error) {
+                                console.warn('Failed to generate TOC:', error);
+                            }
+                        }
+                    }, 100);
+                };
+
+                contentFrame.onerror = function (error) {
+                    console.error('Failed to load note:', note.title, error);
+                    contentFrame.srcdoc = `
+                        <div style="padding: 20px; text-align: center; color: #e74c3c;">
+                            <h3>加载失败</h3>
+                            <p>无法加载笔记: ${note.title}</p>
+                            <button onclick="location.reload()">重新加载</button>
+                        </div>
+                    `;
+                };
+
+                // 直接设置src加载内容
+                contentFrame.src = note.content;
+            }
+
+            // 使用布局管理器处理移动端视图切换
+            if (layoutManager && layoutManager.currentMode === 'mobile') {
+                setTimeout(() => {
+                    layoutManager.showMobileNoteView();
+                }, 50);
+            }
         }
 
-        function showListView() {
-            document.getElementById('detailView').classList.remove('show-detail');
-            document.getElementById(' listView').classList.add('show-detail');
+        // 备用的笔记加载方式 - 通过fetch获取内容然后注入到iframe
+        async function loadNoteAlternative(note, contentFrame) {
+            console.log('Using alternative loading method for:', note.title);
+
+            try {
+                // 通过fetch获取笔记内容
+                const response = await fetch(note.content);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const htmlContent = await response.text();
+                console.log('Fetched content length:', htmlContent.length);
+
+                // 使用srcdoc注入内容
+                contentFrame.srcdoc = htmlContent;
+
+                // 设置加载完成处理
+                contentFrame.onload = function () {
+                    console.log('Alternative loading successful:', note.title);
+
+                    // 应用样式处理
+                    if (styleProcessor) {
+                        try {
+                            applyUnifiedStylesToIframe(contentFrame, note);
+                        } catch (error) {
+                            console.warn('Failed to apply styles, but content loaded:', error);
+                        }
+                    }
+
+                    // 生成目录
+                    if (mobileMenu) {
+                        try {
+                            generateTableOfContents(contentFrame);
+                        } catch (error) {
+                            console.warn('Failed to generate TOC, but content loaded:', error);
+                        }
+                    }
+                };
+
+            } catch (error) {
+                console.error('Alternative loading also failed:', error);
+
+                // 最后的错误显示
+                contentFrame.srcdoc = `
+                    <html>
+                    <head>
+                        <title>加载失败</title>
+                        <meta charset="UTF-8">
+                    </head>
+                    <body style="font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; padding: 40px; text-align: center; background-color: #f8f9fa;">
+                        <div style="max-width: 500px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                            <div style="font-size: 48px; margin-bottom: 20px;">⚠️</div>
+                            <h2 style="color: #e74c3c; margin: 0 0 16px 0;">加载失败</h2>
+                            <p style="color: #666; margin: 0 0 16px 0;">
+                                无法加载笔记: <strong>${note.title}</strong>
+                            </p>
+                            <p style="color: #999; font-size: 14px; margin: 0 0 24px 0;">
+                                文件: ${note.content}<br>
+                                错误: ${error.message}
+                            </p>
+                            <button onclick="window.parent.location.reload()" style="
+                                padding: 10px 20px;
+                                background-color: #3498db;
+                                color: white;
+                                border: none;
+                                border-radius: 4px;
+                                cursor: pointer;
+                                font-size: 14px;
+                            ">重新加载页面</button>
+                        </div>
+                    </body>
+                    </html>
+                `;
+            }
         }
 
-        // 初始化
-        renderNotes();
-        document.getElementById('listView').classList.add('show-detail');
+        // 回退的笔记加载方式
+        function fallbackLoadNote(note, contentFrame) {
+            console.log('Using fallback loading method for:', note.title);
+
+            // 设置iframe加载完成后的处理
+            contentFrame.onload = () => {
+                console.log('Fallback loading successful:', note.title);
+
+                if (styleProcessor) {
+                    try {
+                        applyUnifiedStylesToIframe(contentFrame, note);
+                    } catch (error) {
+                        console.warn('Failed to apply styles, but content loaded:', error);
+                    }
+                }
+
+                // 生成目录
+                if (mobileMenu) {
+                    try {
+                        generateTableOfContents(contentFrame);
+                    } catch (error) {
+                        console.warn('Failed to generate TOC, but content loaded:', error);
+                    }
+                }
+            };
+
+            contentFrame.src = note.content;
+        }
+
+        // 将统一样式应用到iframe内容
+        function applyUnifiedStylesToIframe(iframe, note) {
+            try {
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                if (!iframeDoc) {
+                    console.warn('Cannot access iframe document for:', note.title);
+                    return;
+                }
+
+                // 获取iframe的body内容
+                const iframeBody = iframeDoc.body;
+                if (!iframeBody) {
+                    console.warn('No body found in iframe for:', note.title);
+                    return;
+                }
+
+                // 应用统一样式到iframe的body
+                let styledContent;
+                try {
+                    // 确保传入的是有效的HTMLElement
+                    if (iframeBody && iframeBody instanceof HTMLElement) {
+                        styledContent = styleProcessor.applyUnifiedStyles(iframeBody);
+                    } else {
+                        throw new Error('Invalid iframe body element');
+                    }
+                } catch (error) {
+                    console.warn('StyleProcessor.applyUnifiedStyles failed, using fallback:', error);
+                    // 如果样式处理器失败，直接使用原始body并添加统一样式类
+                    styledContent = iframeBody;
+                    if (styledContent && styledContent.classList) {
+                        styledContent.classList.add('unified-note-content');
+                    }
+                }
+
+                // 注入CSS变量到iframe
+                const iframeRoot = iframeDoc.documentElement;
+                Object.entries(styleProcessor.themeConfig.cssVariables).forEach(([property, value]) => {
+                    iframeRoot.style.setProperty(property, value);
+                });
+
+                // 创建并注入统一样式表到iframe
+                let existingStyle = iframeDoc.getElementById('unified-styles');
+                if (existingStyle) {
+                    existingStyle.remove();
+                }
+
+                const styleElement = iframeDoc.createElement('style');
+                styleElement.id = 'unified-styles';
+                styleElement.textContent = styleProcessor.generateUnifiedCSS();
+                iframeDoc.head.appendChild(styleElement);
+
+                // 创建并注入代码高亮样式到iframe
+                let existingCodeStyle = iframeDoc.getElementById('code-highlight-styles');
+                if (existingCodeStyle) {
+                    existingCodeStyle.remove();
+                }
+
+                const codeStyleElement = iframeDoc.createElement('style');
+                codeStyleElement.id = 'code-highlight-styles';
+                codeStyleElement.textContent = styleProcessor.generateCodeHighlightCSS();
+                iframeDoc.head.appendChild(codeStyleElement);
+
+                // 替换iframe的body内容
+                iframeBody.innerHTML = styledContent.innerHTML;
+                iframeBody.className = styledContent.className;
+
+                console.log('Unified styles applied to iframe for:', note.title);
+            } catch (error) {
+                console.error('Failed to apply unified styles to iframe:', error);
+            }
+        }
+
+        // 从iframe内容生成目录 - 使用新的TableOfContents组件
+        function generateTableOfContents(iframe) {
+            try {
+                // 使用NoteRenderer的TableOfContents组件
+                if (noteRenderer && noteRenderer.tableOfContents) {
+                    const currentNote = notes.find(note => note.id === currentNoteId);
+                    if (currentNote) {
+                        noteRenderer.generateTableOfContents(iframe, currentNote);
+                    }
+                } else {
+                    // 回退到旧的实现
+                    generateTableOfContentsLegacy(iframe);
+                }
+            } catch (error) {
+                console.error('Failed to generate table of contents:', error);
+                generateTableOfContentsLegacy(iframe);
+            }
+        }
+
+        // 旧的目录生成实现（作为回退方案）
+        function generateTableOfContentsLegacy(iframe) {
+            try {
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                if (!iframeDoc) return;
+
+                const headings = iframeDoc.querySelectorAll('h1, h2, h3, h4, h5, h6');
+                const tocContainer = document.getElementById('tableOfContents');
+
+                if (headings.length === 0) {
+                    tocContainer.innerHTML = '<li class="no-toc-message">暂无目录</li>';
+                    return;
+                }
+
+                tocContainer.innerHTML = '';
+
+                headings.forEach((heading, index) => {
+                    const level = parseInt(heading.tagName.charAt(1));
+                    const text = heading.textContent.trim();
+
+                    // 确保标题有ID
+                    if (!heading.id) {
+                        heading.id = `heading-${index}`;
+                    }
+
+                    const tocItem = document.createElement('li');
+                    tocItem.className = 'toc-item';
+
+                    const tocLink = document.createElement('a');
+                    tocLink.href = '#';
+                    tocLink.className = `toc-link toc-level-${level}`;
+                    tocLink.textContent = text;
+
+                    tocLink.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        heading.scrollIntoView({ behavior: 'smooth' });
+
+                        // 在移动端点击目录项后关闭菜单
+                        if (mobileMenu && layoutManager && layoutManager.currentMode === 'mobile') {
+                            mobileMenu.hide();
+                        }
+                    });
+
+                    tocItem.appendChild(tocLink);
+                    tocContainer.appendChild(tocItem);
+                });
+
+                console.log(`Generated table of contents with ${headings.length} headings`);
+            } catch (error) {
+                console.error('Failed to generate table of contents:', error);
+                const tocContainer = document.getElementById('tableOfContents');
+                tocContainer.innerHTML = '<li class="no-toc-message">目录生成失败</li>';
+            }
+        }
+
+        // 返回按钮事件
+        document.getElementById('backBtn').addEventListener('click', () => {
+            if (layoutManager && layoutManager.currentMode === 'mobile') {
+                layoutManager.showMobileListView();
+            }
+        });
+
+        // 菜单按钮事件
+        document.getElementById('menuBtn').addEventListener('click', () => {
+            if (layoutManager && layoutManager.currentMode === 'mobile') {
+                layoutManager.toggleMobileMenu();
+            }
+        });
+
+        // 布局管理器事件监听
+        function setupLayoutManagerEvents() {
+            // 监听布局模式变化
+            layoutManager.on('modeChange', (event) => {
+                console.log('Layout mode changed:', event.detail);
+
+                // 根据新模式调整界面
+                const { to } = event.detail;
+                if (to === 'desktop' && currentNoteId) {
+                    // 桌面模式下确保内容可见
+                    layoutManager.toggleSidebar(true);
+                }
+            });
+
+            // 监听视图变化
+            layoutManager.on('viewChange', (event) => {
+                console.log('View changed:', event.detail);
+            });
+
+            // 监听侧边栏切换
+            layoutManager.on('sidebarToggle', (event) => {
+                console.log('Sidebar toggled:', event.detail);
+            });
+
+            // 监听菜单切换
+            layoutManager.on('menuToggle', (event) => {
+                console.log('Menu toggled:', event.detail);
+            });
+
+            // 监听窗口大小变化
+            layoutManager.on('resize', (event) => {
+                console.log('Layout resized:', event.detail);
+            });
+        }
+
+        // 移动端菜单事件监听
+        function setupMobileMenuEvents() {
+            // 监听菜单显示/隐藏
+            mobileMenu.on('show', (event) => {
+                console.log('Mobile menu shown:', event.detail);
+            });
+
+            mobileMenu.on('hide', (event) => {
+                console.log('Mobile menu hidden:', event.detail);
+                // 同步布局管理器状态
+                if (layoutManager) {
+                    layoutManager.menuVisible = false;
+                }
+            });
+
+            // 监听目录滚动
+            mobileMenu.on('scroll', (event) => {
+                console.log('Scrolled to section:', event.detail);
+            });
+        }
+
+        // NoteRenderer事件监听
+        function setupNoteRendererEvents() {
+            if (!noteRenderer) return;
+
+            // 监听笔记加载完成
+            noteRenderer.on('noteLoaded', (event) => {
+                console.log('Note loaded:', event.detail);
+                const { note } = event.detail;
+
+                // 更新移动端菜单目录
+                if (mobileMenu && layoutManager && layoutManager.currentMode === 'mobile') {
+                    // 延迟生成目录，确保内容已渲染
+                    setTimeout(() => {
+                        const contentFrame = document.getElementById('contentFrame');
+                        if (contentFrame) {
+                            generateTableOfContents(contentFrame);
+                        }
+                    }, 100);
+                }
+            });
+
+            // 监听目录生成完成
+            noteRenderer.on('tocGenerated', (event) => {
+                console.log('Table of contents generated:', event.detail);
+                const { note, toc } = event.detail;
+
+                // 更新移动端菜单目录
+                if (mobileMenu) {
+                    updateMobileMenuToc(toc);
+                }
+            });
+
+            // 监听笔记加载错误
+            noteRenderer.on('noteLoadError', (event) => {
+                console.error('Note load error:', event.detail);
+                const { note, error } = event.detail;
+
+                // 可以在这里添加错误通知逻辑
+                console.error(`Failed to load note "${note.title}": ${error.message}`);
+            });
+
+            // 监听iframe样式注入完成
+            noteRenderer.on('iframeStylesInjected', (event) => {
+                console.log('Iframe styles injected:', event.detail);
+            });
+        }
+
+        // 更新移动端菜单目录
+        function updateMobileMenuToc(toc) {
+            const tocContainer = document.getElementById('tableOfContents');
+
+            if (!toc || toc.length === 0) {
+                tocContainer.innerHTML = '<li class="no-toc-message">暂无目录</li>';
+                return;
+            }
+
+            tocContainer.innerHTML = '';
+
+            toc.forEach((item) => {
+                const tocItem = document.createElement('li');
+                tocItem.className = 'toc-item';
+
+                const tocLink = document.createElement('a');
+                tocLink.href = '#';
+                tocLink.className = `toc-link toc-level-${item.level}`;
+                tocLink.textContent = item.text;
+
+                tocLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+
+                    // 滚动到对应标题
+                    if (item.element) {
+                        item.element.scrollIntoView({ behavior: 'smooth' });
+                    }
+
+                    // 在移动端点击目录项后关闭菜单
+                    if (mobileMenu && layoutManager && layoutManager.currentMode === 'mobile') {
+                        mobileMenu.hide();
+                    }
+                });
+
+                tocItem.appendChild(tocLink);
+                tocContainer.appendChild(tocItem);
+            });
+        }
+
+        // 初始化应用
+        function initApp() {
+            try {
+                // 初始化样式处理器
+                styleProcessor = new StyleProcessor();
+
+                // 初始化笔记渲染器
+                noteRenderer = new NoteRenderer();
+
+                // 将全局引用设置给NoteRenderer，用于错误重试功能
+                window.noteRenderer = noteRenderer;
+
+                // 初始化布局管理器
+                layoutManager = new LayoutManager();
+
+                // 初始化移动端菜单
+                mobileMenu = new MobileMenu();
+
+                // 将mobileMenu设置为全局变量，供LayoutManager使用
+                window.mobileMenu = mobileMenu;
+
+                // 设置事件监听
+                setupLayoutManagerEvents();
+                setupMobileMenuEvents();
+                setupNoteRendererEvents();
+
+                // 渲染笔记列表
+                renderNotes();
+
+                // 强制刷新布局以确保正确应用
+                setTimeout(() => {
+                    if (layoutManager) {
+                        layoutManager.refresh();
+                    }
+                }, 100);
+
+                console.log('Application initialized successfully');
+            } catch (error) {
+                console.error('Failed to initialize application:', error);
+                // 降级处理：使用基本功能
+                renderNotes();
+
+                // 尝试只初始化布局管理器
+                try {
+                    layoutManager = new LayoutManager();
+                    setupLayoutManagerEvents();
+                } catch (layoutError) {
+                    console.error('Layout manager initialization also failed:', layoutError);
+                }
+            }
+        }
+
+        // 页面加载完成后初始化
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initApp);
+        } else {
+            initApp();
+        }
     </script>
 </body>
 

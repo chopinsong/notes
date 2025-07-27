@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Layout Test</title>
+    <style>
+        body { margin: 0; font-family: Arial, sans-serif; }
+        .container { width: 100%; height: 100vh; position: relative; }
+        .sidebar { width: 300px; height: 100%; background: #f0f0f0; position: absolute; left: 0; top: 0; }
+        .main-content { margin-left: 200px; height: 100%; background: #fff; position: relative; }
+        
+        .sidebar.hidden { transform: translateX(-100%); }
+        .main-content.show { margin-left: 0; }
+        
+        .sidebar.collapsed { width: 60px; }
+        
+        @media (max-width: 768px) {
+            .container { display: flex; flex-direction: column; }
+            .sidebar { position: absolute; width: 100%; z-index: 10; }
+            .main-content { margin-left: 0; z-index: 20; }
+            
+            .sidebar { transform: translateX(0); transition: transform 0.3s ease; }
+            .sidebar.hidden { transform: translateX(-100%); }
+            
+            .main-content { transform: translateX(100%); transition: transform 0.3s ease; }
+            .main-content.show { transform: translateX(0); }
+        }
+        
+        .debug-info {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            z-index: 1000;
+        }
+        
+        .controls {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            z-index: 1000;
+        }
+        
+        button {
+            margin: 5px;
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar" id="sidebar">
+            <h3>侧边栏</h3>
+            <p>这是侧边栏内容</p>
+        </div>
+        <div class="main-content" id="mainContent">
+            <h3>主内容</h3>
+            <p>这是主内容区域</p>
+        </div>
+    </div>
+    
+    <div class="debug-info" id="debugInfo">
+        调试信息
+    </div>
+    
+    <div class="controls">
+        <button onclick="showList()">显示列表</button>
+        <button onclick="showNote()">显示笔记</button>
+        <button onclick="toggleDebug()">切换调试</button>
+    </div>
+
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+        const debugInfo = document.getElementById('debugInfo');
+        
+        function updateDebugInfo() {
+            const isMobile = window.innerWidth <= 768;
+            debugInfo.innerHTML = `
+                屏幕宽度: ${window.innerWidth}px<br>
+                模式: ${isMobile ? '移动端' : '桌面端'}<br>
+                侧边栏类: ${sidebar.className}<br>
+                主内容类: ${mainContent.className}<br>
+                侧边栏变换: ${getComputedStyle(sidebar).transform}<br>
+                主内容变换: ${getComputedStyle(mainContent).transform}
+            `;
+        }
+        
+        function showList() {
+            sidebar.classList.remove('hidden');
+            mainContent.classList.remove('show');
+            updateDebugInfo();
+        }
+        
+        function showNote() {
+            sidebar.classList.add('hidden');
+            mainContent.classList.add('show');
+            updateDebugInfo();
+        }
+        
+        function toggleDebug() {
+            debugInfo.style.display = debugInfo.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        // 监听窗口大小变化
+        window.addEventListener('resize', updateDebugInfo);
+        
+        // 初始化
+        updateDebugInfo();
+        
+        // 模拟移动端初始状态
+        if (window.innerWidth <= 768) {
+            showList(); // 移动端默认显示列表
+        }
+    </script>
+</body>
+</html>

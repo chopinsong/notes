@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StyleProcessor 测试</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .test-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .original-content {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .processed-content {
+            background-color: #fff;
+            border: 1px solid #e1e1e1;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>StyleProcessor 功能测试</h1>
+        
+        <div class="test-section">
+            <div class="test-title">测试1: 基本HTML内容处理</div>
+            <div class="original-content" id="test1-original">
+                <h1>这是一个标题</h1>
+                <p>这是一个段落，包含一些<strong>粗体文本</strong>和<em>斜体文本</em>。</p>
+                <ul>
+                    <li>列表项1</li>
+                    <li>列表项2</li>
+                </ul>
+                <pre><code>console.log("Hello World");</code></pre>
+            </div>
+            <button onclick="testBasicContent()">应用统一样式</button>
+            <div class="processed-content" id="test1-processed"></div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">测试2: 代码高亮处理</div>
+            <div class="original-content" id="test2-original">
+                <h2>JavaScript代码</h2>
+                <pre><code class="language-javascript">
+function greet(name) {
+    return "Hello, " + name + "!";
+}
+console.log(greet("World"));
+                </code></pre>
+                
+                <h2>Java代码</h2>
+                <pre><code class="language-java">
+public class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello, World!");
+    }
+}
+                </code></pre>
+            </div>
+            <button onclick="testCodeHighlighting()">应用代码高亮</button>
+            <div class="processed-content" id="test2-processed"></div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">测试3: 表格样式处理</div>
+            <div class="original-content" id="test3-original">
+                <h2>数据表格</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>姓名</th>
+                            <th>年龄</th>
+                            <th>城市</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>张三</td>
+                            <td>25</td>
+                            <td>北京</td>
+                        </tr>
+                        <tr>
+                            <td>李四</td>
+                            <td>30</td>
+                            <td>上海</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button onclick="testTableStyling()">应用表格样式</button>
+            <div class="processed-content" id="test3-processed"></div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">测试4: 主题配置</div>
+            <button onclick="testThemeUpdate()">切换到深色主题</button>
+            <button onclick="resetTheme()">重置为默认主题</button>
+            <div id="theme-info"></div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">测试结果</div>
+            <div id="test-results"></div>
+        </div>
+    </div>
+
+    <script src="js/StyleProcessor.js"></script>
+    <script>
+        let styleProcessor;
+        let testResults = [];
+
+        // 初始化StyleProcessor
+        function initStyleProcessor() {
+            try {
+                styleProcessor = new StyleProcessor();
+                addTestResult('StyleProcessor初始化', '成功', 'success');
+                return true;
+            } catch (error) {
+                addTestResult('StyleProcessor初始化', `失败: ${error.message}`, 'error');
+                return false;
+            }
+        }
+
+        // 测试基本内容处理
+        function testBasicContent() {
+            if (!styleProcessor) {
+                addTestResult('基本内容处理', '失败: StyleProcessor未初始化', 'error');
+                return;
+            }
+
+            try {
+                const originalContent = document.getElementById('test1-original').cloneNode(true);
+                const processedContent = styleProcessor.applyUnifiedStyles(originalContent);
+                
+                const targetContainer = document.getElementById('test1-processed');
+                targetContainer.innerHTML = '';
+                targetContainer.appendChild(processedContent);
+                
+                addTestResult('基本内容处理', '成功应用统一样式', 'success');
+            } catch (error) {
+                addTestResult('基本内容处理', `失败: ${error.message}`, 'error');
+            }
+        }
+
+        // 测试代码高亮
+        function testCodeHighlighting() {
+            if (!styleProcessor) {
+                addTestResult('代码高亮处理', '失败: StyleProcessor未初始化', 'error');
+                return;
+            }
+
+            try {
+                const originalContent = document.getElementById('test2-original').cloneNode(true);
+                const processedContent = styleProcessor.applyUnifiedStyles(originalContent);
+                
+                const targetContainer = document.getElementById('test2-processed');
+                targetContainer.innerHTML = '';
+                targetContainer.appendChild(processedContent);
+                
+                addTestResult('代码高亮处理', '成功应用代码高亮样式', 'success');
+            } catch (error) {
+                addTestResult('代码高亮处理', `失败: ${error.message}`, 'error');
+            }
+        }
+
+        // 测试表格样式
+        function testTableStyling() {
+            if (!styleProcessor) {
+                addTestResult('表格样式处理', '失败: StyleProcessor未初始化', 'error');
+                return;
+            }
+
+            try {
+                const originalContent = document.getElementById('test3-original').cloneNode(true);
+                const processedContent = styleProcessor.applyUnifiedStyles(originalContent);
+                
+                const targetContainer = document.getElementById('test3-processed');
+                targetContainer.innerHTML = '';
+                targetContainer.appendChild(processedContent);
+                
+                addTestResult('表格样式处理', '成功应用表格样式', 'success');
+            } catch (error) {
+                addTestResult('表格样式处理', `失败: ${error.message}`, 'error');
+            }
+        }
+
+        // 测试主题更新
+        function testThemeUpdate() {
+            if (!styleProcessor) {
+                addTestResult('主题更新', '失败: StyleProcessor未初始化', 'error');
+                return;
+            }
+
+            try {
+                const darkTheme = {
+                    cssVariables: {
+                        '--background-color': '#2c3e50',
+                        '--text-color': '#ecf0f1',
+                        '--primary-color': '#e74c3c',
+                        '--secondary-color': '#3498db',
+                        '--border-color': '#34495e',
+                        '--code-bg': '#34495e',
+                        '--sidebar-bg': '#34495e'
+                    }
+                };
+                
+                styleProcessor.updateTheme(darkTheme);
+                
+                const themeInfo = document.getElementById('theme-info');
+                themeInfo.innerHTML = '<p>已切换到深色主题</p>';
+                themeInfo.style.color = 'var(--text-color)';
+                themeInfo.style.backgroundColor = 'var(--background-color)';
+                themeInfo.style.padding = '10px';
+                themeInfo.style.borderRadius = '4px';
+                
+                addTestResult('主题更新', '成功切换到深色主题', 'success');
+            } catch (error) {
+                addTestResult('主题更新', `失败: ${error.message}`, 'error');
+            }
+        }
+
+        // 重置主题
+        function resetTheme() {
+            if (!styleProcessor) {
+                addTestResult('主题重置', '失败: StyleProcessor未初始化', 'error');
+                return;
+            }
+
+            try {
+                styleProcessor.resetToDefaultTheme();
+                
+                const themeInfo = document.getElementById('theme-info');
+                themeInfo.innerHTML = '<p>已重置为默认主题</p>';
+                themeInfo.style.color = '';
+                themeInfo.style.backgroundColor = '';
+                themeInfo.style.padding = '10px';
+                themeInfo.style.borderRadius = '4px';
+                
+                addTestResult('主题重置', '成功重置为默认主题', 'success');
+            } catch (error) {
+                addTestResult('主题重置', `失败: ${error.message}`, 'error');
+            }
+        }
+
+        // 添加测试结果
+        function addTestResult(testName, result, status) {
+            const timestamp = new Date().toLocaleTimeString();
+            testResults.push({
+                name: testName,
+                result: result,
+                status: status,
+                timestamp: timestamp
+            });
+            
+            updateTestResultsDisplay();
+        }
+
+        // 更新测试结果显示
+        function updateTestResultsDisplay() {
+            const resultsContainer = document.getElementById('test-results');
+            resultsContainer.innerHTML = '';
+            
+            testResults.forEach(test => {
+                const resultDiv = document.createElement('div');
+                resultDiv.style.cssText = `
+                    padding: 8px 12px;
+                    margin: 4px 0;
+                    border-radius: 4px;
+                    background-color: ${test.status === 'success' ? '#d4edda' : '#f8d7da'};
+                    border: 1px solid ${test.status === 'success' ? '#c3e6cb' : '#f5c6cb'};
+                    color: ${test.status === 'success' ? '#155724' : '#721c24'};
+                `;
+                
+                resultDiv.innerHTML = `
+                    <strong>${test.name}</strong> [${test.timestamp}]<br>
+                    ${test.result}
+                `;
+                
+                resultsContainer.appendChild(resultDiv);
+            });
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            initStyleProcessor();
+            
+            // 显示当前主题配置
+            if (styleProcessor) {
+                const themeConfig = styleProcessor.getThemeConfig();
+                console.log('当前主题配置:', themeConfig);
+            }
+        });
+    </script>
+</body>
+</html>

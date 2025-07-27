@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>我的笔记</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --background-color: #ffffff;
+            --text-color: #333333;
+            --border-color: #e1e1e1;
+            --sidebar-width: 320px;
+            --header-height: 60px;
+            --sidebar-bg: #f8f9fa;
+        }
+
+        * {
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        /* 主容器 - 桌面端使用CSS Grid */
+        .app-container {
+            width: 100%;
+            height: 100vh;
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            grid-template-rows: 1fr;
+        }
+
+        /* 侧边栏 - 笔记列表区域 */
+        .sidebar {
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, width 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--background-color);
+        }
+
+        .sidebar-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0;
+            color: var(--secondary-color);
+        }
+
+        .note-list {
+            flex: 1;
+            padding: 0;
+        }
+
+        .note-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: background-color 0.2s;
+            background-color: var(--background-color);
+        }
+
+        .note-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        .note-item.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .note-item-title {
+            font-size: 1rem;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        /* 主内容区域 */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .content-header {
+            display: none;
+        }
+
+        .content-area {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .welcome-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* 移动端布局 */
+        @media (max-width: 768px) {
+            .app-container {
+                display: flex;
+                flex-direction: column;
+                grid-template-columns: none;
+                grid-template-rows: none;
+            }
+
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 10;
+                transform: translateX(0);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.hidden {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 20;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+                background-color: var(--background-color);
+            }
+
+            .main-content.show {
+                transform: translateX(0);
+            }
+
+            .content-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                height: var(--header-height);
+                padding: 0 15px;
+                background-color: var(--background-color);
+                border-bottom: 1px solid var(--border-color);
+                position: sticky;
+                top: 0;
+                z-index: 30;
+            }
+
+            .back-btn {
+                padding: 8px 12px;
+                background-color: var(--primary-color);
+                color: white;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 0.9rem;
+                transition: background-color 0.2s;
+            }
+
+            .content-title {
+                flex: 1;
+                text-align: center;
+                font-size: 1.1rem;
+                font-weight: 500;
+                margin: 0 15px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .content-area {
+                height: calc(100% - var(--header-height));
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- 侧边栏 - 笔记列表区域 -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h1 class="sidebar-title">我的笔记</h1>
+            </div>
+            <div class="note-list" id="noteList"></div>
+        </div>
+
+        <!-- 主内容区域 -->
+        <div class="main-content" id="mainContent">
+            <!-- 移动端顶部导航栏 -->
+            <div class="content-header" id="contentHeader">
+                <button class="back-btn" id="backBtn">← 返回</button>
+                <h2 class="content-title" id="contentTitle">选择笔记</h2>
+            </div>
+
+            <!-- 内容显示区域 -->
+            <div class="content-area" id="contentArea">
+                <div class="welcome-content" id="welcomeContent">
+                    请从左侧选择一篇笔记开始阅读
+                </div>
+                <iframe id="contentFrame" style="display: none;"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const notes = [
+            { id: 1, title: "第一篇笔记", content: "note1.html" },
+            { id: 2, title: "生日贺卡项目部署指南", content: "note2.html" },
+            { id: 3, title: "Java基础学习大纲", content: "note3.html" },
+            { id: 4, title: "Python基础学习大纲", content: "note4.html" },
+            { id: 5, title: "Mysql基础学习大纲", content: "note5.html" },
+            { id: 6, title: "Maven使用方法与私有仓库配置教程", content: "note6.html" },
+            { id: 7, title: "Spring Boot 基础教程", content: "note7.html" }
+        ];
+
+        let currentNoteId = null;
+
+        // 渲染笔记列表
+        function renderNotes() {
+            const noteList = document.getElementById('noteList');
+            noteList.innerHTML = '';
+
+            notes.forEach(note => {
+                const item = document.createElement('div');
+                item.className = 'note-item';
+                item.setAttribute('data-note-id', note.id);
+
+                const title = document.createElement('div');
+                title.className = 'note-item-title';
+                title.textContent = note.title;
+                item.appendChild(title);
+
+                item.onclick = () => showNoteDetail(note);
+                noteList.appendChild(item);
+            });
+        }
+
+        // 显示笔记详情 - 最简化版本
+        function showNoteDetail(note) {
+            console.log('Loading note:', note.title);
+            
+            currentNoteId = note.id;
+
+            // 更新活跃状态
+            document.querySelectorAll('.note-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`[data-note-id="${note.id}"]`).classList.add('active');
+
+            // 获取内容显示元素
+            const contentFrame = document.getElementById('contentFrame');
+            const welcomeContent = document.getElementById('welcomeContent');
+
+            // 隐藏欢迎内容，显示iframe
+            welcomeContent.style.display = 'none';
+            contentFrame.style.display = 'block';
+
+            // 更新标题
+            document.getElementById('contentTitle').textContent = note.title;
+
+            // 最简单的加载方式 - 直接设置src
+            contentFrame.src = note.content;
+            
+            console.log('Note src set to:', note.content);
+
+            // 处理移动端视图切换
+            if (window.innerWidth <= 768) {
+                document.getElementById('sidebar').classList.add('hidden');
+                document.getElementById('mainContent').classList.add('show');
+            }
+        }
+
+        // 返回按钮事件
+        document.getElementById('backBtn').addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                document.getElementById('sidebar').classList.remove('hidden');
+                document.getElementById('mainContent').classList.remove('show');
+            }
+        });
+
+        // 窗口大小变化处理
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                document.getElementById('sidebar').classList.remove('hidden');
+                document.getElementById('mainContent').classList.remove('show');
+            }
+        });
+
+        // 初始化应用
+        function initApp() {
+            console.log('Initializing app...');
+            renderNotes();
+            console.log('App initialized successfully');
+        }
+
+        // 页面加载完成后初始化
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initApp);
+        } else {
+            initApp();
+        }
+    </script>
+</body>
+
+</html>

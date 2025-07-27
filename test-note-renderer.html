@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoteRenderer Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+        }
+        
+        .toc-panel {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+        
+        .content-panel {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .toc-title {
+            margin: 0 0 15px 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .table-of-contents {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .toc-item {
+            border-bottom: 1px solid #eee;
+        }
+        
+        .toc-link {
+            display: block;
+            padding: 10px 15px;
+            color: #333;
+            text-decoration: none;
+            transition: background-color 0.2s;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .toc-link:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .toc-link.active {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .toc-level-1 {
+            font-weight: 600;
+        }
+        
+        .toc-level-2 {
+            padding-left: 25px;
+            font-weight: 500;
+        }
+        
+        .toc-level-3 {
+            padding-left: 40px;
+            font-weight: normal;
+            font-size: 0.85rem;
+        }
+        
+        .no-toc-message {
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .controls {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            margin: 0 5px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .status {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #e8f4fd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <h1>NoteRenderer Component Test</h1>
+        <button class="btn" onclick="loadNote1()">加载笔记1</button>
+        <button class="btn" onclick="loadNote3()">加载笔记3 (Java)</button>
+        <button class="btn" onclick="clearContent()">清空内容</button>
+        <div class="status" id="status">准备就绪</div>
+    </div>
+
+    <div class="test-container">
+        <div class="toc-panel">
+            <h3 class="toc-title">目录</h3>
+            <ul class="table-of-contents" id="tableOfContents">
+                <li class="no-toc-message">暂无目录</li>
+            </ul>
+        </div>
+        
+        <div class="content-panel">
+            <iframe id="contentFrame"></iframe>
+        </div>
+    </div>
+
+    <!-- 引入组件 -->
+    <script src="js/StyleProcessor.js"></script>
+    <script src="js/TableOfContents.js"></script>
+    <script src="js/NoteRenderer.js"></script>
+
+    <script>
+        let styleProcessor = null;
+        let noteRenderer = null;
+        
+        const testNotes = [
+            { id: 1, title: "第一篇笔记", content: "note1.html" },
+            { id: 3, title: "Java基础学习大纲", content: "note3.html" }
+        ];
+
+        // 初始化
+        function init() {
+            try {
+                // 初始化样式处理器
+                styleProcessor = new StyleProcessor();
+                window.styleProcessor = styleProcessor;
+                
+                // 初始化笔记渲染器
+                noteRenderer = new NoteRenderer();
+                window.noteRenderer = noteRenderer;
+                
+                // 监听目录生成事件
+                noteRenderer.on('tocGenerated', (event) => {
+                    const { note, toc } = event.detail;
+                    updateStatus(`目录生成完成: ${note.title}, 共 ${toc.length} 个标题`);
+                });
+                
+                // 监听笔记加载事件
+                noteRenderer.on('noteLoaded', (event) => {
+                    const { note } = event.detail;
+                    updateStatus(`笔记加载完成: ${note.title}`);
+                });
+                
+                // 监听加载错误事件
+                noteRenderer.on('noteLoadError', (event) => {
+                    const { note, error } = event.detail;
+                    updateStatus(`笔记加载失败: ${note.title} - ${error.message}`);
+                });
+                
+                updateStatus('NoteRenderer 组件初始化成功');
+                
+            } catch (error) {
+                updateStatus('初始化失败: ' + error.message);
+                console.error('Initialization failed:', error);
+            }
+        }
+
+        // 加载笔记1
+        function loadNote1() {
+            if (!noteRenderer) {
+                updateStatus('NoteRenderer 未初始化');
+                return;
+            }
+            
+            const note = testNotes[0];
+            const iframe = document.getElementById('contentFrame');
+            
+            updateStatus(`正在加载: ${note.title}`);
+            
+            noteRenderer.loadNote(note, iframe).then(success => {
+                if (success) {
+                    updateStatus(`加载成功: ${note.title}`);
+                } else {
+                    updateStatus(`加载失败: ${note.title}`);
+                }
+            }).catch(error => {
+                updateStatus(`加载错误: ${error.message}`);
+            });
+        }
+
+        // 加载笔记3
+        function loadNote3() {
+            if (!noteRenderer) {
+                updateStatus('NoteRenderer 未初始化');
+                return;
+            }
+            
+            const note = testNotes[1];
+            const iframe = document.getElementById('contentFrame');
+            
+            updateStatus(`正在加载: ${note.title}`);
+            
+            noteRenderer.loadNote(note, iframe).then(success => {
+                if (success) {
+                    updateStatus(`加载成功: ${note.title}`);
+                } else {
+                    updateStatus(`加载失败: ${note.title}`);
+                }
+            }).catch(error => {
+                updateStatus(`加载错误: ${error.message}`);
+            });
+        }
+
+        // 清空内容
+        function clearContent() {
+            const iframe = document.getElementById('contentFrame');
+            iframe.src = 'about:blank';
+            
+            const tocContainer = document.getElementById('tableOfContents');
+            tocContainer.innerHTML = '<li class="no-toc-message">暂无目录</li>';
+            
+            updateStatus('内容已清空');
+        }
+
+        // 更新状态显示
+        function updateStatus(message) {
+            const statusElement = document.getElementById('status');
+            statusElement.textContent = `${new Date().toLocaleTimeString()}: ${message}`;
+            console.log('Status:', message);
+        }
+
+        // 页面加载完成后初始化
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+</body>
+</html>

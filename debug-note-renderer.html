@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoteRenderer Debug</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .debug-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .debug-header {
+            background: #e74c3c;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .debug-controls {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .debug-button {
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .debug-button:hover {
+            background: #2980b9;
+        }
+        
+        .debug-content {
+            height: 600px;
+            position: relative;
+        }
+        
+        #debugFrame {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .debug-log {
+            padding: 20px;
+            background: #2c3e50;
+            color: #ecf0f1;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        
+        .status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="debug-container">
+        <div class="debug-header">
+            <h1>NoteRenderer 调试工具</h1>
+            <p>用于调试笔记渲染器的加载和错误处理</p>
+        </div>
+        
+        <div class="debug-controls">
+            <button class="debug-button" onclick="testNote1()">测试 note1.html</button>
+            <button class="debug-button" onclick="testNote3()">测试 note3.html (Java大纲)</button>
+            <button class="debug-button" onclick="testNonExistent()">测试不存在文件</button>
+            <button class="debug-button" onclick="clearDebugLog()">清除日志</button>
+        </div>
+        
+        <div class="debug-content">
+            <div class="status" id="status">准备就绪</div>
+            <iframe id="debugFrame"></iframe>
+        </div>
+        
+        <div class="debug-log" id="debugLog"></div>
+    </div>
+
+    <!-- 引入必要的脚本 -->
+    <script src="js/StyleProcessor.js"></script>
+    <script src="js/NoteRenderer.js"></script>
+    
+    <script>
+        let noteRenderer = null;
+        let styleProcessor = null;
+        
+        // 调试日志
+        function debugLog(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logElement = document.getElementById('debugLog');
+            const prefix = type === 'error' ? '[ERROR]' : type === 'warn' ? '[WARN]' : '[INFO]';
+            logElement.textContent += `${timestamp} ${prefix} ${message}\n`;
+            logElement.scrollTop = logElement.scrollHeight;
+            console.log(`${prefix} ${message}`);
+        }
+        
+        function clearDebugLog() {
+            document.getElementById('debugLog').textContent = '';
+        }
+        
+        function updateStatus(message) {
+            document.getElementById('status').textContent = message;
+        }
+        
+        // 初始化
+        function initDebug() {
+            try {
+                debugLog('初始化调试环境...');
+                
+                // 初始化StyleProcessor
+                styleProcessor = new StyleProcessor();
+                debugLog('StyleProcessor 初始化成功');
+                
+                // 初始化NoteRenderer
+                noteRenderer = new NoteRenderer();
+                debugLog('NoteRenderer 初始化成功');
+                
+                // 设置全局引用
+                window.styleProcessor = styleProcessor;
+                window.noteRenderer = noteRenderer;
+                
+                // 设置事件监听
+                setupDebugEventListeners();
+                
+                updateStatus('调试环境就绪');
+                debugLog('调试环境初始化完成');
+                
+            } catch (error) {
+                debugLog(`初始化失败: ${error.message}`, 'error');
+                updateStatus('初始化失败');
+            }
+        }
+        
+        // 设置事件监听
+        function setupDebugEventListeners() {
+            if (!noteRenderer) return;
+            
+            noteRenderer.on('noteLoaded', (event) => {
+                const { note } = event.detail;
+                debugLog(`✓ 笔记加载成功: ${note.title}`);
+                updateStatus(`已加载: ${note.title}`);
+            });
+            
+            noteRenderer.on('noteLoadError', (event) => {
+                const { note, error } = event.detail;
+                debugLog(`✗ 笔记加载失败: ${note.title} - ${error.message}`, 'error');
+                updateStatus(`加载失败: ${note.title}`);
+            });
+            
+            noteRenderer.on('iframeStylesInjected', (event) => {
+                const { note } = event.detail;
+                debugLog(`✓ 样式注入完成: ${note.title}`);
+            });
+            
+            noteRenderer.on('tocGenerated', (event) => {
+                const { note, toc } = event.detail;
+                debugLog(`✓ 目录生成完成: ${note.title} (${toc.length} 个标题)`);
+            });
+        }
+        
+        // 测试函数
+        async function testNote1() {
+            const note = { id: 1, title: "第一篇笔记", content: "note1.html" };
+            await testLoadNote(note);
+        }
+        
+        async function testNote3() {
+            const note = { id: 3, title: "Java基础学习大纲", content: "note3.html" };
+            await testLoadNote(note);
+        }
+        
+        async function testNonExistent() {
+            const note = { id: 999, title: "不存在的笔记", content: "nonexistent.html" };
+            await testLoadNote(note);
+        }
+        
+        async function testLoadNote(note) {
+            if (!noteRenderer) {
+                debugLog('NoteRenderer 未初始化', 'error');
+                return;
+            }
+            
+            debugLog(`开始测试加载: ${note.title}`);
+            updateStatus(`正在加载: ${note.title}...`);
+            
+            const iframe = document.getElementById('debugFrame');
+            
+            try {
+                const success = await noteRenderer.loadNote(note, iframe);
+                if (success) {
+                    debugLog(`测试成功: ${note.title}`);
+                } else {
+                    debugLog(`测试失败: ${note.title}`, 'warn');
+                }
+            } catch (error) {
+                debugLog(`测试异常: ${note.title} - ${error.message}`, 'error');
+            }
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', initDebug);
+    </script>
+</body>
+</html>

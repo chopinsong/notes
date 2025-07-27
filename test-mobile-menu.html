@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Menu Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .test-result {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 3px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        iframe {
+            width: 100%;
+            height: 400px;
+            border: 1px solid #ddd;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Mobile Menu Implementation Test</h1>
+    
+    <div class="test-section">
+        <h2>1. 基本功能测试</h2>
+        <div id="basicTests"></div>
+        <button onclick="runBasicTests()">运行基本测试</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. 移动端菜单测试</h2>
+        <div id="mobileTests"></div>
+        <button onclick="runMobileTests()">运行移动端测试</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>3. 目录生成测试</h2>
+        <div id="tocTests"></div>
+        <button onclick="runTocTests()">运行目录测试</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>4. 实际应用预览</h2>
+        <p>在移动端模式下测试菜单功能：</p>
+        <iframe src="index.html" id="appPreview"></iframe>
+        <button onclick="toggleMobileView()">切换移动端视图</button>
+    </div>
+
+    <script>
+        function addTestResult(containerId, message, type = 'info') {
+            const container = document.getElementById(containerId);
+            const div = document.createElement('div');
+            div.className = `test-result ${type}`;
+            div.textContent = message;
+            container.appendChild(div);
+        }
+
+        function clearTestResults(containerId) {
+            document.getElementById(containerId).innerHTML = '';
+        }
+
+        function runBasicTests() {
+            clearTestResults('basicTests');
+            
+            // 测试1: 检查文件是否存在
+            fetch('js/MobileMenu.js')
+                .then(response => {
+                    if (response.ok) {
+                        addTestResult('basicTests', '✓ MobileMenu.js 文件存在', 'success');
+                    } else {
+                        addTestResult('basicTests', '✗ MobileMenu.js 文件不存在', 'error');
+                    }
+                })
+                .catch(error => {
+                    addTestResult('basicTests', '✗ 无法加载 MobileMenu.js: ' + error.message, 'error');
+                });
+
+            fetch('js/LayoutManager.js')
+                .then(response => {
+                    if (response.ok) {
+                        addTestResult('basicTests', '✓ LayoutManager.js 文件存在', 'success');
+                    } else {
+                        addTestResult('basicTests', '✗ LayoutManager.js 文件不存在', 'error');
+                    }
+                })
+                .catch(error => {
+                    addTestResult('basicTests', '✗ 无法加载 LayoutManager.js: ' + error.message, 'error');
+                });
+
+            // 测试2: 检查主页面
+            fetch('index.html')
+                .then(response => {
+                    if (response.ok) {
+                        addTestResult('basicTests', '✓ index.html 文件存在', 'success');
+                        return response.text();
+                    } else {
+                        addTestResult('basicTests', '✗ index.html 文件不存在', 'error');
+                    }
+                })
+                .then(html => {
+                    if (html) {
+                        // 检查关键元素
+                        if (html.includes('mobile-menu')) {
+                            addTestResult('basicTests', '✓ 移动端菜单HTML结构存在', 'success');
+                        } else {
+                            addTestResult('basicTests', '✗ 移动端菜单HTML结构缺失', 'error');
+                        }
+                        
+                        if (html.includes('table-of-contents')) {
+                            addTestResult('basicTests', '✓ 目录容器HTML结构存在', 'success');
+                        } else {
+                            addTestResult('basicTests', '✗ 目录容器HTML结构缺失', 'error');
+                        }
+                        
+                        if (html.includes('MobileMenu.js')) {
+                            addTestResult('basicTests', '✓ MobileMenu.js 已引入', 'success');
+                        } else {
+                            addTestResult('basicTests', '✗ MobileMenu.js 未引入', 'error');
+                        }
+                    }
+                })
+                .catch(error => {
+                    addTestResult('basicTests', '✗ 无法分析 index.html: ' + error.message, 'error');
+                });
+        }
+
+        function runMobileTests() {
+            clearTestResults('mobileTests');
+            
+            addTestResult('mobileTests', 'ℹ 移动端测试需要在实际设备或浏览器开发者工具中进行', 'info');
+            addTestResult('mobileTests', '测试步骤:', 'info');
+            addTestResult('mobileTests', '1. 打开浏览器开发者工具 (F12)', 'info');
+            addTestResult('mobileTests', '2. 切换到移动端视图 (Ctrl+Shift+M)', 'info');
+            addTestResult('mobileTests', '3. 选择一篇笔记', 'info');
+            addTestResult('mobileTests', '4. 点击右上角"菜单"按钮', 'info');
+            addTestResult('mobileTests', '5. 验证侧滑菜单是否正确显示', 'info');
+            addTestResult('mobileTests', '6. 验证目录是否正确生成', 'info');
+            addTestResult('mobileTests', '7. 点击目录项测试跳转功能', 'info');
+        }
+
+        function runTocTests() {
+            clearTestResults('tocTests');
+            
+            // 测试目录生成逻辑
+            addTestResult('tocTests', '测试目录生成功能...', 'info');
+            
+            // 检查测试用的笔记文件
+            const testNotes = ['note1.html', 'note3.html', 'note5.html'];
+            
+            testNotes.forEach(noteFile => {
+                fetch(noteFile)
+                    .then(response => {
+                        if (response.ok) {
+                            addTestResult('tocTests', `✓ ${noteFile} 文件存在`, 'success');
+                            return response.text();
+                        } else {
+                            addTestResult('tocTests', `✗ ${noteFile} 文件不存在`, 'error');
+                        }
+                    })
+                    .then(html => {
+                        if (html) {
+                            // 检查标题结构
+                            const headingMatches = html.match(/<h[1-6][^>]*>.*?<\/h[1-6]>/gi);
+                            if (headingMatches && headingMatches.length > 0) {
+                                addTestResult('tocTests', `✓ ${noteFile} 包含 ${headingMatches.length} 个标题`, 'success');
+                            } else {
+                                addTestResult('tocTests', `⚠ ${noteFile} 没有找到标题元素`, 'error');
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        addTestResult('tocTests', `✗ 无法分析 ${noteFile}: ${error.message}`, 'error');
+                    });
+            });
+        }
+
+        function toggleMobileView() {
+            const iframe = document.getElementById('appPreview');
+            const currentWidth = iframe.style.width;
+            
+            if (currentWidth === '375px') {
+                // 切换回桌面视图
+                iframe.style.width = '100%';
+                iframe.style.height = '400px';
+                addTestResult('mobileTests', '切换到桌面视图', 'info');
+            } else {
+                // 切换到移动端视图
+                iframe.style.width = '375px';
+                iframe.style.height = '667px';
+                addTestResult('mobileTests', '切换到移动端视图 (iPhone 6/7/8)', 'info');
+            }
+        }
+
+        // 页面加载时运行基本测试
+        window.addEventListener('load', () => {
+            setTimeout(runBasicTests, 500);
+        });
+    </script>
+</body>
+</html>
